@@ -1,0 +1,80 @@
+@import 'theme.styl'
+@import 'animation.styl'
+
+
+::-webkit-scrollbar
+  width 4px
+  height 4px
+  &:hover
+    cursor pointer
+
+/* Track */
+::-webkit-scrollbar-track, ::-webkit-scrollbar-corner, ::-webkit-resizer
+  background transparent
+
+/* Handle */
+::-webkit-scrollbar-thumb
+  background var(--color-active)
+  border-radius 2px
+  &:hover
+    background var(--color-active-light)
+
+html
+  font-family 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size 16px
+  font-weight 300
+  word-spacing 1px
+  -ms-text-size-adjust 100%
+  -webkit-text-size-adjust 100%
+  -moz-osx-font-smoothing grayscale
+  -webkit-font-smoothing antialiased
+  box-sizing border-box
+
+svg
+  width 100%
+  height 100%
+
+*,
+*::before,
+*::after
+  box-sizing border-box
+
+ul[class],
+ol[class]
+  padding 0
+
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+ul[class],
+ol[class],
+figure,
+blockquote,
+dl,
+dd
+  margin 0
+
+:root
+  --size-widget-block 20vmin
+  --height-header 62px
+
+h1, h2, h3, h4, h5, h6
+  font-weight 300
+
+body
+  color var(--fg)
+  padding 0
+  margin 0
+  background-color var(--bg)
+  font-size 1.1rem
+
+a
+  color var(--fg)
+  text-decoration none
+
+.v-application .title
+  font-weight 400

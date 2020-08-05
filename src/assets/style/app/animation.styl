@@ -1,0 +1,61 @@
+.menu-popover-enter,
+.menu-popover-leave-to 
+  opacity: 0
+  transform: perspective(900px) rotate3d(70, 0, 0, -50deg)
+
+.menu-popover-enter-to,
+.menu-popover-leave 
+  opacity: 1
+  transform: perspective(900px) rotate3d(0, 0, 0, 0deg)
+
+.menu-popover-enter-active,
+.menu-popover-leave-active 
+  transition: .4s ease-out
+
+.menu-popover-leave-active 
+  transition: .15s ease-out
+
+.slide-in-dowm-enter-active, .slide-in-dowm-leave-active
+  transition: all .8s
+  transform: translateY(0%)
+
+.slide-in-dowm-enter, .slide-in-dowm-leave-to
+  transform: translateY(-100%)
+
+.fade-enter-active, .fade-leave-active
+  transition: opacity .3s
+
+.fade-enter, .fade-leave-to
+  opacity: 0
+
+.scale-enter-active, .scale-leave-active
+  transform: scale(1)
+  transition: all .5s
+  opacity: 1
+
+.scale-enter, .scale-leave-to
+  transform: scale(0.8)
+  opacity: 0
+
+.fade-page-enter-active, .fade-page-leave-active
+  transition: opacity .3s
+
+.fade-page-enter, .fade-page-leave-to
+  top: 0
+  left: 50%
+  transform: translateX(-50%)
+  width: 100%
+  position: absolute
+  opacity: 0
+
+@keyframes spin
+  0%
+    transform: translate(-50%, -50%) rotate(0deg)
+  100%
+    transform: translate(-50%, -50%) rotate(360deg)
+  
+@keyframes clear-spin
+  0%
+    transform: rotate(0deg)
+  100%
+    transform: rotate(360deg)

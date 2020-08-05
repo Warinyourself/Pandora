@@ -1,0 +1,49 @@
+.theme-button
+  position absolute
+  bottom 10px
+  left 10px
+
+// https://colorhunt.co/palette/141100
+// https://colorhunt.co/palette/196149
+// https://colorhunt.co/palette/172306
+// https://colorhunt.co/palette/196113
+
+.theme--dark.v-navigation-drawer
+  background var(--bg-dark)
+
+.theme--dark.v-application
+  background var(--bg)
+
+.v-application .v-main__wrap
+  background var(--bg)
+
+html.theme--dark
+  background var(--bg)
+
+  .v-tab.v-tab--active
+    color white
+
+  .v-footer
+    border-top-color var(--bg-dark)!important
+
+  ::-webkit-scrollbar
+    width 5px
+    height 4px
+    &:hover
+      cursor pointer
+
+  ::-webkit-scrollbar-track, ::-webkit-scrollbar-corner, ::-webkit-resizer
+    background var(--bg-dark)
+
+  ::-webkit-scrollbar-thumb
+    background var(--primary)
+    border-radius 2px
+
+  .block
+    background-color var(--bg-dark)
+
+  .icon-invert
+    stroke white
+
+  .order-block--simple .order-block-title
+    color white
