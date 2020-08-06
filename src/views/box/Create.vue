@@ -176,7 +176,10 @@ export default class IndexPage extends Vue {
   }
 
   saveBox() {
-    console.log('Save box')
+    this.$db.put('box', {
+      name: this.boxName,
+      files: []
+    })
   }
 
   openViewColor() {
@@ -283,7 +286,7 @@ export default class IndexPage extends Vue {
 
   generateUpdateFileFunction(file: LoaderFile) {
     return async () => {
-      const box = await this.$db.get('box', 'Box name')
+      const box = await this.$db.get('box', this.boxName)
 
       if (!box) {
         this.$db.put('box', {
@@ -312,6 +315,11 @@ export default class IndexPage extends Vue {
           title: 'Delete',
           icon: 'mdi-trash-can-outline',
           callback: () => remove(file)
+        },
+        {
+          title: 'Save file',
+          icon: 'mdi-content-save',
+          callback: this.generateUpdateFileFunction(file)
         },
         {
           title: 'Set as image',

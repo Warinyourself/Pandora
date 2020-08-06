@@ -6,7 +6,7 @@
         <v-row>
           <v-col v-for="box in boxes" :key="box.id">
             <div class="box-block"> 
-              <h2> {{ box.name }}</h2>
+              <h2> Name: {{ box.name }}</h2>
               <p v-if="box.files"> Files: {{ box.files.length }} </p>
             </div>
           </v-col>
