@@ -16,6 +16,11 @@ Vue.use(VueRouter)
     component: () => import('../views/box/Create.vue')
   },
   {
+    path: '/:id',
+    name: 'Edit',
+    component: () => import('../views/box/Edit.vue')
+  },
+  {
     path: '/settings',
     name: 'Settings',
     component: () => import('../views/Settings.vue')

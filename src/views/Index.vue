@@ -5,10 +5,10 @@
       <div v-if="boxes.length">
         <v-row>
           <v-col v-for="box in boxes" :key="box.id">
-            <div class="box-block"> 
-              <h2> Name: {{ box.name }}</h2>
+            <router-link :to="`/${box.name}`" class="box-block"> 
+              <h2 class="title"> Name: {{ box.name }}</h2>
               <p v-if="box.files"> Files: {{ box.files.length }} </p>
-            </div>
+            </router-link>
           </v-col>
         </v-row>
         <AppButton
@@ -45,3 +45,8 @@ export default class IndexPage extends Vue {
   }
 }
 </script>
+
+<style lang="sass">
+.box-block
+  cursor: pointer
+</style>

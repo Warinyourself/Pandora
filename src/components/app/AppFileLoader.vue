@@ -36,14 +36,20 @@ import { getUUID } from '@/utils/helper'
 // @ts-ignore
 import SparkMD5 from 'spark-md5'  
 
-@Component
+@Component({
+  model: {
+    prop: 'files',
+    event: 'input'
+  }
+})
 export default class AppFileLoader extends Vue {
-  @Prop({ type: String }) msg!: string;
-  @Prop() fileModifier!: (file: LoaderFile) => Partial<LoaderFile>;
+  @Prop({ type: String }) msg!: string
+  @Prop({ type: Array, default: () => [] }) files!: []
+  @Prop() fileModifier!: (file: LoaderFile) => Partial<LoaderFile>
 
   text = 'put file here'
   focusFileHash = ''
-  files: LoaderFile[] = []
+  // files: LoaderFile[] = []
   result = []
   id = getUUID()
 
@@ -52,6 +58,7 @@ export default class AppFileLoader extends Vue {
   }
 
   async mounted() {
+    console.log({ self: this })
     let dropArea = this.$refs.loader as HTMLElement
 
     ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
