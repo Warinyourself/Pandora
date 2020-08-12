@@ -128,6 +128,9 @@ if (isElectron) {
 import ColorThief from 'colorthief'
 
 // eslint-disable-next-line no-unused-vars
+import { Box } from '@/models/box'
+
+// eslint-disable-next-line no-unused-vars
 import { LoaderFile, RightMenuItem } from '@/models/page'
 
 import { defaultPalette } from '@/models/color'
@@ -142,10 +145,10 @@ export default class EditBoxPage extends Vue {
   bg = {} as LoaderFile
   editFile = {} as LoaderFile
   boxName = 'Box name'
+  files = [] as Array<LoaderFile>
   palette = defaultPalette
   hex = defaultColor
   viewColorPicker = false
-  files = []
 
   get boxes() {
     return BoxModule.boxes
@@ -153,7 +156,7 @@ export default class EditBoxPage extends Vue {
 
   async mounted() {
     const id = this.$route.params.id
-    const box = await this.$db.get('box', id)
+    const box = await this.$db.get('box', id) as Box
 
     this.boxName = box.name
     this.files = box.files
@@ -295,7 +298,7 @@ export default class EditBoxPage extends Vue {
 
   generateUpdateFileFunction(file: LoaderFile) {
     return async () => {
-      const box = await this.$db.get('box', this.boxName)
+      const box = await this.$db.get('box', this.boxName) as Box
 
       if (!box) {
         this.$db.put('box', {

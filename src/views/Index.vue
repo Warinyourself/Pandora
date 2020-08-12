@@ -29,8 +29,10 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-
 import { BoxModule } from '@/store/box'
+
+// eslint-disable-next-line no-unused-vars
+import { Box } from '@/models/box'
 
 @Component
 export default class IndexPage extends Vue {
@@ -39,7 +41,7 @@ export default class IndexPage extends Vue {
   }
 
   async mounted() {
-    const boxes = await this.$db.getAll('box')
+    const boxes = await this.$db.getAll('box') as Box[]
 
     BoxModule.SET({ key: 'boxes', value: boxes })
   }

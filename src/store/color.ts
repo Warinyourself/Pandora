@@ -143,7 +143,7 @@ class Color extends VuexModule implements ColorState {
 
   @Mutation
   SET_THEME(theme: Omit<ITheme, 'name'>) {
-    Object.entries(theme).forEach(([color, colorValue]) => {
+    Object.entries(theme).forEach(([color, colorValue]: [string, any]) => {
       this[color as TColor] = colorValue
     })
   }
@@ -179,7 +179,7 @@ class Color extends VuexModule implements ColorState {
     if (theme.fg === undefined) {
       const name = `--fg`
 
-      this.setGlobalCSSVariable({ name, value: theme.active })
+      this.setGlobalCSSVariable({ name, value: theme.primary })
     }
 
     console.log({ theme })

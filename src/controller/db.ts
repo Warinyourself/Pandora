@@ -21,10 +21,22 @@ export class DB implements _DB {
   db: null | IDBDatabase = null
 
   constructor() {
+    this.connect()
+  }
+
+  createDefaultDB() {
+    if (!this.db) {
+      return
+    }
+
+    const box = this.db.createObjectStore('box', { keyPath: 'name' })
+  }
+
+  connect() {
     const request = indexedDB.open(this.name, this.version)
 
     request.onsuccess = (event) => {
-      // console.log('Success creating/accessing IndexedDB database', event)
+      console.log('Success creating/accessing IndexedDB database', event)
       this.db = request.result
 
       this.db.onversionchange = () => {
@@ -32,7 +44,7 @@ export class DB implements _DB {
         alert('Need to reload page')
       }
 
-      this.db.onerror = function (event) {
+      this.db.onerror = (event) => {
         console.log({ event }, 'Error creating/accessing IndexedDB database')
       }
     }
@@ -51,13 +63,21 @@ export class DB implements _DB {
       }
     }
 
+    request.onerror = (error: any) => {
+      const dbError = error.srcElement.error
+      if (dbError.name === 'VersionError') {
+        const [oldVersion, newVersion] = dbError.message.match(/\d{1,}/g)
+
+        this.version = newVersion
+        this.connect()        
+      } else {
+        console.log({ error }, 'Error connection to db')
+      }
+    }
+
     request.onblocked = () => {
       alert('Block db')
     }
-  }
-
-  createDefaultDB() {
-    const box = this.db.createObjectStore('box', { keyPath: 'name' })
   }
 
   get(objectStoreName: string, key: string) {
@@ -67,9 +87,9 @@ export class DB implements _DB {
 
       if (!this.db) {
         reject('Failed to connect to indexDB')
+        return
       }
   
-      console.log({ objectStoreName })
       const transaction = this.db.transaction([objectStoreName]);
       const objectStore = transaction.objectStore(objectStoreName);
 
@@ -88,6 +108,7 @@ export class DB implements _DB {
 
       if (!this.db) {
         reject('Failed to connect to indexDB')
+        return
       }
   
       const transaction = this.db.transaction([objectStoreName]);
@@ -101,7 +122,7 @@ export class DB implements _DB {
     })
   }
 
-  put(objectStoreName: string, info: any, key: string, rule: IDBTransactionMode = 'readwrite') {
+  put(objectStoreName: string, info: any, key?: string, rule: IDBTransactionMode = 'readwrite') {
     if (!this.db) {
       return false
     }
