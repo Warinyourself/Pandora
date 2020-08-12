@@ -44,12 +44,11 @@ import SparkMD5 from 'spark-md5'
 })
 export default class AppFileLoader extends Vue {
   @Prop({ type: String }) msg!: string
-  @Prop({ type: Array, default: () => [] }) files!: []
+  @Prop({ type: Array, default: () => [] }) files!: LoaderFile[]
   @Prop() fileModifier!: (file: LoaderFile) => Partial<LoaderFile>
 
   text = 'put file here'
   focusFileHash = ''
-  // files: LoaderFile[] = []
   result = []
   id = getUUID()
 
@@ -83,7 +82,7 @@ export default class AppFileLoader extends Vue {
   }
 
   handlerDragLeave(event: DragEvent) {
-    this.text = 'put file here'
+    this.text = 'Put file here'
    
    console.log("handlerDragLeave", event)
   }

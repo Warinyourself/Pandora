@@ -1,7 +1,7 @@
 <template>
   <AppContent>
     <v-text-field v-model="boxName"></v-text-field>
-    <AppFileLoader :file-modifier="fileModifier">
+    <AppFileLoader v-model="files" :file-modifier="fileModifier">
       <template #emptyFileList>
         <div class="file-upload-body">
           <div>
@@ -42,16 +42,20 @@
           </v-tooltip>
 
           <div class="d-flex fw-wrap">
-            <div 
-              class="color-block" 
-              v-for="color in file.palette"
+            <AppGrag 
               :key="color"
-              :style="`background-color: ${color}`"
-            />
+              v-for="color in file.palette"
+            >
+              <div
+                class="color-block d-flex" 
+                :style="`background-color: ${color}`"
+              />
+            </AppGrag>
           </div>
         </div>
       </template>
     </AppFileLoader>
+
     <AppActiveBlock
       :menu="generatePaletteMenu()"
       class="block mt-2"
@@ -134,6 +138,8 @@ import { defaultPalette } from '@/models/color'
 
 import { BoxModule } from '@/store/box'
 import { ColorModule } from '@/store/color'
+// eslint-disable-next-line no-unused-vars
+import { Box } from '@/models/box';
 
 const defaultColor = '#FF00FF'
 
@@ -142,6 +148,7 @@ export default class IndexPage extends Vue {
   bg = {} as LoaderFile
   editFile = {} as LoaderFile
   boxName = 'Box name'
+  files = []
   palette = defaultPalette
   hex = defaultColor
   viewColorPicker = false
@@ -173,6 +180,13 @@ export default class IndexPage extends Vue {
         resolve({ palette })
       })
     });
+  }
+
+  drag(event: DragEventInit) {
+    console.log({ event })
+    if (event.dataTransfer) {
+      event.dataTransfer.setData("text", 'color 213');
+    }
   }
 
   saveBox() {
@@ -286,7 +300,7 @@ export default class IndexPage extends Vue {
 
   generateUpdateFileFunction(file: LoaderFile) {
     return async () => {
-      const box = await this.$db.get('box', this.boxName)
+      const box = await this.$db.get('box', this.boxName) as Box
 
       if (!box) {
         this.$db.put('box', {
