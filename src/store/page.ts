@@ -2,7 +2,7 @@ import { Module, VuexModule, getModule, Mutation, Action } from 'vuex-module-dec
 import { Route } from 'vue-router'
 import store from '@/store'
 
-import { RightMenu } from '@/models/page'
+import { RightMenu, DragItem } from '@/models/page'
 
 export interface PageState {
   routes: Route[]
@@ -14,6 +14,7 @@ class Page extends VuexModule implements PageState {
   routes: Route[] = []
   isInited = false
   routeReturnFunciton: null | Function = null
+  dragable = [] as DragItem[]
   rightMenu = {
     view: false,
     style: {
@@ -33,6 +34,16 @@ class Page extends VuexModule implements PageState {
   @Mutation
   SET<S extends this, K extends keyof this>({ key, value }: { key: K, value: S[K] }) {
     this[key] = value
+  }
+
+  @Mutation
+  ADD_DRAG(drag: DragItem) {
+    this.dragable.push(drag)
+  }
+
+  @Mutation
+  REMOVE_DRAG(type: string) {
+    this.dragable = this.dragable.filter(drag => drag.type !== type)
   }
 
   @Mutation

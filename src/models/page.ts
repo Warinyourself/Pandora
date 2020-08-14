@@ -1,7 +1,12 @@
 export interface RightMenu {
-  view: boolean,
-  style: Record<string, string>,
+  view: boolean
+  style: Record<string, string>
   items: RightMenuItem[]
+}
+
+export interface DragItem {
+  type: string
+  info: any
 }
 
 export interface RightMenuItem {
@@ -9,7 +14,6 @@ export interface RightMenuItem {
   title: string
   callback: Function
 }
-
 
 export type LoaderFileType = 'image' | 'text'
 
