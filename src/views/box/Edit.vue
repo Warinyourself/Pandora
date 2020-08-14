@@ -1,6 +1,7 @@
 <template>
   <AppContent>
     <v-text-field v-model="boxName"></v-text-field>
+
     <AppFileLoader v-model="files" :file-modifier="fileModifier">
       <template #emptyFileList>
         <div class="file-upload-body">
@@ -42,30 +43,42 @@
           </v-tooltip>
 
           <div class="d-flex fw-wrap">
-            <div 
-              class="color-block" 
-              v-for="color in file.palette"
+            <AppGrag 
               :key="color"
-              :style="`background-color: ${color}`"
-            />
+              :info="color"
+              type="color"
+              v-for="color in file.palette"
+            >
+              <div
+                class="color-block d-flex" 
+                :style="`background-color: ${color}`"
+              />
+            </AppGrag>
           </div>
         </div>
       </template>
     </AppFileLoader>
+  
     <AppActiveBlock
       :menu="generatePaletteMenu()"
       class="block mt-2"
     >
       Palette:
-      <div class="d-flex fw-wrap mt-1" v-if="palette.length">
-        <AppActiveBlock
-          :menu="generateRightMenuColor(color)"
-          class="color-block" 
-          v-for="color in palette"
-          :key="color.hex"
-          :style="`background-color: ${color.hex}`"
-        />
-      </div>
+      <AppDrop
+        type="color"
+        :callback="handleDropColor"
+        v-if="palette.length"
+      >
+        <div class="d-flex fw-wrap mt-1">
+          <AppActiveBlock
+            :menu="generateRightMenuColor(color)"
+            class="color-block" 
+            v-for="color in palette"
+            :key="color.hex"
+            :style="`background-color: ${color.hex}`"
+          />
+        </div>
+      </AppDrop>
     </AppActiveBlock>
 
     <v-dialog
@@ -133,7 +146,7 @@ import { Box } from '@/models/box'
 // eslint-disable-next-line no-unused-vars
 import { LoaderFile, RightMenuItem } from '@/models/page'
 
-import { defaultPalette } from '@/models/color'
+import { defaultColors } from '@/models/palette'
 
 import { BoxModule } from '@/store/box'
 import { ColorModule } from '@/store/color'
@@ -146,7 +159,7 @@ export default class EditBoxPage extends Vue {
   editFile = {} as LoaderFile
   boxName = 'Box name'
   files = [] as Array<LoaderFile>
-  palette = defaultPalette
+  palette = defaultColors
   hex = defaultColor
   viewColorPicker = false
 
@@ -158,8 +171,10 @@ export default class EditBoxPage extends Vue {
     const id = this.$route.params.id
     const box = await this.$db.get('box', id) as Box
 
-    this.boxName = box.name
-    this.files = box.files
+    if (box) {
+      this.boxName = box.name
+      this.files = box.files
+    }
   }
 
   fileModifier(file: LoaderFile) {
@@ -187,8 +202,17 @@ export default class EditBoxPage extends Vue {
     });
   }
 
-  saveBox() {
-    this.$db.put('box', {
+  handleDropColor(color: string) {
+    this.palette.push(
+      {
+        name: 'undefined',
+        hex: color
+      }
+    )
+  }
+
+  async saveBox() {
+    await this.$db.put('box', {
       name: this.boxName,
       files: []
     })
@@ -236,7 +260,7 @@ export default class EditBoxPage extends Vue {
       {
         title: 'Set default palette',
         callback: () => {
-          this.palette = defaultPalette
+          this.palette = defaultColors
         }
       },
     ]
@@ -284,7 +308,7 @@ export default class EditBoxPage extends Vue {
         title: 'Delete',
         icon: 'mdi-trash-can-outline',
         callback: () => {
-          this.palette = this.palette.filter(({ name}) => color.name !== name )
+          this.palette = this.palette.filter((innerColor) => JSON.stringify(color) !== JSON.stringify(innerColor) )
         }
       },
       {
@@ -301,7 +325,7 @@ export default class EditBoxPage extends Vue {
       const box = await this.$db.get('box', this.boxName) as Box
 
       if (!box) {
-        this.$db.put('box', {
+        await this.$db.put('box', {
           name: this.boxName,
           files: [file]
         })
@@ -313,7 +337,7 @@ export default class EditBoxPage extends Vue {
       if (!hasInDB) {
         box.files.push(file)
 
-        this.$db.put('box', box)
+        await this.$db.put('box', box)
       } else {
         alert('already in indexdb')
       }
