@@ -10,7 +10,7 @@ export interface _DB {
 
 type KeysDB = 'box' | 'palette'
 
-import { defaultPalette } from '@/models/palette'
+import { defaultPalette, ActiveRedDarkPalette } from '@/models/palette'
 
 const wait = (time: number) => {
   return new Promise((resolve) => {
@@ -38,6 +38,7 @@ export class DB implements _DB {
 
     return () => {
       this.put('palette', defaultPalette)
+      this.put('palette', ActiveRedDarkPalette)
     }
   }
 
