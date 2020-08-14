@@ -4,9 +4,13 @@ export interface _DB {
   isConnected: boolean
   db: null | IDBDatabase
   get: (objectStoreName: string, key: string) => Promise<unknown>
-  getAll: (objectStoreName: string) => Promise<unknown>
-  put: (objectStoreName: string, info: any, key?: string, rule?: IDBTransactionMode) => boolean
+  getAll: <T>(objectStoreName: KeysDB) => Promise<T[] | undefined>
+  put: (objectStoreName: string, info: any, key?: string, rule?: IDBTransactionMode) => Promise<any>
 }
+
+type KeysDB = 'box' | 'palette'
+
+import { defaultPalette } from '@/models/palette'
 
 const wait = (time: number) => {
   return new Promise((resolve) => {
@@ -24,12 +28,17 @@ export class DB implements _DB {
     this.connect()
   }
 
-  createDefaultDB() {
+  async createDefaultDB() {
     if (!this.db) {
-      return
+      return () => {}
     }
 
-    const box = this.db.createObjectStore('box', { keyPath: 'name' })
+    const box = await this.db.createObjectStore('box', { keyPath: 'name' })
+    const palette = await this.db.createObjectStore('palette', { keyPath: 'name' })
+
+    return () => {
+      this.put('palette', defaultPalette)
+    }
   }
 
   connect() {
@@ -49,16 +58,18 @@ export class DB implements _DB {
       }
     }
 
-    request.onupgradeneeded = () => {
+    request.onupgradeneeded = async() => {
       this.db = request.result
 
       switch (this.db.version) {
         case 0: {
-          this.createDefaultDB()
+          const initDataFunction = await this.createDefaultDB()
+          setTimeout(initDataFunction, 100)
           break
         }
         default: {
-          this.createDefaultDB()
+          const initDataFunction = await this.createDefaultDB()
+          setTimeout(initDataFunction, 100)
         }
       }
     }
@@ -101,9 +112,9 @@ export class DB implements _DB {
     })
   }
 
-  getAll(objectStoreName: string) {
+  getAll<T>(objectStoreName: KeysDB) {
     // eslint-disable-next-line no-async-promise-executor
-    return new Promise( async (resolve, reject) => {
+    return new Promise<T[] | undefined>( async (resolve, reject) => {
       !this.db && await wait(3000)
 
       if (!this.db) {
@@ -123,15 +134,22 @@ export class DB implements _DB {
   }
 
   put(objectStoreName: string, info: any, key?: string, rule: IDBTransactionMode = 'readwrite') {
-    if (!this.db) {
-      return false
-    }
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise( async (resolve, reject) => {
+      !this.db && await wait(3000)
 
-    const transaction = this.db.transaction([objectStoreName], rule)
+      if (!this.db) {
+        reject('Failed to connect to indexDB')
+        return
+      }
 
-    const put = transaction.objectStore(objectStoreName).put(info, key)
+      const transaction = this.db.transaction([objectStoreName], rule)
+      const put = transaction.objectStore(objectStoreName).put(info, key)
 
-    return true
+      put.onsuccess = (response) => {
+        resolve(response)
+      }
+    })
   }
 }
 
