@@ -16,7 +16,7 @@ import { ColorModule } from '@/store/color'
 import noneLayout from '@/layout/none.vue'
 import defaultLayout from '@/layout/default.vue'
 
-import { defaultPalette } from '@/models/color'
+import { defaultColors } from '@/models/palette'
 
 @Component({
   components: {
@@ -36,7 +36,7 @@ export default class App extends Vue {
 
     ThemeModule.changeTheme({ theme: themeMode, self: this })
 
-    const theme = defaultPalette.reduce((theme: any, { hex, name }) => {
+    const theme = defaultColors.reduce((theme: any, { hex, name }) => {
       theme[name] = hex
 
       return theme

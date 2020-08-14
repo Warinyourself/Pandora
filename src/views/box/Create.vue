@@ -134,7 +134,7 @@ import ColorThief from 'colorthief'
 // eslint-disable-next-line no-unused-vars
 import { LoaderFile, RightMenuItem } from '@/models/page'
 
-import { defaultPalette } from '@/models/color'
+import { defaultColors } from '@/models/palette'
 
 import { BoxModule } from '@/store/box'
 import { ColorModule } from '@/store/color'
@@ -149,7 +149,7 @@ export default class IndexPage extends Vue {
   editFile = {} as LoaderFile
   boxName = 'Box name'
   files = []
-  palette = defaultPalette
+  palette = defaultColors
   hex = defaultColor
   viewColorPicker = false
 
@@ -238,7 +238,7 @@ export default class IndexPage extends Vue {
       {
         title: 'Set default palette',
         callback: () => {
-          this.palette = defaultPalette
+          this.palette = defaultColors
         }
       },
     ]

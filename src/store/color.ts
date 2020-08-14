@@ -182,7 +182,6 @@ class Color extends VuexModule implements ColorState {
       this.setGlobalCSSVariable({ name, value: theme.primary })
     }
 
-    console.log({ theme })
     Object.entries(theme).forEach(([color, colorValue]) => {
       if (!colorValue) {
         return
