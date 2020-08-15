@@ -11,12 +11,12 @@ Vue.use(VueRouter)
     component: Index
   },
   {
-    path: '/create',
+    path: '/box/create',
     name: 'BoxCreate',
     component: () => import('../views/box/Create.vue')
   },
   {
-    path: '/:id',
+    path: '/box/:id',
     name: 'Edit',
     component: () => import('../views/box/Edit.vue')
   },

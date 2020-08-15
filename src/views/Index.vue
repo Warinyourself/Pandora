@@ -5,7 +5,7 @@
       <div v-if="boxes.length">
         <v-row>
           <v-col v-for="box in boxes" :key="box.id">
-            <router-link :to="`/${box.name}`" class="box-block"> 
+            <router-link :to="{ name: 'BoxCreate', params: { id: box.name }}" class="box-block"> 
               <h2 class="title"> Name: {{ box.name }}</h2>
               <p v-if="box.files"> Files: {{ box.files.length }} </p>
             </router-link>
