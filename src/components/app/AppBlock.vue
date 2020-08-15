@@ -17,7 +17,7 @@ export default class AppBlock extends Vue {}
   margin-bottom 16px
   border-radius 10px
   overflow hidden
-  background var(--bg)
+  background var(--v-bg-base)
   padding 12px
   filter drop-shadow(0 0 12px rgba(0, 0, 0, .3))
 </style>

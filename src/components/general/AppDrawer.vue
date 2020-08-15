@@ -26,22 +26,13 @@
       {{item.title }}
       </router-link>
     </v-list>
-    <AppThemeButton class="theme-button" />
   </v-navigation-drawer>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
 
-// import { PageModule } from '@/store/page'
-
-import AppThemeButton from '@/components/general/AppThemeButton.vue'
-
-@Component({
-  components: {
-    AppThemeButton
-  }
-})
+@Component
 export default class AppDrawer extends Vue {
   @Prop({ default: false }) readonly expandOnHover!: boolean
   miniVariant = false
@@ -113,7 +104,7 @@ export default class AppDrawer extends Vue {
   transition .3s
   &.router-link-exact-active
     .v-icon
-      color: var(--primary)
+      color: var(--v-primary-base)
      
 
 #core-navigation-drawer

@@ -188,7 +188,7 @@ export default class AppFileLoader extends Vue {
   padding: 10px
   min-height 235px
   border-radius: 10px
-  background: var(--bg-dark)
+  background: var(--v-bg-darken1)
 
 .app-file-loader-files
   display flex
@@ -203,7 +203,7 @@ export default class AppFileLoader extends Vue {
 
 .app-file-loader-file--text
   position relative
-  background var(--bg)
+  background var(--v-bg-base)
   display grid
   place-items center
   &::before
@@ -224,6 +224,8 @@ export default class AppFileLoader extends Vue {
 .color-block
   width 40px
   height 40px
+  min-width 40px
+  min-height 40px
   margin-right 5px
   margin-bottom 5px
   border-radius 10px
