@@ -4,15 +4,28 @@
       <h2 class="title">
         {{ !palettes.length ? 'Set up palette' : 'Here you may create a palette'}}
       </h2>
-      <AppActiveBlock
-        :menu="generateMenu(palette)"
-        v-for="palette in palettes"
-        :key="palette.key"
-      >
-        <AppBlock second>
-          <h3> {{ palette.name }} </h3>
-        </AppBlock>
-      </AppActiveBlock>
+      <v-row>
+        <v-col cols="4"
+          v-for="palette in palettes"
+          :key="palette.key"
+        >
+          <AppActiveBlock
+            :menu="generateMenu(palette)"
+          >
+            <AppBlock second>
+              <h3> {{ palette.name }} </h3>
+              <div class="d-flex">
+                <div
+                  class="color-block"
+                  :style="`background-color: ${color.hex}`"
+                  v-for="color in palette.colors"
+                  :key="color.name"
+                />
+              </div>
+            </AppBlock>
+          </AppActiveBlock>
+        </v-col>
+      </v-row>
     </AppBlock>
   </AppContent>
 </template>
@@ -30,8 +43,7 @@ export default class PalettePage extends Vue {
   }
 
   async mounted() {
-    console.log(PaletteModule)
-    await PaletteModule.setPalettes()
+    await PaletteModule.updatePalettes()
   }
 
   generateMenu(palette: Palette) {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <transition name="fade">
+    <transition name="fade-menu">
       <ul
         class="right-menu"
         v-if="menu.view"

@@ -41,6 +41,8 @@ class PaletteClass extends VuexModule implements PaletteState {
   activatePalette({ palette, self }: {palette: Palette, self: any}) {
     const vuetifyColors = ['primary', 'secondary', 'tertiary', 'bg', 'fg']
 
+    localStorage.setItem('currentPalette', JSON.stringify(palette))
+
     palette.colors.forEach(({ name, hex }) => {
       if (vuetifyColors.includes(name)) {
         self.$vuetify.theme.themes.dark[name] = hex
