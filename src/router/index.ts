@@ -17,7 +17,7 @@ Vue.use(VueRouter)
   },
   {
     path: '/box/:id',
-    name: 'Edit',
+    name: 'BoxEdit',
     component: () => import('../views/box/Edit.vue')
   },
   {

@@ -12,7 +12,7 @@
           <AppActiveBlock
             :menu="generateMenu(palette)"
           >
-            <AppBlock second>
+            <div class="block block--bg">
               <h3> {{ palette.name }} </h3>
               <div class="d-flex">
                 <div
@@ -22,7 +22,7 @@
                   :key="color.name"
                 />
               </div>
-            </AppBlock>
+            </div>
           </AppActiveBlock>
         </v-col>
       </v-row>

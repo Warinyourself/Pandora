@@ -185,6 +185,8 @@ export default class AppFileLoader extends Vue {
 <style lang="stylus">
 .app-file-loader
   width 100%
+  display flex
+  flex-direction column
   padding: 10px
   min-height 235px
   border-radius: 10px
@@ -227,7 +229,6 @@ export default class AppFileLoader extends Vue {
   min-width 40px
   min-height 40px
   margin-right 5px
-  margin-bottom 5px
   border-radius 10px
 
 .fw-wrap
