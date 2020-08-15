@@ -10,13 +10,12 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 import { PageModule } from '@/store/page'
-import { ThemeModule } from '@/store/theme'
-import { ColorModule } from '@/store/color'
+import { PaletteModule } from '@/store/palette'
 
 import noneLayout from '@/layout/none.vue'
 import defaultLayout from '@/layout/default.vue'
 
-import { defaultColors } from '@/models/palette'
+import { defaultPalette } from '@/models/palette'
 
 @Component({
   components: {
@@ -29,20 +28,19 @@ export default class App extends Vue {
     return PageModule.layout
   }
 
+  get isDark() {
+    return PaletteModule.isDark
+  }
+
   mounted() {
     document.documentElement.addEventListener('keydown', PageModule.handleKeypress)
 
-    const themeMode = localStorage.getItem('theme') || 'light'
+    const currentPalette = localStorage.getItem('currentPalette')
+    const palette = currentPalette ? JSON.parse(currentPalette) : defaultPalette
 
-    ThemeModule.changeTheme({ theme: themeMode, self: this })
+    this.$vuetify.theme.dark = this.isDark
 
-    const theme = defaultColors.reduce((theme: any, { hex, name }) => {
-      theme[name] = hex
-
-      return theme
-    }, {})
-
-    ColorModule.setTheme({ theme, self: this })
+    PaletteModule.activatePalette({ palette, self: this })
   }
 }
 </script>
