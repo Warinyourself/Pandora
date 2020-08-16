@@ -12,7 +12,10 @@
           <AppActiveBlock
             :menu="generateMenu(palette)"
           >
-            <div class="block block--bg">
+            <router-link
+              class="block block--darken"
+              :to="{ name: 'PaletteEdit', params: { id: palette.name } }"
+            >
               <h3> {{ palette.name }} </h3>
               <div class="d-flex">
                 <div
@@ -22,7 +25,7 @@
                   :key="color.name"
                 />
               </div>
-            </div>
+            </router-link>
           </AppActiveBlock>
         </v-col>
       </v-row>

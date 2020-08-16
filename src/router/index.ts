@@ -23,12 +23,17 @@ Vue.use(VueRouter)
   {
     path: '/palette',
     name: 'Palette',
-    component: () => import('../views/palette/Index.vue')
+    component: () => import('../views/palette/Palette.vue')
   },
   {
     path: '/palette/create',
     name: 'PaletteCreate',
-    component: () => import('../views/palette/Create.vue')
+    component: () => import('../views/palette/PaletteCreate.vue')
+  },
+  {
+    path: '/palette/:id',
+    name: 'PaletteEdit',
+    component: () => import('../views/palette/PaletteEdit.vue')
   },
   {
     path: '/commands',

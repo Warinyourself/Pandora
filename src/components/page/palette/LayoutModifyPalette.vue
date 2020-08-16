@@ -1,8 +1,6 @@
 <template>
   <AppContent>
-    <v-text-field label="Palette name" v-model="name">
-
-    </v-text-field>
+    <v-text-field label="Palette name" v-model="name"/>
 
     <AppBlock>
       <h2 class="title"> Create colors </h2>
@@ -55,27 +53,34 @@
       color="primary"
       @click="createPalette"
     >
-      Create palette
+      {{isEdit ? 'Update' : 'Create'}} palette
     </v-btn>
   </AppContent>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import { PaletteModule } from '@/store/palette'
 // eslint-disable-next-line no-unused-vars
 import { Palette, PaletteColor } from '@/models/palette'
 import { defaultColor } from '@/models/palette'
+import { getUUID } from '@/utils/helper'
 
 @Component
-export default class PalettePage extends Vue {
+export default class LayoutModifyPalette extends Vue {
+  @Prop({ type: Object, default: () => ({}) }) palette!: Palette
+
   colors = [] as PaletteColor[]
   name = 'Default name'
   activeColor: PaletteColor | null = null
 
+  get isEdit() {
+    return this.palette.id
+  }
+
   get computedPalette(): Palette {
     return {
-      id: Math.random() + '',
+      id: this.palette.id || getUUID(),
       name: this.name,
       colors: this.colors.map(color => {
         color.hex = color.hex.replace(/FF$/, '')
@@ -85,9 +90,18 @@ export default class PalettePage extends Vue {
     }
   }
 
+  mounted() {
+    if (this.isEdit) {
+      this.name = this.palette.name
+      this.colors = this.palette.colors
+
+      this.activeColor = this.colors[0]
+    }
+  }
+
   createColor() {
      const color: PaletteColor = {
-       name: null,
+       name: 'primary',
        hex: defaultColor
      }
 
