@@ -12,7 +12,9 @@
           v-for="item in menu.items"
           :key="item.title"
         >
-          {{ item.title }}
+          <div class="right-menu-item-content">
+            {{ item.title }}
+          </div>
         </li>
       </ul>
     </transition>
@@ -37,13 +39,29 @@ export default class AppBlock extends Vue {
   position absolute
   border-radius 5px
   overflow hidden
-  z-index 10
-  .right-menu-item
-    padding 5px 10px
-    font-size .9rem
-    background #0f091d
-    cursor pointer
+  z-index 5
+
+.right-menu-item-content
+  position relative
+  z-index 2
+
+.right-menu-item
+  padding 5px 10px
+  font-size .9rem
+  cursor pointer
+  position relative
+  &::before
+    content ''
+    display block
+    z-index 1
+    background var(--v-bg-darken2)
+    width 100%
+    height 100%
+    top 0
+    left 0
+    position absolute
+    opacity 0.8
     transition .2s
-    &:hover
-      background #241939
+  &:hover::before
+    opacity 0.9
 </style>
