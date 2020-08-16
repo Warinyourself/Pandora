@@ -141,8 +141,7 @@ if (isElectron) {
 
 // @ts-ignore
 import ColorThief from 'colorthief'
-import { defaultColors } from '@/models/palette'
-const defaultColor = '#FF00FF'
+import { defaultColors, defaultColor } from '@/models/palette'
 
 // eslint-disable-next-line no-unused-vars
 import { Box } from '@/models/box'

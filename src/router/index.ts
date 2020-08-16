@@ -21,19 +21,24 @@ Vue.use(VueRouter)
     component: () => import('../views/box/Edit.vue')
   },
   {
-    path: '/settings',
-    name: 'Settings',
-    component: () => import('../views/Settings.vue')
-  },
-  {
     path: '/palette',
     name: 'Palette',
-    component: () => import('../views/Palette.vue')
+    component: () => import('../views/palette/Index.vue')
+  },
+  {
+    path: '/palette/create',
+    name: 'PaletteCreate',
+    component: () => import('../views/palette/Create.vue')
   },
   {
     path: '/commands',
     name: 'Commands',
     component: () => import('../views/Commands.vue')
+  },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: () => import('../views/Settings.vue')
   }
 ]
 

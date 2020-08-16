@@ -3,6 +3,7 @@
     ref="block"
     v-click-outside="closeMenu"
     @click.right.prevent.stop="viewMenu"
+    v-on="$listeners"
   >
     <slot/>
   </div>

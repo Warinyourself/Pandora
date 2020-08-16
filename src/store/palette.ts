@@ -11,7 +11,7 @@ export interface PaletteState {
 @Module({ dynamic: true, store, name: 'Palette' })
 class PaletteClass extends VuexModule implements PaletteState {
   palettes: Palette[] = []
-  activePalette = ''
+  nameActivePalette = ''
 
   @Mutation
   SET<S extends this, K extends keyof this>({ key, value }: { key: K, value: S[K] }) {
@@ -20,6 +20,10 @@ class PaletteClass extends VuexModule implements PaletteState {
 
   get isDark() {
     return true
+  }
+
+  get activePalette() {
+    return this.palettes.find(({name}) => name === this.nameActivePalette)
   }
 
   @Action
@@ -42,6 +46,7 @@ class PaletteClass extends VuexModule implements PaletteState {
     const vuetifyColors = ['primary', 'secondary', 'tertiary', 'bg', 'fg']
 
     localStorage.setItem('currentPalette', JSON.stringify(palette))
+    this.SET({ key: 'nameActivePalette', value: palette.name })
 
     palette.colors.forEach(({ name, hex }) => {
       if (vuetifyColors.includes(name)) {

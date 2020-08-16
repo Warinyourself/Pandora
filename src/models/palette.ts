@@ -31,6 +31,8 @@ export const defaultColors: PaletteColor[] = [
   },
 ]
 
+export const defaultColor = '#DA0463'
+
 export const ActiveRedDarkColors: PaletteColor[] = [
   {
     name: 'primary',

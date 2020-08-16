@@ -26,6 +26,12 @@
           </AppActiveBlock>
         </v-col>
       </v-row>
+      <v-btn
+        color="primary"
+        :to="{ name: 'PaletteCreate' }"
+      >
+        Create new palette
+      </v-btn>
     </AppBlock>
   </AppContent>
 </template>
@@ -42,19 +48,30 @@ export default class PalettePage extends Vue {
     return PaletteModule.palettes
   }
 
+  get nameActivePalette() {
+    return PaletteModule.nameActivePalette
+  }
+
   async mounted() {
     await PaletteModule.updatePalettes()
   }
 
   generateMenu(palette: Palette) {
-    return [
-      {
-        title: 'Activate palette',
-        callback: () => {
-          PaletteModule.activatePalette({ palette, self: this })
+    const menu = []
+    const isAlreadyActive = this.nameActivePalette === palette.name
+
+    if (!isAlreadyActive) {
+      menu.push(
+        {
+          title: 'Activate palette',
+          callback: () => {
+            PaletteModule.activatePalette({ palette, self: this })
+          }
         }
-      },
-    ]
+      )
+    }
+
+    return menu
   }
 }
 </script>
