@@ -126,7 +126,6 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import { BoxModule } from '@/store/box'
-import { ColorModule } from '@/store/color'
 
 let ipcRenderer: Electron.IpcRenderer
 
@@ -146,7 +145,10 @@ import { defaultColors, defaultColor } from '@/models/palette'
 // eslint-disable-next-line no-unused-vars
 import { Box } from '@/models/box'
 // eslint-disable-next-line no-unused-vars
+import { Palette, PaletteColor } from '@/models/palette'
+// eslint-disable-next-line no-unused-vars
 import { LoaderFile, RightMenuItem } from '@/models/page'
+import { PaletteModule } from '@/store/palette';
 
 
 @Component
@@ -242,12 +244,13 @@ export default class LayoutModifyBox extends Vue {
       {
         title: 'Set up palette',
         callback: () => {
-          const theme = this.palette.reduce((theme: any, { hex, name }) => {
-            theme[name] = hex
+          const palette: Palette = {
+            id: Math.random() + '',
+            name: 'From Box',
+            colors: this.palette
+          }
 
-            return theme
-          }, {})
-          ColorModule.setTheme({ theme, self: this })
+          PaletteModule.activatePalette({ palette, self: this })
         }
       },
       {
@@ -265,42 +268,30 @@ export default class LayoutModifyBox extends Vue {
     ]
   }
 
-  generateRightMenuColor(color: any) {
+  generateRightMenuColor(color: PaletteColor) {
     return [
       {
         title: 'Set primary',
         callback: () => {
-          ColorModule.setColor({ name: 'primary', color: color.hex})
-
-          this.$vuetify.theme.themes.dark.primary = color.hex
-          this.$vuetify.theme.themes.light.primary = color.hex
+          color.name = 'primary'
         }
       },
       {
         title: 'Set secondary',
         callback: () => {
-          ColorModule.setColor({ name: 'secondary', color: color.hex})
-
-          this.$vuetify.theme.themes.dark.secondary = color.hex
-          this.$vuetify.theme.themes.light.secondary = color.hex
+          color.name = 'secondary'
         }
       },
       {
         title: 'Set tertiary',
         callback: () => {
-          ColorModule.setColor({ name: 'tertiary', color: color.hex})
-
-          this.$vuetify.theme.themes.dark.tertiary = color.hex
-          this.$vuetify.theme.themes.light.tertiary = color.hex
+          color.name = 'tertiary'
         }
       },
       {
         title: 'Set background',
         callback: () => {
-          ColorModule.setColor({ name: 'bg', color: color.hex})
-
-          this.$vuetify.theme.themes.dark.bg = color.hex
-          this.$vuetify.theme.themes.light.bg = color.hex
+          color.name = 'bg'
         }
       },
       {
@@ -308,12 +299,6 @@ export default class LayoutModifyBox extends Vue {
         icon: 'mdi-trash-can-outline',
         callback: () => {
           this.palette = this.palette.filter((innerColor) => JSON.stringify(color) !== JSON.stringify(innerColor) )
-        }
-      },
-      {
-        title: 'Update',
-        callback: () => {
-          
         }
       },
     ]
