@@ -271,28 +271,33 @@ export default class LayoutModifyBox extends Vue {
   generateRightMenuColor(color: PaletteColor) {
     return [
       {
-        title: 'Set primary',
-        callback: () => {
-          color.name = 'primary'
-        }
-      },
-      {
-        title: 'Set secondary',
-        callback: () => {
-          color.name = 'secondary'
-        }
-      },
-      {
-        title: 'Set tertiary',
-        callback: () => {
-          color.name = 'tertiary'
-        }
-      },
-      {
-        title: 'Set background',
-        callback: () => {
-          color.name = 'bg'
-        }
+        title: 'Set',
+        items: [
+          {
+            title: 'Set primary',
+            callback: () => {
+              color.name = 'primary'
+            }
+          },
+          {
+            title: 'Set secondary',
+            callback: () => {
+              color.name = 'secondary'
+            }
+          },
+          {
+            title: 'Set tertiary',
+            callback: () => {
+              color.name = 'tertiary'
+            }
+          },
+          {
+            title: 'Set background',
+            callback: () => {
+              color.name = 'bg'
+            }
+          }
+        ]
       },
       {
         title: 'Delete',
