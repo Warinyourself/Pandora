@@ -10,9 +10,10 @@ export interface DragItem {
 }
 
 export interface RightMenuItem {
-  icon: string
+  icon?: string
   title: string
-  callback: Function
+  callback?: Function
+  items?: RightMenuItem[]
 }
 
 export type LoaderFileType = 'image' | 'text'

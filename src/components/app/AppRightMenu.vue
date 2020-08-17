@@ -13,7 +13,28 @@
           :key="item.title"
         >
           <div class="right-menu-item-content">
-            {{ item.title }}
+            <p class="flex-1 mb-0">
+              {{ item.title }}
+            </p>
+            <AppIcon class="right-menu-item-arrow" v-if="item.items && item.items.length" name="arrow"/>
+            <ul
+              class="right-menu-items"
+              v-if="item.items && item.items.length"
+            >
+              <li
+                class="right-menu-item"
+                @click.stop.prevent="item.callback"
+                v-for="item in item.items"
+                :key="item.title"
+              >
+                <div class="right-menu-item-content">
+                  <p class="flex-1 mb-0">
+                    {{ item.title }}
+                  </p>
+                  <AppIcon class="right-menu-item-arrow" v-if="item.items && item.items.length" name="arrow"/>
+                </div>
+              </li>
+            </ul>
           </div>
         </li>
       </ul>
@@ -38,18 +59,25 @@ export default class AppBlock extends Vue {
 .right-menu
   position absolute
   border-radius 5px
-  overflow hidden
   z-index 5
+  & > .right-menu-item:hover
+    .right-menu-items
+      opacity 1
+      display block
 
 .right-menu-item-content
+  padding 5px 10px
   position relative
+  display flex
+  align-items center
   z-index 2
 
 .right-menu-item
-  padding 5px 10px
+  list-style none
   font-size .9rem
   cursor pointer
   position relative
+  white-space nowrap
   &::before
     content ''
     display block
@@ -64,4 +92,21 @@ export default class AppBlock extends Vue {
     transition .2s
   &:hover::before
     opacity 0.9
+
+.right-menu-items
+  top 0
+  right 0
+  opacity 1
+  display none
+  transition: .15s
+  position absolute
+  list-style none
+  transform translateX(100%)
+
+.right-menu-item-arrow
+  height 100%
+  transform rotate(180deg)
+  opacity 0.8
+  width 5px
+  stroke white
 </style>

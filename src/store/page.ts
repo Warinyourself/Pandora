@@ -7,6 +7,7 @@ import { RightMenu, DragItem } from '@/models/page'
 export interface PageState {
   routes: Route[]
   isInited: boolean
+  rightMenu: RightMenu
 }
 
 @Module({ dynamic: true, store, name: 'page' })
@@ -18,8 +19,8 @@ class Page extends VuexModule implements PageState {
   rightMenu = {
     view: false,
     style: {
-      left: null,
-      top: null
+      left: '0px',
+      top: '0px'
     },
     items: [
       {
