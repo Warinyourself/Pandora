@@ -4,6 +4,9 @@ import db from '@/controller/db'
 
 import { Palette } from '@/models/palette'
 
+// @ts-ignore
+import convert from 'color-convert'
+
 export interface PaletteState {
   palettes: Palette[]
 }
@@ -26,6 +29,19 @@ class PaletteClass extends VuexModule implements PaletteState {
     return this.palettes.find(({name}) => name === this.nameActivePalette)
   }
 
+  get changeLight() {
+    return (color: string, light: number) => {
+      const hsl = convert.hex.hsl(color)
+  
+      const [r, g, b] = convert.hsl.rgb(hsl[0], hsl[1], hsl[2] + light)
+      const hex = convert.rgb.hex(r, g, b)
+
+      color = `#${hex}`
+  
+      return color
+    }
+  }
+
   @Action
   async updatePalettes() {
     const palletes = await db.getAll<Palette>('palette')
@@ -45,13 +61,33 @@ class PaletteClass extends VuexModule implements PaletteState {
   activatePalette({ palette, self }: {palette: Palette, self: any}) {
     const vuetifyColors = ['primary', 'secondary', 'tertiary', 'bg', 'fg']
 
+    const updateColors = palette.colors.map((color) => {
+      const step = 5
+      return {
+        name: color.name,
+        base: color.hex,
+        lighten1: this.changeLight(color.hex, step * 1),
+        lighten2: this.changeLight(color.hex, step * 2),
+        lighten3: this.changeLight(color.hex, step * 3),
+        lighten4: this.changeLight(color.hex, step * 4),
+        lighten5: this.changeLight(color.hex, step * 5),
+        darken1: this.changeLight(color.hex, step * -1),
+        darken2: this.changeLight(color.hex, step * -2),
+        darken3: this.changeLight(color.hex, step * -3),
+        darken4: this.changeLight(color.hex, step * -4),
+        darken5: this.changeLight(color.hex, step * -5)
+      }
+    })
+
     localStorage.setItem('currentPalette', JSON.stringify(palette))
     this.SET({ key: 'nameActivePalette', value: palette.name })
 
-    palette.colors.forEach(({ name, hex }) => {
-      if (vuetifyColors.includes(name)) {
-        self.$vuetify.theme.themes.dark[name] = hex
-        self.$vuetify.theme.themes.light[name] = hex
+    updateColors.forEach((color) => {
+      if (vuetifyColors.includes(color.name)) {
+        const { name, ...colors } = color
+
+        self.$vuetify.theme.themes.dark[name] = colors
+        self.$vuetify.theme.themes.light[name] = colors
       }
     })
   }
