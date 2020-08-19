@@ -102,7 +102,7 @@ export default class AppDrawer extends Vue {
   color white
   font-weight 400
   transition .3s
-  &.router-link-exact-active
+  &.router-link-active
     .v-icon
       color: var(--v-primary-base)
      

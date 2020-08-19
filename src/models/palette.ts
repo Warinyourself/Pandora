@@ -5,12 +5,12 @@ export interface Palette {
   colors: PaletteColor[]
 }
 
+export type ColorsType = 'primary' | 'secondary' | 'tertiary' | 'fg' | 'bg' | 'undefined'
+
 export interface PaletteColor {
   name: ColorsType
   hex: string
 }
-
-export type ColorsType = 'primary' | 'secondary' | 'tertiary' | 'fg' | 'bg' 
 
 export const defaultColors: PaletteColor[] = [
   {

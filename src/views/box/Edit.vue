@@ -14,7 +14,7 @@ import { Box } from '@/models/box'
   }
 })
 export default class EditBoxPage extends Vue {
-  box: Box | null = null
+  box: Box | null | undefined = null
 
   async mounted() {
     const id = this.$route.params.id

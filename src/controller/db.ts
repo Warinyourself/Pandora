@@ -1,11 +1,12 @@
+/* eslint-disable no-async-promise-executor */
 export interface _DB {
   name: string
   version: number
   isConnected: boolean
   db: null | IDBDatabase
-  get: (objectStoreName: string, key: string) => Promise<unknown>
+  get: <T>(objectStoreName: KeysDB, key: string) => Promise<T | undefined>
   getAll: <T>(objectStoreName: KeysDB) => Promise<T[] | undefined>
-  put: (objectStoreName: string, info: any, key?: string, rule?: IDBTransactionMode) => Promise<any>
+  put: <T>(objectStoreName: KeysDB, info: T, key?: string, rule?: IDBTransactionMode) => Promise<any>
 }
 
 type KeysDB = 'box' | 'palette'
@@ -92,9 +93,8 @@ export class DB implements _DB {
     }
   }
 
-  get(objectStoreName: string, key: string) {
-    // eslint-disable-next-line no-async-promise-executor
-    return new Promise( async (resolve, reject) => {
+  get<T>(objectStoreName: KeysDB, key: string) {
+    return new Promise<T>( async (resolve, reject) => {
       !this.db && await wait(3000)
 
       if (!this.db) {
@@ -114,7 +114,6 @@ export class DB implements _DB {
   }
 
   getAll<T>(objectStoreName: KeysDB) {
-    // eslint-disable-next-line no-async-promise-executor
     return new Promise<T[] | undefined>( async (resolve, reject) => {
       !this.db && await wait(3000)
 
@@ -134,8 +133,7 @@ export class DB implements _DB {
     })
   }
 
-  put(objectStoreName: string, info: any, key?: string, rule: IDBTransactionMode = 'readwrite') {
-    // eslint-disable-next-line no-async-promise-executor
+  put<T>(objectStoreName: KeysDB, info: T, key?: string, rule: IDBTransactionMode = 'readwrite') {
     return new Promise( async (resolve, reject) => {
       !this.db && await wait(3000)
 
