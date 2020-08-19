@@ -63,7 +63,7 @@
       :menu="generatePaletteMenu()"
       class="block block mt-2"
     >
-      Palette:
+      Palette
       <AppDrop
         type="color"
         :callback="handleDropColor"
@@ -74,9 +74,13 @@
             :menu="generateRightMenuColor(color)"
             class="color-block" 
             v-for="color in palette"
+            @click="activateColor(color)"
             :key="color.hex"
             :style="`background-color: ${color.hex}`"
           />
+          <v-expand-transition>
+            <ModifyColor v-show="activeColor" v-model="activeColor"/>
+          </v-expand-transition>
         </div>
       </AppDrop>
     </AppActiveBlock>
@@ -125,7 +129,12 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
+
+import ModifyColor from '@/components/page/palette/ModifyColor.vue'
+
 import { BoxModule } from '@/store/box'
+import { PaletteModule } from '@/store/palette'
+
 
 let ipcRenderer: Electron.IpcRenderer
 
@@ -148,10 +157,14 @@ import { Box } from '@/models/box'
 import { Palette, PaletteColor } from '@/models/palette'
 // eslint-disable-next-line no-unused-vars
 import { LoaderFile, RightMenuItem } from '@/models/page'
-import { PaletteModule } from '@/store/palette';
+// eslint-disable-next-line no-unused-vars
+import { Color } from 'vuetify/lib/util/colors'
 
-
-@Component
+@Component({
+  components: {
+    ModifyColor
+  }
+})
 export default class LayoutModifyBox extends Vue {
   @Prop({ type: Object }) box!: Box
 
@@ -159,6 +172,7 @@ export default class LayoutModifyBox extends Vue {
   editFile = {} as LoaderFile
   boxName = 'Box name'
   files = [] as Array<LoaderFile>
+  activeColor = {}
   palette = defaultColors
   hex = defaultColor
   viewColorPicker = false
@@ -176,6 +190,11 @@ export default class LayoutModifyBox extends Vue {
       this.boxName = this.box.name
       this.files = this.box.files
     }
+  }
+
+  activateColor(color: Color) {
+    console.log({ color })
+    this.activeColor = color
   }
 
   fileModifier(file: LoaderFile) {
@@ -225,7 +244,7 @@ export default class LayoutModifyBox extends Vue {
 
   addColorToPalette() {
     this.palette.push({
-      name: Math.random() + '',
+      name: 'undefined',
       hex: this.hex
     })
 
