@@ -103,6 +103,35 @@
       </div>
     </v-dialog>
 
+    <v-dialog
+      v-model="paletteSelectionModal"
+      max-width="50vmin"
+    >
+      <div class="block ma-0">
+        <v-row>
+          <v-col cols="6"
+            v-for="palette in palettes"
+            :key="palette.key"
+          >
+            <div
+              class="block block--darken"
+              @click="activatePalette(palette)"
+            >
+              <h3> {{ palette.name }} </h3>
+              <div class="d-flex">
+                <div
+                  class="color-block"
+                  :style="`background-color: ${color.hex}`"
+                  v-for="color in palette.colors"
+                  :key="color.name"
+                />
+              </div>
+            </div>
+          </v-col>
+        </v-row>
+      </div>
+    </v-dialog>
+
     <div
       v-if="bg.hash"
       class="block bg-image mt-2"
@@ -176,6 +205,11 @@ export default class LayoutModifyBox extends Vue {
   palette = defaultColors
   hex = defaultColor
   viewColorPicker = false
+  paletteSelectionModal = true
+
+  get palettes() {
+    return PaletteModule.palettes
+  }
 
   get isEdit() {
     return this.box
@@ -186,6 +220,8 @@ export default class LayoutModifyBox extends Vue {
   }
 
   async mounted() {
+    await PaletteModule.updatePalettes()
+
     if (this.box) {
       this.boxName = this.box.name
       this.files = this.box.files
@@ -193,7 +229,6 @@ export default class LayoutModifyBox extends Vue {
   }
 
   activateColor(color: Color) {
-    console.log({ color })
     this.activeColor = color
   }
 
@@ -252,6 +287,12 @@ export default class LayoutModifyBox extends Vue {
     this.hex = defaultColor
   }
 
+  activatePalette(palette: Palette) {
+    this.palette = palette.colors
+
+    this.paletteSelectionModal = false
+  }
+
   generatePaletteMenu() {
     return [
       {
@@ -270,6 +311,12 @@ export default class LayoutModifyBox extends Vue {
           }
 
           PaletteModule.activatePalette({ palette, self: this })
+        }
+      },
+      {
+        title: 'Upload palette',
+        callback: () => {
+          this.paletteSelectionModal = true
         }
       },
       {

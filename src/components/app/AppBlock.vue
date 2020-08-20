@@ -25,5 +25,5 @@ export default class AppBlock extends Vue {}
   background-color var(--v-bg-base)
 
 .block--darken
-  background-color var(--v-bg-darkend3)
+  background-color var(--v-bg-darken2)
 </style>
