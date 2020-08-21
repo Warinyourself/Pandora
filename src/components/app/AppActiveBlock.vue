@@ -1,7 +1,6 @@
 <template>
   <div
     ref="block"
-    v-click-outside="closeMenu"
     @click.right.prevent.stop="viewMenu"
     v-on="$listeners"
   >
@@ -25,12 +24,6 @@ export default class AppActiveBlock extends Vue {
         top: event.pageY + 'px',
         left: event.pageX + 'px'
       }
-    })
-  }
-
-  closeMenu() {
-    PageModule.ASSING_MENU({
-      view: false,
     })
   }
 }

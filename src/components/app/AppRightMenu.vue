@@ -2,13 +2,14 @@
   <div>
     <transition name="fade-menu">
       <ul
+        v-click-outside="closeMenu"
         class="right-menu"
         v-if="menu.view"
         :style="menu.style"
       >
         <li
-          class="right-menu-item"
-          @click.stop.prevent="item.callback"
+          :class="`right-menu-item ${item.disabled ? 'right-menu-items--disabled' : ''}`"
+          @click.stop.prevent="handleCallback(item)"
           v-for="item in menu.items"
           :key="item.title"
         >
@@ -22,7 +23,7 @@
               v-if="item.items && item.items.length"
             >
               <li
-                class="right-menu-item"
+                :class="`right-menu-item ${item.disabled ? 'right-menu-items--disabled' : ''}`"
                 @click.stop.prevent="item.callback"
                 v-for="item in item.items"
                 :key="item.title"
@@ -48,9 +49,20 @@ import { PageModule } from '@/store/page'
 
 @Component
 export default class AppBlock extends Vue {
-
   get menu() {
     return PageModule.rightMenu
+  }
+
+  async handleCallback(item) {
+    await item.callback()
+    
+    this.closeMenu()
+  }
+
+  closeMenu() {
+    PageModule.ASSING_MENU({
+      view: false,
+    })
   }
 }
 </script>
@@ -109,4 +121,11 @@ export default class AppBlock extends Vue {
   opacity 0.8
   width 5px
   stroke white
+
+.right-menu-items--disabled
+  cursor not-allowed
+  pointer-events none
+  .right-menu-item-content
+    opacity 0.6
+
 </style>

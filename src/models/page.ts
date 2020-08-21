@@ -12,6 +12,7 @@ export interface DragItem {
 export interface RightMenuItem {
   icon?: string
   title: string
+  disabled?: boolean
   callback?: Function
   items?: RightMenuItem[]
 }
