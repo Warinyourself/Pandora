@@ -12,7 +12,7 @@
           <AppActiveBlock
             :menu="generateMenu(palette)"
           >
-            <router-link
+            <div
               class="block block--darken"
               :to="{ name: 'PaletteEdit', params: { id: palette.name } }"
             >
@@ -25,7 +25,7 @@
                   :key="color.name"
                 />
               </div>
-            </router-link>
+            </div>
           </AppActiveBlock>
         </v-col>
       </v-row>
@@ -40,10 +40,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator'
 import { PaletteModule } from '@/store/palette'
 // eslint-disable-next-line no-unused-vars
 import { Palette } from '@/models/palette'
+// eslint-disable-next-line no-unused-vars
+import { RightMenuItem } from '@/models/page'
 
 @Component
 export default class PalettePage extends Vue {
@@ -63,16 +65,13 @@ export default class PalettePage extends Vue {
     const menu = []
     const isAlreadyActive = this.nameActivePalette === palette.name
 
-    if (!isAlreadyActive) {
-      menu.push(
-        {
-          title: 'Activate palette',
-          callback: () => {
-            PaletteModule.activatePalette({ palette, self: this })
-          }
-        }
-      )
-    }
+    menu.push({
+      title: 'Activate palette',
+      disabled: isAlreadyActive,
+      callback: () => {
+        PaletteModule.activatePalette({ palette, self: this })
+      }
+    })
 
     return menu
   }
