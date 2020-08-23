@@ -41,12 +41,12 @@ export default class AppDrawer extends Vue {
     return [
       {
         id: 'Boxes',
-        name: 'Index',
+        name: 'Box',
         title: 'Boxes',
         badge: 0,
         isAvailable: true,
         to: {
-          name: 'Index'
+          name: 'Box'
         },
         icon: 'mdi-widgets'
       },
@@ -57,7 +57,7 @@ export default class AppDrawer extends Vue {
         badge: 0,
         isAvailable: true,
         to: {
-          name: 'Commands'
+          name: 'Command'
         },
         icon: 'mdi-bash'
       },

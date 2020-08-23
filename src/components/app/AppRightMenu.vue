@@ -127,5 +127,4 @@ export default class AppBlock extends Vue {
   pointer-events none
   .right-menu-item-content
     opacity 0.6
-
 </style>

@@ -6,8 +6,13 @@ Vue.use(VueRouter)
 
   const routes = [
   {
-    path: '/box',
+    path: '/',
     name: 'Index',
+    redirect: '/box'
+  },
+  {
+    path: '/box',
+    name: 'Box',
     component: Index
   },
   {
@@ -36,9 +41,9 @@ Vue.use(VueRouter)
     component: () => import('../views/palette/PaletteEdit.vue')
   },
   {
-    path: '/commands',
-    name: 'Commands',
-    component: () => import('../views/Commands.vue')
+    path: '/command',
+    name: 'Command',
+    component: () => import('../views/command/Command.vue')
   },
   {
     path: '/settings',

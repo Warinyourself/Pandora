@@ -254,7 +254,7 @@ export default class LayoutModifyBox extends Vue {
 
         resolve({ palette })
       })
-    });
+    })
   }
 
   handleDropColor(color: string) {
