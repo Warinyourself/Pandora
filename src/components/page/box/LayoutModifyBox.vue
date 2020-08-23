@@ -205,7 +205,7 @@ export default class LayoutModifyBox extends Vue {
   palette = defaultColors
   hex = defaultColor
   viewColorPicker = false
-  paletteSelectionModal = true
+  paletteSelectionModal = false
 
   get palettes() {
     return PaletteModule.palettes
@@ -269,8 +269,10 @@ export default class LayoutModifyBox extends Vue {
   async saveBox() {
     await this.$db.put('box', {
       name: this.boxName,
-      files: []
+      files: this.files
     })
+
+    this.$router.push({ name: 'Box' })
   }
 
   openViewColor() {

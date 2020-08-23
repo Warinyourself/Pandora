@@ -41,9 +41,7 @@ export default class IndexPage extends Vue {
   }
 
   async mounted() {
-    const boxes = await this.$db.getAll('box') as Box[]
-
-    BoxModule.SET({ key: 'boxes', value: boxes })
+    await BoxModule.loadAll()
   }
 }
 </script>
