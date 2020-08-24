@@ -4,11 +4,8 @@
       <h2 class="title"> Choise box </h2>
       <div v-if="boxes.length">
         <v-row>
-          <v-col v-for="box in boxes" :key="box.id">
-            <router-link :to="{ name: 'BoxEdit', params: { id: box.name }}" class="box-block"> 
-              <h2 class="title"> Name: {{ box.name }}</h2>
-              <p v-if="box.files"> Files: {{ box.files.length }} </p>
-            </router-link>
+          <v-col cols="4" v-for="box in boxes" :key="box.id">
+            <BoxBlock :box="box"/>
           </v-col>
         </v-row>
         <AppButton
@@ -33,8 +30,13 @@ import { BoxModule } from '@/store/box'
 
 // eslint-disable-next-line no-unused-vars
 import { Box } from '@/models/box'
+import BoxBlock from '@/components/page/box/BoxBlock.vue'
 
-@Component
+@Component({
+  components: {
+    BoxBlock
+  }
+})
 export default class IndexPage extends Vue {
   get boxes() {
     return BoxModule.boxes

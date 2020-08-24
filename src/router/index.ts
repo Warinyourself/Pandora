@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Index from '@/views/Index.vue'
 
 Vue.use(VueRouter)
 
-  const routes = [
+const routes = [
   {
     path: '/',
     name: 'Index',
@@ -13,17 +12,17 @@ Vue.use(VueRouter)
   {
     path: '/box',
     name: 'Box',
-    component: Index
+    component: () => import('../views/box/Box.vue')
   },
   {
     path: '/box/create',
     name: 'BoxCreate',
-    component: () => import('../views/box/Create.vue')
+    component: () => import('../views/box/BoxCreate.vue')
   },
   {
     path: '/box/:id',
     name: 'BoxEdit',
-    component: () => import('../views/box/Edit.vue')
+    component: () => import('../views/box/BoxEdit.vue')
   },
   {
     path: '/palette',
