@@ -12,7 +12,7 @@
           <AppActiveBlock
             :menu="generateMenu(palette)"
           >
-            <div
+            <router-link
               class="block block--darken"
               :to="{ name: 'PaletteEdit', params: { id: palette.name } }"
             >
@@ -25,7 +25,7 @@
                   :key="color.name"
                 />
               </div>
-            </div>
+            </router-link>
           </AppActiveBlock>
         </v-col>
       </v-row>

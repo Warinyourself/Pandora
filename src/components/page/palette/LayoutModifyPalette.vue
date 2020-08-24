@@ -4,7 +4,7 @@
 
     <AppBlock>
       <h2 class="title"> Create colors </h2>
-      <v-row>
+      <v-row dense class="mb-2">
         <v-col
           cols="auto"
           v-for="color in colors"
@@ -49,12 +49,32 @@
         </v-col>
       </v-row>
     </AppBlock>
-    <v-btn
-      color="primary"
-      @click="createPalette"
-    >
-      {{isEdit ? 'Update' : 'Create'}} palette
-    </v-btn>
+    <v-row dense>
+      <v-col cols="auto">
+        <v-btn
+          color="primary"
+          @click="createPalette"
+        >
+          {{isEdit ? 'Update' : 'Save'}} palette
+        </v-btn>
+      </v-col>
+      <v-col cols="auto">
+        <v-btn
+          color="primary"
+          @click="exportToJson"
+        >
+          Export palette to JSON
+        </v-btn>
+      </v-col>
+      <v-col cols="auto">
+        <v-btn
+          color="primary"
+          @click="importPalette"
+        >
+          Import palette from clipboard
+        </v-btn>
+      </v-col>
+    </v-row>
   </AppContent>
 </template>
 
@@ -70,8 +90,9 @@ import { getUUID } from '@/utils/helper'
 export default class LayoutModifyPalette extends Vue {
   @Prop({ type: Object, default: () => ({}) }) palette!: Palette
 
-  colors = [] as PaletteColor[]
+  id = getUUID()
   name = 'Default name'
+  colors = [] as PaletteColor[]
   activeColor: PaletteColor | null = null
 
   get isEdit() {
@@ -80,7 +101,7 @@ export default class LayoutModifyPalette extends Vue {
 
   get computedPalette(): Palette {
     return {
-      id: this.palette.id || getUUID(),
+      id: this.palette.id || this.id,
       name: this.name,
       colors: this.colors.map(color => {
         color.hex = color.hex.replace(/FF$/, '')
@@ -96,6 +117,34 @@ export default class LayoutModifyPalette extends Vue {
       this.colors = this.palette.colors
 
       this.activeColor = this.colors[0]
+    }
+  }
+
+  async exportToJson() {
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(this.computedPalette))
+
+      alert('Successful save')
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async importPalette() {
+    try {
+      const info = JSON.parse(await navigator.clipboard.readText()) as Palette
+      let { id, name, colors } = info
+      
+      colors = colors.filter(({ hex, name }) => hex && name)
+
+      this.id = id
+      this.name = name
+      this.colors = colors
+
+      this.activeColor = this.colors[0]
+      alert('Successful export')
+    } catch (error) {
+      console.error(error)
     }
   }
 
