@@ -3,14 +3,6 @@
     <v-text-field v-model="boxName"></v-text-field>
 
     <AppFileLoader v-model="files" :file-modifier="fileModifier">
-      <template #emptyFileList>
-        <div class="file-upload-body">
-          <div>
-            <AppIcon name="file-image"/> 
-            <h5> Upload files here </h5>
-          </div>
-        </div>
-      </template>
       <template v-slot="{ file, remove }">
         <AppActiveBlock          
           :menu="generateRightMenu(file, { remove })"
@@ -67,13 +59,13 @@
       <AppDrop
         type="color"
         :callback="handleDropColor"
-        v-if="palette.length"
+        v-if="colors.length"
       >
         <div class="d-flex fw-wrap mt-1">
           <AppActiveBlock
             :menu="generateRightMenuColor(color)"
             class="color-block" 
-            v-for="color in palette"
+            v-for="color in colors"
             @click="activateColor(color)"
             :key="color.hex"
             :style="`background-color: ${color.hex}`"
@@ -196,10 +188,11 @@ export default class LayoutModifyBox extends Vue {
   boxName = 'Box name'
   files = [] as Array<LoaderFile>
   activeColor = {}
-  palette = defaultColors
   hex = defaultColor
   viewColorPicker = false
   paletteSelectionModal = false
+
+  colors = defaultColors
 
   get palettes() {
     return PaletteModule.palettes
@@ -252,7 +245,7 @@ export default class LayoutModifyBox extends Vue {
   }
 
   handleDropColor(color: string) {
-    this.palette.push(
+    this.colors.push(
       {
         name: 'undefined',
         hex: color
@@ -274,7 +267,7 @@ export default class LayoutModifyBox extends Vue {
   }
 
   addColorToPalette() {
-    this.palette.push({
+    this.colors.push({
       name: 'undefined',
       hex: this.hex
     })
@@ -284,7 +277,7 @@ export default class LayoutModifyBox extends Vue {
   }
 
   activatePalette(palette: Palette) {
-    this.palette = palette.colors
+    this.colors = palette.colors
 
     this.paletteSelectionModal = false
   }
@@ -303,7 +296,7 @@ export default class LayoutModifyBox extends Vue {
           const palette: Palette = {
             id: Math.random() + '',
             name: 'From Box',
-            colors: this.palette
+            colors: this.colors
           }
 
           PaletteModule.activatePalette({ palette, self: this })
@@ -318,13 +311,13 @@ export default class LayoutModifyBox extends Vue {
       {
         title: 'Save palette',
         callback: () => {
-          this.$db.put('palette', this.palette, 'palette amount-' + Math.random())
+          this.$db.put('palette', this.colors, 'palette amount-' + Math.random())
         }
       },
       {
         title: 'Set default palette',
         callback: () => {
-          this.palette = defaultColors
+          this.colors = defaultColors
         }
       },
     ]
@@ -365,7 +358,7 @@ export default class LayoutModifyBox extends Vue {
         title: 'Delete',
         icon: 'mdi-trash-can-outline',
         callback: () => {
-          this.palette = this.palette.filter((innerColor) => JSON.stringify(color) !== JSON.stringify(innerColor) )
+          this.colors = this.colors.filter((innerColor) => JSON.stringify(color) !== JSON.stringify(innerColor) )
         }
       },
     ]
@@ -427,7 +420,7 @@ export default class LayoutModifyBox extends Vue {
           }
 
           const finalColors = { bg, primary, secondary, tertiary }
-          this.palette = Object.entries<[number, number, number]>(finalColors).map(([name, hsl]) => {
+          this.colors = Object.entries<[number, number, number]>(finalColors).map(([name, hsl]) => {
             return {
               name: name as ColorsType,
               hex: PaletteModule.hslToHex(hsl)
@@ -467,9 +460,10 @@ export default class LayoutModifyBox extends Vue {
   width 55vmin
   height 100%
 
-.file-upload-body
-  width 100%
-  height 100%
-  display grid
-  place-items center
+// .file-upload-body
+//   width 100%
+//   height 100%
+//   display flex
+//   justify-content center
+//   align-items center
 </style>

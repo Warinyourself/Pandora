@@ -11,7 +11,11 @@
     </div>
     
     <label :for="id" v-else-if="!files.length" class="app-file-loader--full app-file-loader-empty">
-      <slot name="emptyFileList"/>
+      <slot v-if="$slots.emptyFileList" name="emptyFileList"/>
+      <div v-else class="flex-full">
+        <AppIcon class="app-file-loader-document" name="file-image"/> 
+        <h5 class="mt-2"> Upload files here </h5>
+      </div>
     </label>
 
     <v-row v-else>
@@ -226,6 +230,8 @@ export default class AppFileLoader extends Vue {
   z-index 1
 
 .flex-full
+  width 100%
+  height 100%
   flex 1 1 auto
   display flex
   align-items center
@@ -238,8 +244,8 @@ export default class AppFileLoader extends Vue {
   align-items center
 
 .app-file-loader-document
-  width 78px
-  height 78px
+  width 112px
+  height 112px
 
 .app-file-loader-file--image
   background-size cover
