@@ -1,12 +1,19 @@
 <template>
   <div class="app-file-loader" ref="loader">
-    <div class="app-file-loader-header">
-      {{ text }}
-    </div>
     <input type="file" multiple :id="id" class="hide-input" @change="handleFileUpload">
-    <label :for="id" v-if="!files.length" class="c-pointer">
+
+    <div v-if="isFocus" class="app-file-loader--full">
+      <slot v-if="$slots.focusFileList" name="focusFileList"/>
+      <div v-else class="flex-full"> 
+        <AppIcon class="app-file-loader-document" name="file-image"/> 
+        <h5 class="mt-2"> Drop files here </h5>
+      </div>
+    </div>
+    
+    <label :for="id" v-else-if="!files.length" class="app-file-loader--full app-file-loader-empty">
       <slot name="emptyFileList"/>
     </label>
+
     <v-row v-else>
       <v-col
         v-for="(file, i) in files"
@@ -26,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 
 // eslint-disable-next-line no-unused-vars
 import { LoaderFile, LoaderFileType } from '@/models/page'
@@ -34,7 +41,7 @@ import { LoaderFile, LoaderFileType } from '@/models/page'
 import { getUUID } from '@/utils/helper'
 
 // @ts-ignore
-import SparkMD5 from 'spark-md5'  
+import SparkMD5 from 'spark-md5'
 
 @Component({
   model: {
@@ -43,21 +50,26 @@ import SparkMD5 from 'spark-md5'
   }
 })
 export default class AppFileLoader extends Vue {
-  @Prop({ type: String }) msg!: string
   @Prop({ type: Array, default: () => [] }) files!: LoaderFile[]
   @Prop() fileModifier!: (file: LoaderFile) => Partial<LoaderFile>
 
-  text = 'put file here'
+  isFocus = true
   focusFileHash = ''
   result = []
   id = getUUID()
+
+  @Watch('files')
+  __filesChange(files: LoaderFile[]) {
+    if (files && files[0]?.hash && !this.focusFileHash) {
+      this.focusFileHash = files[0].hash
+    }
+  }
 
   get focusFile() {
     return this.files.find(({ hash }) => hash === this.focusFileHash)
   }
 
   async mounted() {
-    console.log({ self: this })
     let dropArea = this.$refs.loader as HTMLElement
 
     ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -76,24 +88,18 @@ export default class AppFileLoader extends Vue {
   }
 
   handlerDragEnter(event: DragEvent) {
-    this.text = 'Hold up mouse'
+    this.isFocus = true
 
     console.log("handlerDragEnter", event)
   }
 
   handlerDragLeave(event: DragEvent) {
-    this.text = 'Put file here'
+    this.isFocus = false
    
    console.log("handlerDragLeave", event)
   }
 
-  // handlerDragOver(event: DragEvent) {
-  // console.log("handlerDragOver", event)
-  // }
-  
   handlerDrop(event: DragEvent) {
-    this.text = 'put file here'
-
     let { dataTransfer } = event
     let files = dataTransfer?.files  
 
@@ -218,6 +224,22 @@ export default class AppFileLoader extends Vue {
 
 .app-file-loader-file-name
   z-index 1
+
+.flex-full
+  flex 1 1 auto
+  display flex
+  align-items center
+  flex-direction column
+
+.app-file-loader--full
+  cursor pointer
+  flex 1 1 auto
+  display flex
+  align-items center
+
+.app-file-loader-document
+  width 78px
+  height 78px
 
 .app-file-loader-file--image
   background-size cover
