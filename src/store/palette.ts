@@ -29,6 +29,21 @@ class PaletteClass extends VuexModule implements PaletteState {
     return this.palettes.find(({name}) => name === this.nameActivePalette)
   }
 
+  get hexToHsl() {
+    return (hex: string): [number, number, number] => {
+      return convert.hex.hsl(hex)
+    }
+  }
+
+  get hslToHex() {
+    return ([h, s, l]: [number, number, number]) => {
+      const [r, g, b] = convert.hsl.rgb(h, s, l)
+      const hex = convert.rgb.hex(r, g, b)
+
+      return `#${hex}`
+    }
+  }
+
   get changeLight() {
     return (color: string, light: number) => {
       const hsl = convert.hex.hsl(color)

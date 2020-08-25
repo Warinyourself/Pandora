@@ -30,7 +30,7 @@
             :key="item.title + 'btn'"
             bottom
           >
-            <template v-slot:activator="{attrs, on}">
+            <template v-slot:activator="{on}">
               <v-btn
                 @click="item.callback"
                 v-on="on"
@@ -178,7 +178,7 @@ import { defaultColors, defaultColor } from '@/models/palette'
 // eslint-disable-next-line no-unused-vars
 import { Box } from '@/models/box'
 // eslint-disable-next-line no-unused-vars
-import { Palette, PaletteColor } from '@/models/palette'
+import { Palette, PaletteColor, ColorsType } from '@/models/palette'
 // eslint-disable-next-line no-unused-vars
 import { LoaderFile, RightMenuItem } from '@/models/page'
 // eslint-disable-next-line no-unused-vars
@@ -396,29 +396,7 @@ export default class LayoutModifyBox extends Vue {
   }
 
   generateRightMenu(file: LoaderFile, { remove }: Record<string, Function> ): RightMenuItem[] {
-    if (file.type === 'image') {
-      return [
-        {
-          title: 'Delete',
-          icon: 'mdi-trash-can-outline',
-          callback: () => remove(file)
-        },
-        {
-          title: 'Save file',
-          icon: 'mdi-content-save',
-          callback: this.generateUpdateFileFunction(file)
-        },
-        {
-          title: 'Set as background',
-          icon: 'mdi-share',
-          callback: () => {
-            ipcRenderer.send('sendCommand', { command: 'nitrogen', attrs: ['--set-auto', file.path]})
-          }
-        }
-      ]
-    }
-
-    return [
+    const fileOptions = [
       {
         title: 'Delete',
         icon: 'mdi-trash-can-outline',
@@ -428,15 +406,58 @@ export default class LayoutModifyBox extends Vue {
         title: 'Save file',
         icon: 'mdi-content-save',
         callback: this.generateUpdateFileFunction(file)
-      },
+      }
+    ]
+
+    if (file.palette) {
+      fileOptions.push({
+        title: 'Generate palette',
+        icon: 'mdi-cog-sync-outline',
+        callback: () => {
+          const fullColors = file.palette.map(hex => {
+            return PaletteModule.hexToHsl(hex)
+          })
+          const bg = fullColors.find(([, , l]) => l <= 30)
+          const [primary, secondary, tertiary] = fullColors.filter(([, , l]) => l >= 60 && l <= 80)
+
+
+          if (!bg || !primary || !secondary || !tertiary) {
+            alert('Failed to generate palette')
+            return
+          }
+
+          const finalColors = { bg, primary, secondary, tertiary }
+          this.palette = Object.entries<[number, number, number]>(finalColors).map(([name, hsl]) => {
+            return {
+              name: name as ColorsType,
+              hex: PaletteModule.hslToHex(hsl)
+            }
+          })
+        }
+      })
+    }
+
+    if (file.type === 'image') {
+      return fileOptions.concat([
+        {
+          title: 'Set as background',
+          icon: 'mdi-share',
+          callback: () => {
+            ipcRenderer.send('sendCommand', { command: 'nitrogen', attrs: ['--set-auto', file.path]})
+          }
+        }
+      ])
+    }
+
+    return fileOptions.concat([
       {
         title: 'Set to edit',
         icon: 'mdi-pencil',
         callback: () => {
           this.editFile = file
         }
-      },
-    ]
+      }
+    ])
   }
 }
 </script>

@@ -25,6 +25,7 @@ export interface LoaderFile {
   name: string
   size: number
   type: LoaderFileType
+  palette: string[]
   src?: string
   text?: string
   hash?: string
