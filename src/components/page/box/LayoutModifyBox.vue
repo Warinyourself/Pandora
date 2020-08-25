@@ -133,11 +133,6 @@
     </v-dialog>
 
     <div
-      v-if="bg.hash"
-      class="block bg-image mt-2"
-       :style="`background-image: url(${bg.src})`"
-    />
-    <div
       v-if="editFile.hash"
       class="block edit-file"
     >
@@ -197,7 +192,6 @@ import { Color } from 'vuetify/lib/util/colors'
 export default class LayoutModifyBox extends Vue {
   @Prop({ type: Object }) box!: Box
 
-  bg = {} as LoaderFile
   editFile = {} as LoaderFile
   boxName = 'Box name'
   files = [] as Array<LoaderFile>
@@ -415,13 +409,6 @@ export default class LayoutModifyBox extends Vue {
           callback: this.generateUpdateFileFunction(file)
         },
         {
-          title: 'Set as image',
-          icon: 'mdi-image-area',
-          callback: () => {
-            this.bg = file
-          }
-        },
-        {
           title: 'Set as background',
           icon: 'mdi-share',
           callback: () => {
@@ -455,14 +442,6 @@ export default class LayoutModifyBox extends Vue {
 </script>
 
 <style lang="stylus">
-.bg-image
-  background-size cover
-  background-position center
-  width 40vmin
-  height 40vmin
-  min-width 250px
-  min-height 250px
-
 .edit-file
   width 55vmin
   height 100%
