@@ -5,7 +5,11 @@
     <div v-if="isFocus" class="app-file-loader--full">
       <slot v-if="$slots.focusFileList" name="focusFileList"/>
       <div v-else class="flex-full"> 
-        <AppIcon class="app-file-loader-document" name="file-image"/> 
+        <div :class="`app-file-loader-document-animation`">
+          <AppIcon class="app-file-loader-document" name="file-image"/> 
+          <AppIcon class="app-file-loader-document" name="file-image"/> 
+          <AppIcon class="app-file-loader-document" name="file-image"/> 
+        </div>
         <h5 class="mt-2"> Drop files here </h5>
       </div>
     </div>
@@ -57,7 +61,7 @@ export default class AppFileLoader extends Vue {
   @Prop({ type: Array, default: () => [] }) files!: LoaderFile[]
   @Prop() fileModifier!: (file: LoaderFile) => Partial<LoaderFile>
 
-  isFocus = true
+  isFocus = false
   focusFileHash = ''
   result = []
   id = getUUID()
@@ -99,7 +103,7 @@ export default class AppFileLoader extends Vue {
 
   handlerDragLeave(event: DragEvent) {
     this.isFocus = false
-   
+
    console.log("handlerDragLeave", event)
   }
 
@@ -243,7 +247,29 @@ export default class AppFileLoader extends Vue {
   display flex
   align-items center
 
-.app-file-loader-document
+.app-file-loader-document-animation
+  position relative
+  .app-file-loader-document
+    transition .3s
+    position absolute
+    top 50%
+    left 50%
+    transform translate(-50%, -50%)
+    .icon-bg
+      fill var(--v-bg-darken1)
+  &:hover, &.active
+    .app-file-loader-document:first-child
+      transform-origin 0 100%
+      transform translate(-50%, -60%) rotate(-40deg) scale(0.8)
+    .app-file-loader-document:nth-child(2)
+      transform-origin 100% 100%
+      transform translate(-50%, -60%) rotate(40deg) scale(0.8)
+    .app-file-loader-document:last-child
+      transform translate(-50%, -50%) scale(0.95)
+
+
+
+.app-file-loader-document, .app-file-loader-document-animation
   width 112px
   height 112px
 

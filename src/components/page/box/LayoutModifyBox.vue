@@ -459,11 +459,4 @@ export default class LayoutModifyBox extends Vue {
 .edit-file
   width 55vmin
   height 100%
-
-// .file-upload-body
-//   width 100%
-//   height 100%
-//   display flex
-//   justify-content center
-//   align-items center
 </style>
