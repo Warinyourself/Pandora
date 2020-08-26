@@ -1,8 +1,7 @@
 <template>
   <AppContent>
-    <v-text-field label="Palette name" v-model="name"/>
-
     <AppBlock>
+      <v-text-field label="Palette name" v-model="name"/>
       <h2 class="title"> Create colors </h2>
       <v-row dense class="mb-2">
         <v-col
@@ -21,60 +20,72 @@
             </div>
           </AppActiveBlock>
         </v-col>
+        <v-col cols="auto">
+          <AppActiveBlock @click="createColor">
+            <div class="d-flex">
+              <div
+                class="color-block c-pointer ma-0"
+                :style="`background-color: var(--v-bg-base)`"
+              >
+              <v-icon size="25"> mdi-plus </v-icon>
+              </div>
+            </div>
+          </AppActiveBlock>
+        </v-col>
       </v-row>
-      <v-btn
-        color="primary"
-        @click="createColor"
-      >
-        Create color
-      </v-btn>
-    </AppBlock>
-    <AppBlock v-if="activeColor">
-      <v-row>
-        <v-col>
-          <v-color-picker
-            class="ma-2"
-            v-model="activeColor.hex"
-            dot-size="10"
-            width="400px"
-          ></v-color-picker>
-            </v-col>
-            <v-col>
-          <v-select
-            :items="['primary', 'secondary', 'tertiary', 'fg', 'bg' ]"
-            v-model="activeColor.name"
-            label="Set color type"
+      <div v-if="activeColor">
+        <v-row>
+          <v-col>
+            <v-color-picker
+              class="ma-2"
+              v-model="activeColor.hex"
+              dot-size="10"
+              width="400px"
+            ></v-color-picker>
+              </v-col>
+              <v-col>
+            <v-select
+              :items="['primary', 'secondary', 'tertiary', 'fg', 'bg' ]"
+              v-model="activeColor.name"
+              label="Set color type"
+            />
+            <v-btn
+              color="primary"
+              @click="deleteActiveColor"
+            >
+              Delete color
+            </v-btn>
+          </v-col>
+        </v-row>
+      </div>
+
+      <v-row dense>
+        <v-col cols="auto">
+          <v-btn
+            color="primary"
+            @click="createPalette"
           >
-          </v-select>
+            {{isEdit ? 'Update' : 'Save'}} palette
+          </v-btn>
+        </v-col>
+        <v-col cols="auto">
+          <v-btn
+            color="primary"
+            @click="exportToJson"
+          >
+            Export palette to JSON
+          </v-btn>
+        </v-col>
+        <v-col cols="auto">
+          <v-btn
+            color="primary"
+            @click="importPalette"
+          >
+            Import palette from clipboard
+          </v-btn>
         </v-col>
       </v-row>
     </AppBlock>
-    <v-row dense>
-      <v-col cols="auto">
-        <v-btn
-          color="primary"
-          @click="createPalette"
-        >
-          {{isEdit ? 'Update' : 'Save'}} palette
-        </v-btn>
-      </v-col>
-      <v-col cols="auto">
-        <v-btn
-          color="primary"
-          @click="exportToJson"
-        >
-          Export palette to JSON
-        </v-btn>
-      </v-col>
-      <v-col cols="auto">
-        <v-btn
-          color="primary"
-          @click="importPalette"
-        >
-          Import palette from clipboard
-        </v-btn>
-      </v-col>
-    </v-row>
   </AppContent>
 </template>
 
@@ -146,6 +157,14 @@ export default class LayoutModifyPalette extends Vue {
     } catch (error) {
       console.error(error)
     }
+  }
+
+  deleteActiveColor() {
+    this.colors = this.colors.filter(color => {
+      return JSON.stringify(color) !== JSON.stringify(this.activeColor)
+    })
+
+    this.activeColor = this.colors[0]
   }
 
   createColor() {
