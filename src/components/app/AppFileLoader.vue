@@ -50,6 +50,7 @@ import SparkMD5 from 'spark-md5'
 
 // Couter for inner child on drag events
 let counter = 0
+let timeoutToUnfocus: any = null
 
 @Component({
   model: {
@@ -98,6 +99,9 @@ export default class AppFileLoader extends Vue {
 
   handlerDragEnter() {
     this.finallyUnfocus = false
+    // To discard another finallyUnfocus variable changes
+    clearTimeout(timeoutToUnfocus)
+
     this.$nextTick(() => {
       counter++
 
@@ -110,7 +114,7 @@ export default class AppFileLoader extends Vue {
 
     if (counter === 0) {
       this.isFocus = false
-      setTimeout(() => {
+      timeoutToUnfocus = setTimeout(() => {
         this.finallyUnfocus = true
       }, 1000)
     }
@@ -119,7 +123,7 @@ export default class AppFileLoader extends Vue {
   handlerDrop(event: DragEvent) {
     this.isFocus = false
     counter = 0
-    setTimeout(() => {
+    timeoutToUnfocus = setTimeout(() => {
       this.finallyUnfocus = true
     }, 1000)
 
