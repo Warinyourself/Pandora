@@ -2,40 +2,37 @@
   <div class="app-file-loader" ref="loader">
     <input type="file" multiple :id="id" class="hide-input" @change="handleFileUpload">
 
-    <div v-if="isFocus" class="app-file-loader--full">
-      <slot v-if="$slots.focusFileList" name="focusFileList"/>
-      <div v-else class="flex-full"> 
-        <div :class="`app-file-loader-document-animation`">
-          <AppIcon class="app-file-loader-document" name="file-image"/> 
-          <AppIcon class="app-file-loader-document" name="file-image"/> 
-          <AppIcon class="app-file-loader-document" name="file-image"/> 
-        </div>
-        <h5 class="mt-2"> Drop files here </h5>
-      </div>
-    </div>
-    
-    <label :for="id" v-else-if="!files.length" class="app-file-loader--full app-file-loader-empty">
-      <slot v-if="$slots.emptyFileList" name="emptyFileList"/>
-      <div v-else class="flex-full">
-        <AppIcon class="app-file-loader-document" name="file-image"/> 
-        <h5 class="mt-2"> Upload files here </h5>
-      </div>
-    </label>
-
-    <v-row v-else>
-      <v-col
-        v-for="(file, i) in files"
-        :key="file.name + i"
-        cols="3"
-        lg="2"
-        class="pa-2"
-        @click="focusFileHash = file.hash"
+    <div class="app-file-loader-wrapper">
+      <label
+        :for="id"
+        :class="`app-file-loader-preview ${isFocus || !files.length ? 'active' : ''} ${finallyUnfocus ? 'unfocus' : ''}`"
       >
-        <slot v-bind="{ file, remove }" class="update-class"/>
-      </v-col>
-    </v-row>
-    <div v-if="focusFile">
-      <slot name="focusFile" v-bind="{ file: focusFile, remove }"></slot>
+        <slot v-if="$slots.uploadFile" name="uploadFile" v-bind="{ isFocus, files}"/>
+        <div v-else class="flex-full"> 
+          <div :class="`app-file-loader-document-animation ${isFocus ? 'active' : ''}`">
+            <AppIcon class="app-file-loader-document" name="file-image"/> 
+            <AppIcon class="app-file-loader-document" name="file-image"/> 
+            <AppIcon class="app-file-loader-document" name="file-image"/> 
+          </div>
+          <h5 class="mt-2"> {{ isFocus ? 'Drop' : 'Upload'}} files here </h5>
+        </div>
+      </label>
+
+      <v-row v-if="files.length">
+        <v-col
+          v-for="(file, i) in files"
+          :key="file.name + i"
+          cols="3"
+          lg="2"
+          class="pa-2"
+          @click="focusFileHash = file.hash"
+        >
+          <slot v-bind="{ file, remove }" class="update-class"/>
+        </v-col>
+      </v-row>
+      <div v-if="focusFile">
+        <slot name="focusFile" v-bind="{ file: focusFile, remove }"></slot>
+      </div>
     </div>
   </div>
 </template>
@@ -51,6 +48,9 @@ import { getUUID } from '@/utils/helper'
 // @ts-ignore
 import SparkMD5 from 'spark-md5'
 
+// Couter for inner child on drag events
+let counter = 0
+
 @Component({
   model: {
     prop: 'files',
@@ -62,6 +62,8 @@ export default class AppFileLoader extends Vue {
   @Prop() fileModifier!: (file: LoaderFile) => Partial<LoaderFile>
 
   isFocus = false
+  finallyUnfocus = false
+
   focusFileHash = ''
   result = []
   id = getUUID()
@@ -85,8 +87,7 @@ export default class AppFileLoader extends Vue {
     })
 
     dropArea.addEventListener('dragenter', this.handlerDragEnter, false)
-    dropArea.addEventListener('dragleave', this.handlerDragLeave, false)
-    // dropArea.addEventListener('dragover', this.handlerDragOver, false)
+    dropArea.addEventListener('dragleave', this.handlerDragLeave)
     dropArea.addEventListener('drop', this.handlerDrop, false)
   }
 
@@ -95,19 +96,33 @@ export default class AppFileLoader extends Vue {
     event.stopPropagation()
   }
 
-  handlerDragEnter(event: DragEvent) {
-    this.isFocus = true
+  handlerDragEnter() {
+    this.finallyUnfocus = false
+    this.$nextTick(() => {
+      counter++
 
-    console.log("handlerDragEnter", event)
+      this.isFocus = true
+    })
   }
 
-  handlerDragLeave(event: DragEvent) {
-    this.isFocus = false
+  handlerDragLeave() {
+    counter--
 
-   console.log("handlerDragLeave", event)
+    if (counter === 0) {
+      this.isFocus = false
+      setTimeout(() => {
+        this.finallyUnfocus = true
+      }, 1000)
+    }
   }
 
   handlerDrop(event: DragEvent) {
+    this.isFocus = false
+    counter = 0
+    setTimeout(() => {
+      this.finallyUnfocus = true
+    }, 1000)
+
     let { dataTransfer } = event
     let files = dataTransfer?.files  
 
@@ -201,21 +216,22 @@ export default class AppFileLoader extends Vue {
   width 100%
   display flex
   flex-direction column
+  position relative
   padding: 10px
-  min-height 235px
-  border-radius: 10px
-  background: var(--v-bg-darken1)
+  min-height 200px
+  border-radius 10px
+  background var(--v-bg-darken1)
 
 .app-file-loader-files
   display flex
-  flex-wrap: wrap
+  flex-wrap wrap
 
 .app-file-loader-file
-  width: 100%
-  height: 12vmin
-  min-height: 90px
-  max-height: 250px
-  border-radius: 10px
+  width 100%
+  height 12vmin
+  min-height 90px
+  max-height 250px
+  border-radius 10px
 
 .app-file-loader-file--text
   position relative
@@ -233,19 +249,39 @@ export default class AppFileLoader extends Vue {
 .app-file-loader-file-name
   z-index 1
 
+.pe-none
+  pointer-events none
+
+.app-file-loader-wrapper
+  position relative
+  width 100%
+  flex 1 1 auto
+  height 100%
+
 .flex-full
   width 100%
-  height 100%
   flex 1 1 auto
   display flex
   align-items center
   flex-direction column
 
-.app-file-loader--full
+.app-file-loader-preview
+  position absolute
+  left: 0
+  top: 0
+  width: 100%
+  height: 100%
   cursor pointer
   flex 1 1 auto
   display flex
   align-items center
+  opacity 0
+  transition opacity .3s
+  &.active
+    opacity 1
+    z-index 3 
+  &.unfocus
+    z-index -1 
 
 .app-file-loader-document-animation
   position relative
@@ -257,7 +293,7 @@ export default class AppFileLoader extends Vue {
     transform translate(-50%, -50%)
     .icon-bg
       fill var(--v-bg-darken1)
-  &:hover, &.active
+  &.active
     .app-file-loader-document:first-child
       transform-origin 0 100%
       transform translate(-50%, -60%) rotate(-40deg) scale(0.8)
@@ -266,8 +302,6 @@ export default class AppFileLoader extends Vue {
       transform translate(-50%, -60%) rotate(40deg) scale(0.8)
     .app-file-loader-document:last-child
       transform translate(-50%, -50%) scale(0.95)
-
-
 
 .app-file-loader-document, .app-file-loader-document-animation
   width 112px
@@ -278,6 +312,9 @@ export default class AppFileLoader extends Vue {
   background-position center
 
 .color-block
+  display flex
+  align-items center
+  justify-content center
   width 40px
   height 40px
   min-width 40px
