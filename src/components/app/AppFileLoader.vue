@@ -5,7 +5,7 @@
     <div class="app-file-loader-wrapper">
       <label
         :for="id"
-        :class="`app-file-loader-preview ${isFocus || !files.length ? 'active' : ''} ${finallyUnfocus ? 'unfocus' : ''}`"
+        :class="`app-file-loader-preview ${isShowWrapper ? 'active' : ''} ${isUnfocusWrapper ? 'unfocus' : ''}`"
       >
         <slot v-if="$slots.uploadFile" name="uploadFile" v-bind="{ isFocus, files}"/>
         <div v-else class="flex-full"> 
@@ -63,7 +63,15 @@ export default class AppFileLoader extends Vue {
   @Prop() fileModifier!: (file: LoaderFile) => Partial<LoaderFile>
 
   isFocus = false
-  finallyUnfocus = !!this.files.length
+  hideWrapper = true
+
+  get isShowWrapper() {
+    return !this.files.length || this.isFocus
+  }
+
+  get isUnfocusWrapper() {
+    return !this.isShowWrapper && this.hideWrapper
+  }
 
   focusFileHash = ''
   result = []
@@ -93,6 +101,8 @@ export default class AppFileLoader extends Vue {
 
     if (this.files[0]) {
       this.focusFileHash = this.files[0]?.hash || ''
+    } else {
+      this.hideWrapper = false
     }
   }
 
@@ -102,8 +112,8 @@ export default class AppFileLoader extends Vue {
   }
 
   handlerDragEnter() {
-    this.finallyUnfocus = false
-    // To discard another finallyUnfocus variable changes
+    this.hideWrapper = false
+    // To discard another hideWrapper variable changes
     clearTimeout(timeoutToUnfocus)
 
     this.$nextTick(() => {
@@ -119,7 +129,7 @@ export default class AppFileLoader extends Vue {
     if (counter === 0) {
       this.isFocus = false
       timeoutToUnfocus = setTimeout(() => {
-        this.finallyUnfocus = true
+        this.hideWrapper = true
       }, 1000)
     }
   }
@@ -128,7 +138,7 @@ export default class AppFileLoader extends Vue {
     this.isFocus = false
     counter = 0
     timeoutToUnfocus = setTimeout(() => {
-      this.finallyUnfocus = true
+      this.hideWrapper = true
     }, 1000)
 
     let { dataTransfer } = event
