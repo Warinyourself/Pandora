@@ -265,6 +265,27 @@
     </defs>
   </svg>
 
+<svg v-else-if="name === 'file-cancel'" width="40" height="52" viewBox="0 0 40 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M39.121 9.707L30.293 0.879C29.727 0.313 28.973 0 28.171 0H3C1.346 0 0 1.346 0 3V43V45V49C0 50.654 1.346 52 3 52H37C38.654 52 40 50.654 40 49V45V43V11.828C40 11.027 39.688 10.273 39.121 9.707ZM36.586 10H31C30.449 10 30 9.552 30 9V3.414L36.586 10ZM37 50H3C2.449 50 2 49.552 2 49V47.815C2.314 47.928 2.648 48 3 48H37C37.352 48 37.686 47.928 38 47.816V49C38 49.552 37.551 50 37 50ZM38 45C38 45.552 37.551 46 37 46H3C2.449 46 2 45.552 2 45V43V3C2 2.448 2.449 2 3 2H28V9C28 10.654 29.346 12 31 12H38V43V45Z" fill="url(#paint0_linear)"/>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M20.5 35C25.1944 35 29 31.1944 29 26.5C29 21.8056 25.1944 18 20.5 18C15.8056 18 12 21.8056 12 26.5C12 31.1944 15.8056 35 20.5 35ZM20.5 37C26.299 37 31 32.299 31 26.5C31 20.701 26.299 16 20.5 16C14.701 16 10 20.701 10 26.5C10 32.299 14.701 37 20.5 37Z" fill="url(#paint1_linear)"/>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M20.5 28.5L15 34L13.5858 32.5858L19.0858 27.0858L13 21L14.4142 19.5858L20.5 25.6716L26.5858 19.5858L28 21L21.9142 27.0858L27.4142 32.5858L26 34L20.5 28.5Z" fill="url(#paint2_linear)"/>
+  <defs>
+      <linearGradient id="paint0_linear" x1="20" y1="-1" x2="20" y2="54.012" gradientUnits="userSpaceOnUse">
+        <stop stop-color="var(--v-primary-base)"/>
+        <stop offset="1" stop-color="var(--v-secondary-base)"/>
+      </linearGradient>
+      <linearGradient id="paint1_linear" x1="20" y1="15.5769" x2="20" y2="38.8512" gradientUnits="userSpaceOnUse">
+        <stop stop-color="var(--v-primary-base)"/>
+        <stop offset="1" stop-color="var(--v-secondary-base)"/>
+      </linearGradient>
+      <linearGradient id="paint2_linear" x1="20" y1="15.5769" x2="20" y2="38.8512" gradientUnits="userSpaceOnUse">
+        <stop stop-color="var(--v-primary-base)"/>
+        <stop offset="1" stop-color="var(--v-secondary-base)"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+
 
   <v-icon
     v-else

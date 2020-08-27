@@ -4,15 +4,16 @@
 
     <div class="app-file-loader-wrapper">
       <label
-        :for="id"
-        :class="`app-file-loader-preview ${isShowWrapper ? 'active' : ''} ${isUnfocusWrapper ? 'unfocus' : ''}`"
+        :for="!blockToUploadType ? id : ''"
+        :class="`app-file-loader-preview ${isShowWrapper ? 'active' : ''} ${isUnfocusWrapper ? 'unfocus' : ''} ${blockToUploadType ? 'block' : ''}`"
       >
-        <slot v-if="$slots.uploadFile" name="uploadFile" v-bind="{ isFocus, files}"/>
+        <slot v-if="$slots.wrapper" name="wrapper" v-bind="{ isFocus, files }"/>
         <div v-else class="flex-full"> 
           <div :class="`app-file-loader-document-animation ${isFocus ? 'active' : ''}`">
             <AppIcon class="app-file-loader-document" name="file-image"/> 
             <AppIcon class="app-file-loader-document" name="file-image"/> 
             <AppIcon class="app-file-loader-document" name="file-image"/> 
+            <AppIcon class="app-file-loader-document-block" name="file-cancel"/> 
           </div>
           <h5 class="mt-2"> {{ isFocus ? 'Drop' : 'Upload'}} files here </h5>
         </div>
@@ -65,6 +66,8 @@ export default class AppFileLoader extends Vue {
   isFocus = false
   hideWrapper = true
 
+  blockToUploadType: 'fileType' | '' = 'fileType'
+
   get isShowWrapper() {
     return !this.files.length || this.isFocus
   }
@@ -111,7 +114,7 @@ export default class AppFileLoader extends Vue {
     event.stopPropagation()
   }
 
-  handlerDragEnter() {
+  handlerDragEnter(event: DragEvent) {
     this.hideWrapper = false
     // To discard another hideWrapper variable changes
     clearTimeout(timeoutToUnfocus)
@@ -121,6 +124,20 @@ export default class AppFileLoader extends Vue {
 
       this.isFocus = true
     })
+
+    const info = event.dataTransfer?.items
+
+    if (info) {
+      if (Array.from(info).some(item => item.kind !== 'file')) {
+        this.isFocus = false 
+      } else if (Array.from(info).some(item => !['file'].includes(item.kind))) {
+        this.blockToUploadType = 'fileType'
+      } else {
+        this.isFocus = true
+        this.blockToUploadType = ''
+      }
+    }
+
   }
 
   handlerDragLeave() {
@@ -128,8 +145,10 @@ export default class AppFileLoader extends Vue {
 
     if (counter === 0) {
       this.isFocus = false
+
       timeoutToUnfocus = setTimeout(() => {
         this.hideWrapper = true
+        this.blockToUploadType = ''
       }, 1000)
     }
   }
@@ -300,10 +319,15 @@ export default class AppFileLoader extends Vue {
     z-index 3 
   &.unfocus
     z-index -1 
+  &.block
+    .app-file-loader-document
+      opacity 0
+    .app-file-loader-document-block
+      opacity 1
 
 .app-file-loader-document-animation
   position relative
-  .app-file-loader-document
+  .app-file-loader-document, .app-file-loader-document-block
     transition .3s
     position absolute
     top 50%
