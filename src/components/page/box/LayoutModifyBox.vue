@@ -51,49 +51,7 @@
       </template>
     </AppFileLoader>
   
-    <AppActiveBlock
-      :menu="generatePaletteMenu()"
-      class="block block mt-2"
-    >
-      Palette
-      <AppDrop
-        type="color"
-        :callback="handleDropColor"
-        v-if="colors.length"
-      >
-        <div class="d-flex fw-wrap mt-1">
-          <AppActiveBlock
-            :menu="generateRightMenuColor(color)"
-            class="color-block" 
-            v-for="color in colors"
-            @click="activateColor(color)"
-            :key="color.hex"
-            :style="`background-color: ${color.hex}`"
-          />
-          <v-expand-transition>
-            <ModifyColor v-show="activeColor" v-model="activeColor"/>
-          </v-expand-transition>
-        </div>
-      </AppDrop>
-    </AppActiveBlock>
-
-    <v-dialog
-      v-model="viewColorPicker"
-      max-width="440px"
-    >
-      <div class="block ma-0">
-        <v-color-picker
-          class="ma-2"
-          v-model="hex"
-          dot-size="10"
-          width="400px"
-        ></v-color-picker>
-        <v-btn
-          @click="addColorToPalette"
-          class="mt-2"
-        > Accept </v-btn>
-      </div>
-    </v-dialog>
+    <LayoutModifyPalette :palette="palette" class="mt-4"/>
 
     <v-dialog
       v-model="paletteSelectionModal"
@@ -150,7 +108,7 @@ import ModifyColor from '@/components/page/palette/ModifyColor.vue'
 
 import { BoxModule } from '@/store/box'
 import { PaletteModule } from '@/store/palette'
-
+import LayoutModifyPalette from '@/components/page/palette/LayoutModifyPalette.vue'
 
 let ipcRenderer: Electron.IpcRenderer
 
@@ -165,7 +123,7 @@ if (isElectron) {
 
 // @ts-ignore
 import ColorThief from 'colorthief'
-import { defaultColors, defaultColor } from '@/models/palette'
+import { defaultPalette, defaultColor } from '@/models/palette'
 
 // eslint-disable-next-line no-unused-vars
 import { Box } from '@/models/box'
@@ -178,7 +136,8 @@ import { Color } from 'vuetify/lib/util/colors'
 
 @Component({
   components: {
-    ModifyColor
+    ModifyColor,
+    LayoutModifyPalette
   }
 })
 export default class LayoutModifyBox extends Vue {
@@ -187,12 +146,11 @@ export default class LayoutModifyBox extends Vue {
   editFile = {} as LoaderFile
   boxName = 'Box name'
   files = [] as Array<LoaderFile>
-  activeColor = {}
-  hex = defaultColor
-  viewColorPicker = false
-  paletteSelectionModal = false
 
-  colors = defaultColors
+  palette = defaultPalette
+
+  hex = defaultColor
+  paletteSelectionModal = false
 
   get palettes() {
     return PaletteModule.palettes
@@ -213,10 +171,6 @@ export default class LayoutModifyBox extends Vue {
       this.boxName = this.box.name
       this.files = this.box.files
     }
-  }
-
-  activateColor(color: Color) {
-    this.activeColor = color
   }
 
   fileModifier(file: LoaderFile) {
@@ -244,15 +198,6 @@ export default class LayoutModifyBox extends Vue {
     })
   }
 
-  handleDropColor(color: string) {
-    this.colors.push(
-      {
-        name: 'undefined',
-        hex: color
-      }
-    )
-  }
-
   async saveBox() {
     await this.$db.put('box', {
       name: this.boxName,
@@ -262,106 +207,8 @@ export default class LayoutModifyBox extends Vue {
     this.$router.push({ name: 'Box' })
   }
 
-  openViewColor() {
-    this.viewColorPicker = true
-  }
-
-  addColorToPalette() {
-    this.colors.push({
-      name: 'undefined',
-      hex: this.hex
-    })
-
-    this.viewColorPicker = false
-    this.hex = defaultColor
-  }
-
   activatePalette(palette: Palette) {
-    this.colors = palette.colors
-
-    this.paletteSelectionModal = false
-  }
-
-  generatePaletteMenu() {
-    return [
-      {
-        title: 'Add color',
-        callback: () => {
-          this.openViewColor()
-        }
-      },
-      {
-        title: 'Set up palette',
-        callback: () => {
-          const palette: Palette = {
-            id: Math.random() + '',
-            name: 'From Box',
-            colors: this.colors
-          }
-
-          PaletteModule.activatePalette({ palette, self: this })
-        }
-      },
-      {
-        title: 'Upload palette',
-        callback: () => {
-          this.paletteSelectionModal = true
-        }
-      },
-      {
-        title: 'Save palette',
-        callback: () => {
-          this.$db.put('palette', this.colors, 'palette amount-' + Math.random())
-        }
-      },
-      {
-        title: 'Set default palette',
-        callback: () => {
-          this.colors = defaultColors
-        }
-      },
-    ]
-  }
-
-  generateRightMenuColor(color: PaletteColor) {
-    return [
-      {
-        title: 'Set',
-        items: [
-          {
-            title: 'Set primary',
-            callback: () => {
-              color.name = 'primary'
-            }
-          },
-          {
-            title: 'Set secondary',
-            callback: () => {
-              color.name = 'secondary'
-            }
-          },
-          {
-            title: 'Set tertiary',
-            callback: () => {
-              color.name = 'tertiary'
-            }
-          },
-          {
-            title: 'Set background',
-            callback: () => {
-              color.name = 'bg'
-            }
-          }
-        ]
-      },
-      {
-        title: 'Delete',
-        icon: 'mdi-trash-can-outline',
-        callback: () => {
-          this.colors = this.colors.filter((innerColor) => JSON.stringify(color) !== JSON.stringify(innerColor) )
-        }
-      },
-    ]
+    this.palette = palette
   }
 
   generateUpdateFileFunction(file: LoaderFile) {
@@ -420,7 +267,7 @@ export default class LayoutModifyBox extends Vue {
           }
 
           const finalColors = { bg, primary, secondary, tertiary }
-          this.colors = Object.entries<[number, number, number]>(finalColors).map(([name, hsl]) => {
+          this.palette.colors = Object.entries<[number, number, number]>(finalColors).map(([name, hsl]) => {
             return {
               name: name as ColorsType,
               hex: PaletteModule.hslToHex(hsl)

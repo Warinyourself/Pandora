@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-4">
+  <v-container>
     <slot></slot>
   </v-container>
 </template>
