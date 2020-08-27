@@ -1,38 +1,45 @@
 <template>
-  <AppContent>
+  <div class="palette-modify">
     <AppBlock>
       <v-text-field label="Palette name" v-model="name"/>
       <h2 class="title"> Create colors </h2>
-      <v-row dense class="mb-2">
-        <v-col
-          cols="auto"
-          v-for="color in colors"
-          :key="color.name"
-        >
-          <AppActiveBlock
-            @click="activeColor = color"
+
+      <AppDrop
+        type="color"
+        :callback="handleDropColor"
+      >
+        <v-row dense class="mb-2">
+          <v-col
+            cols="auto"
+            v-for="color in colors"
+            :key="color.name"
           >
-            <div class="d-flex">
-              <div
-                class="color-block ma-0"
-                :style="`background-color: ${color.hex}`"
-              />
-            </div>
-          </AppActiveBlock>
-        </v-col>
-        <v-col cols="auto">
-          <AppActiveBlock @click="createColor">
-            <div class="d-flex">
-              <div
-                class="color-block c-pointer ma-0"
-                :style="`background-color: var(--v-bg-base)`"
-              >
-              <v-icon size="25"> mdi-plus </v-icon>
+            <AppActiveBlock
+              @click="activeColor = color"
+            >
+              <div class="d-flex">
+                <div
+                  class="color-block ma-0"
+                  :style="`background-color: ${color.hex}`"
+                />
               </div>
-            </div>
-          </AppActiveBlock>
-        </v-col>
-      </v-row>
+            </AppActiveBlock>
+          </v-col>
+          <v-col cols="auto">
+            <AppActiveBlock @click="createColor">
+              <div class="d-flex">
+                <div
+                  class="color-block c-pointer ma-0"
+                  :style="`background-color: var(--v-bg-base)`"
+                >
+                <v-icon size="25"> mdi-plus </v-icon>
+                </div>
+              </div>
+            </AppActiveBlock>
+          </v-col>
+        </v-row>
+      </AppDrop>
+
       <div v-if="activeColor">
         <v-row>
           <v-col>
@@ -86,7 +93,7 @@
         </v-col>
       </v-row>
     </AppBlock>
-  </AppContent>
+  </div>
 </template>
 
 <script lang="ts">
@@ -157,6 +164,15 @@ export default class LayoutModifyPalette extends Vue {
     } catch (error) {
       console.error(error)
     }
+  }
+
+  handleDropColor(color: string) {
+    this.colors.push(
+      {
+        name: 'undefined',
+        hex: color
+      }
+    )
   }
 
   deleteActiveColor() {

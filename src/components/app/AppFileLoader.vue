@@ -63,7 +63,7 @@ export default class AppFileLoader extends Vue {
   @Prop() fileModifier!: (file: LoaderFile) => Partial<LoaderFile>
 
   isFocus = false
-  finallyUnfocus = false
+  finallyUnfocus = !!this.files.length
 
   focusFileHash = ''
   result = []
@@ -90,6 +90,10 @@ export default class AppFileLoader extends Vue {
     dropArea.addEventListener('dragenter', this.handlerDragEnter, false)
     dropArea.addEventListener('dragleave', this.handlerDragLeave)
     dropArea.addEventListener('drop', this.handlerDrop, false)
+
+    if (this.files[0]) {
+      this.focusFileHash = this.files[0]?.hash || ''
+    }
   }
 
   preventDefaults (event: any) {
