@@ -1,0 +1,103 @@
+.app-file-loader
+  width 100%
+  display flex
+  flex-direction column
+  position relative
+  padding: 10px
+  min-height 200px
+  border-radius 10px
+  background var(--v-bg-darken1)
+
+.app-file-loader-files
+  display flex
+  flex-wrap wrap
+
+.app-file-loader-file
+  width 100%
+  height 12vmin
+  min-height 90px
+  max-height 250px
+  border-radius 10px
+
+.app-file-loader-file--text
+  position relative
+  background var(--v-bg-base)
+  display grid
+  place-items center
+  &::before
+    content 'text'
+    position absolute
+    font-weight 900
+    font-size 3rem
+    z-index 0
+    opacity 0.2
+
+.app-file-loader-file-name
+  z-index 1
+
+.app-file-loader-wrapper
+  position relative
+  width 100%
+  flex 1 1 auto
+  height 100%
+
+.flex-full
+  width 100%
+  flex 1 1 auto
+  display flex
+  align-items center
+  flex-direction column
+
+.app-file-loader-preview
+  position absolute
+  left: 0
+  top: 0
+  width: 100%
+  height: 100%
+  cursor pointer
+  flex 1 1 auto
+  display flex
+  align-items center
+  opacity 0
+  transition opacity .3s
+  &.active
+    opacity 1
+    z-index 3 
+  &.unfocus
+    z-index -1 
+  &.block
+    .app-file-loader-document
+      opacity 0
+    .app-file-loader-document-block
+      opacity 1
+
+.app-file-loader-document-block
+  opacity 0
+
+.app-file-loader-document-animation
+  position relative
+  .app-file-loader-document, .app-file-loader-document-block
+    transition .3s
+    position absolute
+    top 50%
+    left 50%
+    transform translate(-50%, -50%)
+    .icon-bg
+      fill var(--v-bg-darken1)
+  &.active
+    .app-file-loader-document:first-child
+      transform-origin 0 100%
+      transform translate(-50%, -60%) rotate(-40deg) scale(0.8)
+    .app-file-loader-document:nth-child(2)
+      transform-origin 100% 100%
+      transform translate(-50%, -60%) rotate(40deg) scale(0.8)
+    .app-file-loader-document:last-child
+      transform translate(-50%, -50%) scale(0.95)
+
+.app-file-loader-document, .app-file-loader-document-animation
+  width 112px
+  height 112px
+
+.app-file-loader-file--image
+  background-size cover
+  background-position center

@@ -302,8 +302,4 @@ export default class LayoutModifyBox extends Vue {
 }
 </script>
 
-<style lang="stylus">
-.edit-file
-  width 55vmin
-  height 100%
-</style>
+<style lang="stylus"></style>

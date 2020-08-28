@@ -76,22 +76,4 @@ export default class AppDrop extends Vue {
 }
 </script>
 
-<style lang="stylus">
-.drop
-  position relative
-
-.drop--active
-  border 4px solid var(--v-primary-lighten4)
-
-.drop--focus
-  &::before
-    content ''
-    display block
-    position absolute
-    top 0
-    left 0
-    width 100%
-    height 100%
-    background rgba(255, 255, 255, .2)
-
-</style>
+<style lang="stylus"></style>

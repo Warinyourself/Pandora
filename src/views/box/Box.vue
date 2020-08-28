@@ -4,7 +4,7 @@
       <h2 class="title"> Choise box </h2>
       <div v-if="boxes.length">
         <v-row>
-          <v-col cols="4" v-for="box in boxes" :key="box.id">
+          <v-col cols="6" md="4" xl="2" v-for="box in boxes" :key="box.id">
             <BoxBlock :box="box"/>
           </v-col>
         </v-row>
