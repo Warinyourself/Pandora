@@ -9,7 +9,7 @@ export interface _DB {
   put: <T>(objectStoreName: KeysDB, info: T, key?: string, rule?: IDBTransactionMode) => Promise<any>
 }
 
-type KeysDB = 'box' | 'palette'
+type KeysDB = 'box' | 'palette' | 'command'
 
 import { defaultPalette, ActiveRedDarkPalette } from '@/models/palette'
 
@@ -36,6 +36,7 @@ export class DB implements _DB {
 
     const box = await this.db.createObjectStore('box', { keyPath: 'name' })
     const palette = await this.db.createObjectStore('palette', { keyPath: 'name' })
+    const command = await this.db.createObjectStore('command', { keyPath: 'name' })
 
     return () => {
       this.put('palette', defaultPalette)
