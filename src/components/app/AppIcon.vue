@@ -285,8 +285,6 @@
     </defs>
   </svg>
 
-
-
   <v-icon
     v-else
     v-bind="$attrs"

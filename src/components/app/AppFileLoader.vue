@@ -5,7 +5,7 @@
     <div class="app-file-loader-wrapper">
       <label
         :for="!blockToUploadType ? id : ''"
-        :class="`app-file-loader-preview ${isShowWrapper ? 'active' : ''} ${isUnfocusWrapper ? 'unfocus' : ''} ${blockToUploadType ? 'block' : ''}`"
+        :class="`app-file-loader-preview ${files.length && isShowWrapper ? 'has-files' : ''} ${isShowWrapper ? 'active' : ''} ${isUnfocusWrapper ? 'unfocus' : ''} ${blockToUploadType ? 'block' : ''}`"
       >
         <slot v-if="$slots.wrapper" name="wrapper" v-bind="{ isFocus, files }"/>
         <div v-else class="flex-full"> 
@@ -104,8 +104,6 @@ export default class AppFileLoader extends Vue {
 
     if (this.files[0]) {
       this.focusFileHash = this.files[0]?.hash || ''
-    } else {
-      this.hideWrapper = false
     }
   }
 
@@ -115,6 +113,19 @@ export default class AppFileLoader extends Vue {
   }
 
   handlerDragEnter(event: DragEvent) {
+    const info = event.dataTransfer?.items
+
+    if (info) {
+      if (Array.from(info).some(item => !['file'].includes(item.kind))) {
+        this.isFocus = false
+        this.blockToUploadType = 'fileType'
+        return
+      } else {
+        this.isFocus = true
+        this.blockToUploadType = ''
+      }
+    }
+
     this.hideWrapper = false
     // To discard another hideWrapper variable changes
     clearTimeout(timeoutToUnfocus)
@@ -124,20 +135,6 @@ export default class AppFileLoader extends Vue {
 
       this.isFocus = true
     })
-
-    const info = event.dataTransfer?.items
-
-    if (info) {
-      if (Array.from(info).some(item => item.kind !== 'file')) {
-        this.isFocus = false 
-      } else if (Array.from(info).some(item => !['file'].includes(item.kind))) {
-        this.blockToUploadType = 'fileType'
-      } else {
-        this.isFocus = true
-        this.blockToUploadType = ''
-      }
-    }
-
   }
 
   handlerDragLeave() {
@@ -166,7 +163,7 @@ export default class AppFileLoader extends Vue {
     if (files) {
       Array.from(files).forEach((file: File) => {
         this.parseFile(file)
-      });
+      })
     }
   }
 
@@ -177,7 +174,7 @@ export default class AppFileLoader extends Vue {
   }
 
   remove(file: LoaderFile) {
-    this.files = this.files.filter(({ name }) => name !== file.name)
+    this.$emit('input', this.files.filter(({ name }) => name !== file.name))
   }
 
   parseFile(file: File) {
