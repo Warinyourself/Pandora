@@ -12,6 +12,8 @@ export interface PaletteColor {
   hex: string
 }
 
+export const defaultColor = '#DA0463'
+
 export const defaultColors: PaletteColor[] = [
   {
     name: 'primary',
@@ -30,8 +32,6 @@ export const defaultColors: PaletteColor[] = [
     hex: '#142850'
   },
 ]
-
-export const defaultColor = '#DA0463'
 
 export const ActiveRedDarkColors: PaletteColor[] = [
   {

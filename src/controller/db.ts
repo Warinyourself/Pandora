@@ -1,4 +1,6 @@
 /* eslint-disable no-async-promise-executor */
+import { getUUID } from '@/utils/helper'
+
 export interface _DB {
   name: string
   version: number
@@ -41,6 +43,27 @@ export class DB implements _DB {
     return () => {
       this.put('palette', defaultPalette)
       this.put('palette', ActiveRedDarkPalette)
+      this.put('command', {
+        name: 'Send Notify',
+        id: getUUID(),
+        command: {
+          default: {
+            body: 'notify-send',
+            value: {
+              title: 'string',
+              description: 'string'
+            },
+            flags: {
+              icon : {
+                type: 'string'
+              }
+            },
+            examples: [{
+              command: `notify-send 'Hello world!' 'This is an example notification.' --icon=dialog-information`
+            }]
+          }
+        }
+      })
     }
   }
 
