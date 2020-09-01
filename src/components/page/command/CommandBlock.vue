@@ -3,6 +3,11 @@
     class="block command-block"
   > 
     <h2 class="title"> {{ command.name }} </h2>
+    <div v-if="command.list.default.examples">
+      <div class="command-block-example" v-for="example in command.list.default.examples" :key="example.command">
+        {{ example.command }}
+      </div>
+    </div>
   </div>
 </template>
 

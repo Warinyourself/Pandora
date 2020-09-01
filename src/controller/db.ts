@@ -46,7 +46,7 @@ export class DB implements _DB {
       this.put('command', {
         name: 'Send Notify',
         id: getUUID(),
-        command: {
+        list: {
           default: {
             body: 'notify-send',
             value: {
