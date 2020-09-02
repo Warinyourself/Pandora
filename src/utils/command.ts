@@ -21,15 +21,11 @@ function showOS() {
     appendOutput("Linux Detected.")
 }
 
-export function backgroundProcess({ command, attrs }: { command: string, attrs: string[] }) {
-  console.log(`Start command: ${command} ${attrs.join(' ')}`)
-  const childProcess = require('child_process');
+export function backgroundProcess({ command, attrs }: { command: string, attrs?: string[] }) {
+  console.log(`Start command: ${command} ${attrs ? attrs.join(' ') : ''}`)
+  const childProcess = require('child_process')
 
-  showOS();
-
-  // const pathImage = '~/Pictures/3d_letter_v_lg.jpg'.replace('~', `/home/${process.env.USER}`)
-  const child = childProcess.spawn(command, attrs); 
-  // const child = process.spawn('./test.sh'); 
+  const child = attrs ? childProcess.spawn(command, attrs) : childProcess.exec(command)
 
   child.on('error', function(err: any) {
     console.log(`Get error ${Buffer.from(err, 'utf8')}`)
