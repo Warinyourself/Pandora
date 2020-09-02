@@ -1,15 +1,22 @@
 import Vue, { VNode } from 'vue'
 import { Framework } from 'vuetify'
 import { _DB } from '@/controller/db'
-// import { AninateOptions, IIsNeedRequestOptions } from '@/plugins/handler'
-
-// declare module '*.vue' {
-//   export default Vue
-// }
+import { WebFrame, Clipboard, ContextBridge, CrashReporter, DesktopCapturer, IpcRenderer, NativeImage, Remote, Shell } from 'electron'
 
 declare module 'vue/types/vue' {
   export interface Vue {
     $vuetify: Framework
+    $electron: {
+      clipboard: Clipboard
+      contextBridge: ContextBridge
+      crashReporter: CrashReporter
+      desktopCapturer: DesktopCapturer
+      ipcRenderer: IpcRenderer
+      nativeImage: typeof NativeImage
+      remote: Remote
+      shell: Shell
+      webFrame: WebFrame
+    }
     $db: _DB
   }
 }
