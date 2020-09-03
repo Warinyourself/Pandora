@@ -6,9 +6,10 @@
 
       <AppDrop
         type="color"
+        class="mb-2"
         :callback="handleDropColor"
       >
-        <v-row dense class="mb-2">
+        <v-row dense>
           <v-col
             cols="auto"
             v-for="color in colors"

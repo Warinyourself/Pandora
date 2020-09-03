@@ -1,5 +1,6 @@
 .app-file-loader
   width 100%
+  overflow hidden
   display flex
   flex-direction column
   position relative
@@ -36,7 +37,6 @@
   z-index 1
 
 .app-file-loader-wrapper
-  position relative
   width 100%
   flex 1 1 auto
   height 100%
@@ -60,9 +60,11 @@
   align-items center
   opacity 0
   transition opacity .3s
+  z-index 3
+  &.has-files
+    background: rgba(0, 0, 0, .4)
   &.active
     opacity 1
-    z-index 3 
   &.unfocus
     z-index -1 
   &.block
