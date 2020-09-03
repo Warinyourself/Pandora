@@ -3,21 +3,21 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import LayoutModifyPalette from '@/components/page/palette/LayoutModifyPalette.vue'
+import { Component, Vue } from 'vue-property-decorator';
+import LayoutModifyPalette from '@/components/page/palette/LayoutModifyPalette.vue';
 
 @Component({
   components: {
-    LayoutModifyPalette
-  }
+    LayoutModifyPalette,
+  },
 })
 export default class PaletteEditPage extends Vue {
   palette: any = null
 
   async mounted() {
-    const id = this.$route.params.id
+    const { id } = this.$route.params;
 
-    this.palette = await this.$db.get('palette', id)
+    this.palette = await this.$db.get('palette', id);
   }
 }
 </script>

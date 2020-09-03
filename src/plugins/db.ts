@@ -1,4 +1,4 @@
-import Vue from 'vue'
-import DB from '@/controller/db'
+import Vue from 'vue';
+import DB from '@/controller/db';
 
-Vue.prototype.$db = DB
+Vue.prototype.$db = DB;

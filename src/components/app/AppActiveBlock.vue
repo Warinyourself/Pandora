@@ -9,8 +9,8 @@
 </template>
 
 <script type="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
-import { PageModule } from '@/store/page'
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import { PageModule } from '@/store/page';
 
 @Component
 export default class AppActiveBlock extends Vue {
@@ -21,10 +21,10 @@ export default class AppActiveBlock extends Vue {
       view: true,
       items: this.menu,
       style: {
-        top: event.pageY + 'px',
-        left: event.pageX + 'px'
-      }
-    })
+        top: `${event.pageY}px`,
+        left: `${event.pageX}px`,
+      },
+    });
   }
 }
 </script>

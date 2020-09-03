@@ -44,25 +44,25 @@
 </template>
 
 <script type="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { PageModule } from '@/store/page'
+import { Component, Vue } from 'vue-property-decorator';
+import { PageModule } from '@/store/page';
 
 @Component
 export default class AppBlock extends Vue {
   get menu() {
-    return PageModule.rightMenu
+    return PageModule.rightMenu;
   }
 
   async handleCallback(item) {
-    await item.callback()
-    
-    this.closeMenu()
+    await item.callback();
+
+    this.closeMenu();
   }
 
   closeMenu() {
     PageModule.ASSING_MENU({
       view: false,
-    })
+    });
   }
 }
 </script>

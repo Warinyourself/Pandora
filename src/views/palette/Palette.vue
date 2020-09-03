@@ -40,40 +40,40 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { PaletteModule } from '@/store/palette'
+import { Component, Vue } from 'vue-property-decorator';
+import { PaletteModule } from '@/store/palette';
 // eslint-disable-next-line no-unused-vars
-import { Palette } from '@/models/palette'
+import { Palette } from '@/models/palette';
 // eslint-disable-next-line no-unused-vars
-import { RightMenuItem } from '@/models/page'
+import { RightMenuItem } from '@/models/page';
 
 @Component
 export default class PalettePage extends Vue {
   get palettes() {
-    return PaletteModule.palettes
+    return PaletteModule.palettes;
   }
 
   get nameActivePalette() {
-    return PaletteModule.nameActivePalette
+    return PaletteModule.nameActivePalette;
   }
 
   async mounted() {
-    await PaletteModule.updatePalettes()
+    await PaletteModule.updatePalettes();
   }
 
   generateMenu(palette: Palette) {
-    const menu = []
-    const isAlreadyActive = this.nameActivePalette === palette.name
+    const menu = [];
+    const isAlreadyActive = this.nameActivePalette === palette.name;
 
     menu.push({
       title: 'Activate palette',
       disabled: isAlreadyActive,
       callback: () => {
-        PaletteModule.activatePalette({ palette, self: this })
-      }
-    })
+        PaletteModule.activatePalette({ palette, self: this });
+      },
+    });
 
-    return menu
+    return menu;
   }
 }
 </script>

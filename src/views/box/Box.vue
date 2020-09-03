@@ -14,7 +14,7 @@
         > Create a box </AppButton>
       </div>
       <div v-else>
-        You don't have any box, so, 
+        You don't have any box, so,
         <AppButton
           color="primary"
           :to="{ name: 'BoxCreate' }"
@@ -25,25 +25,25 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { BoxModule } from '@/store/box'
+import { Component, Vue } from 'vue-property-decorator';
+import { BoxModule } from '@/store/box';
 
 // eslint-disable-next-line no-unused-vars
-import { Box } from '@/models/box'
-import BoxBlock from '@/components/page/box/BoxBlock.vue'
+import { Box } from '@/models/box';
+import BoxBlock from '@/components/page/box/BoxBlock.vue';
 
 @Component({
   components: {
-    BoxBlock
-  }
+    BoxBlock,
+  },
 })
 export default class IndexPage extends Vue {
   get boxes() {
-    return BoxModule.boxes
+    return BoxModule.boxes;
   }
 
   async mounted() {
-    await BoxModule.loadAll()
+    await BoxModule.loadAll();
   }
 }
 </script>

@@ -4,7 +4,7 @@
 
     <AppFileLoader v-model="files" :file-modifier="fileModifier">
       <template v-slot="{ file, remove }">
-        <AppActiveBlock          
+        <AppActiveBlock
           :menu="generateRightMenu(file, { remove })"
         >
           <div
@@ -35,14 +35,14 @@
           </v-tooltip>
 
           <div class="d-flex fw-wrap">
-            <AppGrag 
+            <AppGrag
               :key="color"
               :info="color"
               type="color"
               v-for="color in file.palette"
             >
               <div
-                class="color-block d-flex" 
+                class="color-block d-flex"
                 :style="`background-color: ${color}`"
               />
             </AppGrag>
@@ -50,7 +50,7 @@
         </div>
       </template>
     </AppFileLoader>
-  
+
     <LayoutModifyPalette :palette="palette" class="mt-4"/>
 
     <v-dialog
@@ -95,186 +95,186 @@
       @click="saveBox"
       class="mt-2"
       color="primary"
-    > 
-      Save box 
+    >
+      Save box
     </AppButton>
   </AppContent>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Component, Vue, Prop } from 'vue-property-decorator';
 
-import ModifyColor from '@/components/page/palette/ModifyColor.vue'
+import ModifyColor from '@/components/page/palette/ModifyColor.vue';
 
-import { BoxModule } from '@/store/box'
-import { PaletteModule } from '@/store/palette'
-import LayoutModifyPalette from '@/components/page/palette/LayoutModifyPalette.vue'
-
-let ipcRenderer: Electron.IpcRenderer
-
-const userAgent = navigator.userAgent.toLowerCase();
-const isElectron = userAgent.indexOf(' electron/') > -1
-
-if (isElectron) {
-  const obj = window.require('electron')
-
-  ipcRenderer = obj.ipcRenderer
-}
+import { BoxModule } from '@/store/box';
+import { PaletteModule } from '@/store/palette';
+import LayoutModifyPalette from '@/components/page/palette/LayoutModifyPalette.vue';
 
 // @ts-ignore
-import ColorThief from 'colorthief'
-import { defaultPalette, defaultColor } from '@/models/palette'
+import ColorThief from 'colorthief';
+import { defaultPalette, defaultColor } from '@/models/palette';
 
 // eslint-disable-next-line no-unused-vars
-import { Box } from '@/models/box'
+import { Box } from '@/models/box';
 // eslint-disable-next-line no-unused-vars
-import { Palette, PaletteColor, ColorsType } from '@/models/palette'
+import { Palette, PaletteColor, ColorsType } from '@/models/palette';
 // eslint-disable-next-line no-unused-vars
-import { LoaderFile, RightMenuItem } from '@/models/page'
+import { LoaderFile, RightMenuItem } from '@/models/page';
 // eslint-disable-next-line no-unused-vars
-import { Color } from 'vuetify/lib/util/colors'
+import { Color } from 'vuetify/lib/util/colors';
+
+let ipcRenderer: Electron.IpcRenderer;
+
+const userAgent = navigator.userAgent.toLowerCase();
+const isElectron = userAgent.indexOf(' electron/') > -1;
+
+if (isElectron) {
+  const obj = window.require('electron');
+
+  ipcRenderer = obj.ipcRenderer;
+}
 
 @Component({
   components: {
     ModifyColor,
-    LayoutModifyPalette
-  }
+    LayoutModifyPalette,
+  },
 })
 export default class LayoutModifyBox extends Vue {
   @Prop({ type: Object }) box!: Box
 
   editFile = {} as LoaderFile
+
   boxName = 'Box name'
+
   files = [] as Array<LoaderFile>
 
   palette = defaultPalette
 
   hex = defaultColor
+
   paletteSelectionModal = false
 
   get palettes() {
-    return PaletteModule.palettes
+    return PaletteModule.palettes;
   }
 
   get isEdit() {
-    return this.box
+    return this.box;
   }
 
   get boxes() {
-    return BoxModule.boxes
+    return BoxModule.boxes;
   }
 
   async mounted() {
-    await PaletteModule.updatePalettes()
+    await PaletteModule.updatePalettes();
 
     if (this.box) {
-      this.boxName = this.box.name
-      this.files = this.box.files
+      this.boxName = this.box.name;
+      this.files = this.box.files;
     }
   }
 
   fileModifier(file: LoaderFile) {
     return new Promise((resolve) => {
-      if (file.type !== 'image') return resolve({})
+      if (file.type !== 'image') return resolve({});
 
-      const image = new Image()
-      image.src = file.src as string
-  
+      const image = new Image();
+      image.src = file.src as string;
+
       const colorThief = new ColorThief();
-  
-      const rgbToHex = (color: string) => {
-        const [r, g, b] = color
-        return '#' + [r, g, b].map(x => {
-          const hex = parseInt(x).toString(16)
-          return hex.length === 1 ? '0' + hex : hex
-        }).join('')
-      }
-  
-      image.addEventListener('load', async () => {
-        let palette = (await colorThief.getPalette(image)).map(rgbToHex)
 
-        resolve({ palette })
-      })
-    })
+      const rgbToHex = (color: string) => {
+        const [r, g, b] = color;
+        return `#${[r, g, b].map((x) => {
+          const hex = parseInt(x).toString(16);
+          return hex.length === 1 ? `0${hex}` : hex;
+        }).join('')}`;
+      };
+
+      image.addEventListener('load', async () => {
+        const palette = (await colorThief.getPalette(image)).map(rgbToHex);
+
+        resolve({ palette });
+      });
+    });
   }
 
   async saveBox() {
     await this.$db.put('box', {
       name: this.boxName,
-      files: this.files
-    })
+      files: this.files,
+    });
 
-    this.$router.push({ name: 'Box' })
+    this.$router.push({ name: 'Box' });
   }
 
   activatePalette(palette: Palette) {
-    this.palette = palette
+    this.palette = palette;
   }
 
   generateUpdateFileFunction(file: LoaderFile) {
     return async () => {
-      const box = await this.$db.get('box', this.boxName) as Box
+      const box = await this.$db.get('box', this.boxName) as Box;
 
       if (!box) {
         await this.$db.put('box', {
           name: this.boxName,
-          files: [file]
-        })
-        return
+          files: [file],
+        });
+        return;
       }
 
-      const hasInDB = box.files.find(({ hash }) => hash === file.hash)
+      const hasInDB = box.files.find(({ hash }) => hash === file.hash);
 
       if (!hasInDB) {
-        box.files.push(file)
+        box.files.push(file);
 
-        await this.$db.put('box', box)
+        await this.$db.put('box', box);
       } else {
-        alert('already in indexdb')
+        alert('already in indexdb');
       }
-    }
+    };
   }
 
-  generateRightMenu(file: LoaderFile, { remove }: Record<string, Function> ): RightMenuItem[] {
+  generateRightMenu(file: LoaderFile, { remove }: Record<string, Function>): RightMenuItem[] {
     const fileOptions = [
       {
         title: 'Delete',
         icon: 'mdi-trash-can-outline',
-        callback: () => remove(file)
+        callback: () => remove(file),
       },
       {
         title: 'Save file',
         icon: 'mdi-content-save',
-        callback: this.generateUpdateFileFunction(file)
-      }
-    ]
+        callback: this.generateUpdateFileFunction(file),
+      },
+    ];
 
     if (file.palette) {
       fileOptions.push({
         title: 'Generate palette',
         icon: 'mdi-cog-sync-outline',
         callback: () => {
-          const fullColors = file.palette.map(hex => {
-            return PaletteModule.hexToHsl(hex)
-          })
-          const bg = fullColors.find(([, , l]) => l <= 30)
-          const [primary, secondary, tertiary] = fullColors.filter(([, , l]) => l >= 60 && l <= 80)
-
+          const fullColors = file.palette.map((hex) => PaletteModule.hexToHsl(hex));
+          const bg = fullColors.find(([, , l]) => l <= 30);
+          const [primary, secondary, tertiary] = fullColors.filter(([, , l]) => l >= 60 && l <= 80);
 
           if (!bg || !primary || !secondary || !tertiary) {
-            alert('Failed to generate palette')
-            return
+            alert('Failed to generate palette');
+            return;
           }
 
-          const finalColors = { bg, primary, secondary, tertiary }
-          this.palette.colors = Object.entries<[number, number, number]>(finalColors).map(([name, hsl]) => {
-            return {
-              name: name as ColorsType,
-              hex: PaletteModule.hslToHex(hsl)
-            }
-          })
-        }
-      })
+          const finalColors = {
+            bg, primary, secondary, tertiary,
+          };
+          this.palette.colors = Object.entries<[number, number, number]>(finalColors).map(([name, hsl]) => ({
+            name: name as ColorsType,
+            hex: PaletteModule.hslToHex(hsl),
+          }));
+        },
+      });
     }
 
     if (file.type === 'image') {
@@ -283,10 +283,10 @@ export default class LayoutModifyBox extends Vue {
           title: 'Set as background',
           icon: 'mdi-share',
           callback: () => {
-            ipcRenderer.send('sendCommand', { command: 'nitrogen', attrs: ['--set-auto', file.path]})
-          }
-        }
-      ])
+            ipcRenderer.send('sendCommand', { command: 'nitrogen', attrs: ['--set-auto', file.path] });
+          },
+        },
+      ]);
     }
 
     return fileOptions.concat([
@@ -294,10 +294,10 @@ export default class LayoutModifyBox extends Vue {
         title: 'Set to edit',
         icon: 'mdi-pencil',
         callback: () => {
-          this.editFile = file
-        }
-      }
-    ])
+          this.editFile = file;
+        },
+      },
+    ]);
   }
 }
 </script>

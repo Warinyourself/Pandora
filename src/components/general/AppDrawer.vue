@@ -19,7 +19,7 @@
         v-for="item in menuItems"
         :key="item.title"
       >
-      <v-icon 
+      <v-icon
         class="memu-link-icon mr-2"
         v-text="item.icon"
       ></v-icon>
@@ -30,11 +30,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import {
+  Component, Vue, Prop, Watch,
+} from 'vue-property-decorator';
 
 @Component
 export default class AppDrawer extends Vue {
   @Prop({ default: false }) readonly expandOnHover!: boolean
+
   miniVariant = false
 
   get menuItems() {
@@ -46,9 +49,9 @@ export default class AppDrawer extends Vue {
         badge: 0,
         isAvailable: true,
         to: {
-          name: 'Box'
+          name: 'Box',
         },
-        icon: 'mdi-widgets'
+        icon: 'mdi-widgets',
       },
       {
         id: 'Commands',
@@ -57,9 +60,9 @@ export default class AppDrawer extends Vue {
         badge: 0,
         isAvailable: true,
         to: {
-          name: 'Command'
+          name: 'Command',
         },
-        icon: 'mdi-bash'
+        icon: 'mdi-bash',
       },
       {
         id: 'Palette',
@@ -68,9 +71,9 @@ export default class AppDrawer extends Vue {
         badge: 0,
         isAvailable: true,
         to: {
-          name: 'Palette'
+          name: 'Palette',
         },
-        icon: 'mdi-creation'
+        icon: 'mdi-creation',
       },
       {
         id: 'Settings',
@@ -79,16 +82,16 @@ export default class AppDrawer extends Vue {
         badge: 0,
         isAvailable: true,
         to: {
-          name: 'Settings'
+          name: 'Settings',
         },
-        icon: 'mdi-cog'
+        icon: 'mdi-cog',
       },
-    ]
+    ];
   }
 
   @Watch('$vuetify.breakpoint.smAndDown')
-  onBreakPointChange(val : boolean) {
-    this.$emit('update:expandOnHover', !val)
+  onBreakPointChange(val: boolean) {
+    this.$emit('update:expandOnHover', !val);
   }
 }
 </script>
@@ -105,7 +108,6 @@ export default class AppDrawer extends Vue {
   &.router-link-active
     .v-icon
       color: var(--v-primary-base)
-     
 
 #core-navigation-drawer
   &.v-navigation-drawer--mini-variant

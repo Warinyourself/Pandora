@@ -16,15 +16,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { PaletteModule } from '@/store/palette'
+import { Component, Vue } from 'vue-property-decorator';
+import { PaletteModule } from '@/store/palette';
 
 @Component
 export default class AppPersonalPage extends Vue {
   isLoading = false
 
-  get isDark() { 
-    return PaletteModule.isDark
+  get isDark() {
+    return PaletteModule.isDark;
   }
 }
 </script>

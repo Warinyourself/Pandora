@@ -30,11 +30,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component
 export default class AppLoader extends Vue {
   @Prop({ required: true, type: Boolean }) isLoading!: boolean
-  @Prop({ default: 'content-animation', type: String }) name!: String
+
+  @Prop({ default: 'content-animation', type: String }) name!: string
 }
 </script>

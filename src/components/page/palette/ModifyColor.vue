@@ -20,9 +20,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Component, Vue, Prop } from 'vue-property-decorator';
 // eslint-disable-next-line no-unused-vars
-import { Palette, PaletteColor } from '@/models/palette'
+import { Palette, PaletteColor } from '@/models/palette';
 
 @Component
 export default class LayoutModifyPalette extends Vue {

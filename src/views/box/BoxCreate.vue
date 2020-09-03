@@ -3,13 +3,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import LayoutModifyBox from '@/components/page/box/LayoutModifyBox.vue'
+import { Component, Vue } from 'vue-property-decorator';
+import LayoutModifyBox from '@/components/page/box/LayoutModifyBox.vue';
 
 @Component({
   components: {
-    LayoutModifyBox
-  }
+    LayoutModifyBox,
+  },
 })
 export default class CreateBoxPage extends Vue {}
 </script>

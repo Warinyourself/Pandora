@@ -17,8 +17,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import AppDrawer from '@/components/general/AppDrawer.vue'
+import { Component, Vue } from 'vue-property-decorator';
+import AppDrawer from '@/components/general/AppDrawer.vue';
 
 @Component({
   components: {

@@ -1,15 +1,15 @@
-import { VueConstructor } from 'vue'
+import { VueConstructor } from 'vue';
 // const electron = require('electron')
-const electron = window.require('electron')
+const electron = window.require('electron');
 
 export default {
   install: (Vue: VueConstructor) => {
     Object.defineProperties(Vue.prototype, {
       $electron: {
-        get () {
-          return electron
+        get() {
+          return electron;
         },
       },
-    })
-  }
-}
+    });
+  },
+};

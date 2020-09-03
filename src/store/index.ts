@@ -1,9 +1,9 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import { config } from 'vuex-module-decorators'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import { config } from 'vuex-module-decorators';
 
-config.rawError = true
+config.rawError = true;
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
-export default new Vuex.Store({})
+export default new Vuex.Store({});
