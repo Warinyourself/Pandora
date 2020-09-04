@@ -8,9 +8,18 @@
         class="command-block-example"
         v-for="example in command.list.default.examples"
         :key="example.command"
-        @click="initCommand(example.command)"
       >
         {{ example.command }}
+        <v-btn
+          fab
+          x-small
+          color="primary"
+          @click="initCommand(example.command)"
+        >
+          <v-icon>
+            mdi-play
+          </v-icon>
+        </v-btn>
       </div>
     </div>
   </div>
@@ -41,4 +50,8 @@ export default class CommandBlock extends Vue {
   background-size cover
   background-repeat no-repeat
   background-position center
+
+.command-block-example
+  display flex
+  justify-content space-between
 </style>
