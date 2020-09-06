@@ -1,11 +1,14 @@
 <template functional>
-  <div class="block" v-bind="$attrs">
-    <slot/>
+  <div
+    class="block"
+    v-bind="$attrs"
+  >
+    <slot />
   </div>
 </template>
 
 <script type="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator'
 
 @Component
 export default class AppBlock extends Vue {}

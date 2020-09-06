@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import Themeable from 'vuetify/lib/mixins/themeable';
+import Themeable from 'vuetify/lib/mixins/themeable'
 
 export default {
   name: 'AppItem',
@@ -47,30 +47,30 @@ export default {
         subtitle: undefined,
         title: undefined,
         to: undefined,
-        badge: undefined,
-      }),
+        badge: undefined
+      })
     },
     text: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
 
   computed: {
     computedText() {
-      if (!this.item || !this.item.title) return '';
+      if (!this.item || !this.item.title) return ''
 
-      let text = '';
+      let text = ''
 
       this.item.title.split(' ').forEach((val) => {
-        text += val.substring(0, 1);
-      });
+        text += val.substring(0, 1)
+      })
 
-      return text;
+      return text
     },
     href() {
-      return this.item.href || (!this.item.to ? '#' : undefined);
-    },
-  },
-};
+      return this.item.href || (!this.item.to ? '#' : undefined)
+    }
+  }
+}
 </script>

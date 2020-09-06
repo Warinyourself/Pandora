@@ -2,27 +2,26 @@
   <v-row>
     <v-col>
       <v-color-picker
-        class="ma-2"
         v-model="value.hex"
+        class="ma-2"
         dot-size="10"
         width="400px"
-      ></v-color-picker>
-        </v-col>
-        <v-col>
+      />
+    </v-col>
+    <v-col>
       <v-select
-        :items="['primary', 'secondary', 'tertiary', 'fg', 'bg' ]"
         v-model="value.name"
+        :items="['primary', 'secondary', 'tertiary', 'fg', 'bg']"
         label="Set color type"
-      >
-      </v-select>
+      />
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator'
 // eslint-disable-next-line no-unused-vars
-import { Palette, PaletteColor } from '@/models/palette';
+import { Palette, PaletteColor } from '@/models/palette'
 
 @Component
 export default class LayoutModifyPalette extends Vue {

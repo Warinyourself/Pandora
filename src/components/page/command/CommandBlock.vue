@@ -1,13 +1,13 @@
 <template>
-  <div
-    class="block command-block"
-  >
-    <h2 class="title"> {{ command.name }} </h2>
+  <div class="block command-block">
+    <h2 class="title">
+      {{ command.name }}
+    </h2>
     <div v-if="command.list.default.examples">
       <div
-        class="command-block-example"
         v-for="example in command.list.default.examples"
         :key="example.command"
+        class="command-block-example"
       >
         {{ example.command }}
         <v-btn
@@ -26,17 +26,17 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator'
 
 // eslint-disable-next-line no-unused-vars
-import { Command } from '@/models/command';
+import { Command } from '@/models/command'
 
 @Component
 export default class CommandBlock extends Vue {
   @Prop({ type: Object, required: true }) command!: Command
 
   initCommand(command: string) {
-    this.$electron.ipcRenderer.send('sendCommand', { command });
+    this.$electron.ipcRenderer.send('sendCommand', { command })
   }
 }
 </script>

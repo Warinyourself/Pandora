@@ -2,27 +2,28 @@
   <AppContent>
     <AppBlock>
       <h2 class="title">
-        {{ !palettes.length ? 'Set up palette' : 'Here you may create a palette'}}
+        {{ !palettes.length ? 'Set up palette' : 'Here you may create a palette' }}
       </h2>
       <v-row>
-        <v-col cols="4"
+        <v-col
           v-for="palette in palettes"
           :key="palette.key"
+          cols="4"
         >
           <AppActiveBlock
             :menu="generateMenu(palette)"
           >
             <router-link
               class="block block--darken"
-              :to="{ name: 'PaletteEdit', params: { id: palette.name } }"
+              :to="{name: 'PaletteEdit', params: {id: palette.name}}"
             >
               <h3> {{ palette.name }} </h3>
               <div class="d-flex">
                 <div
-                  class="color-block"
-                  :style="`background-color: ${color.hex}`"
                   v-for="color in palette.colors"
                   :key="color.name"
+                  class="color-block"
+                  :style="`background-color: ${color.hex}`"
                 />
               </div>
             </router-link>
@@ -31,7 +32,7 @@
       </v-row>
       <v-btn
         color="primary"
-        :to="{ name: 'PaletteCreate' }"
+        :to="{name: 'PaletteCreate'}"
       >
         Create new palette
       </v-btn>
@@ -40,40 +41,40 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { PaletteModule } from '@/store/palette';
+import { Component, Vue } from 'vue-property-decorator'
+import { PaletteModule } from '@/store/palette'
 // eslint-disable-next-line no-unused-vars
-import { Palette } from '@/models/palette';
+import { Palette } from '@/models/palette'
 // eslint-disable-next-line no-unused-vars
-import { RightMenuItem } from '@/models/page';
+import { RightMenuItem } from '@/models/page'
 
 @Component
 export default class PalettePage extends Vue {
   get palettes() {
-    return PaletteModule.palettes;
+    return PaletteModule.palettes
   }
 
   get nameActivePalette() {
-    return PaletteModule.nameActivePalette;
+    return PaletteModule.nameActivePalette
   }
 
   async mounted() {
-    await PaletteModule.updatePalettes();
+    await PaletteModule.updatePalettes()
   }
 
   generateMenu(palette: Palette) {
-    const menu = [];
-    const isAlreadyActive = this.nameActivePalette === palette.name;
+    const menu = []
+    const isAlreadyActive = this.nameActivePalette === palette.name
 
     menu.push({
       title: 'Activate palette',
       disabled: isAlreadyActive,
       callback: () => {
-        PaletteModule.activatePalette({ palette, self: this });
-      },
-    });
+        PaletteModule.activatePalette({ palette, self: this })
+      }
+    })
 
-    return menu;
+    return menu
   }
 }
 </script>

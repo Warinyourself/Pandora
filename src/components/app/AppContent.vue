@@ -1,11 +1,11 @@
 <template>
   <v-container>
-    <slot></slot>
+    <slot />
   </v-container>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator'
 
 // import { PageModule } from '@/store/page'
 

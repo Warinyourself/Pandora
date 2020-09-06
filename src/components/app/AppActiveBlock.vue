@@ -4,13 +4,13 @@
     @click.right.prevent.stop="viewMenu"
     v-on="$listeners"
   >
-    <slot/>
+    <slot />
   </div>
 </template>
 
 <script type="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-import { PageModule } from '@/store/page';
+import { Component, Vue, Prop } from 'vue-property-decorator'
+import { PageModule } from '@/store/page'
 
 @Component
 export default class AppActiveBlock extends Vue {
@@ -22,9 +22,9 @@ export default class AppActiveBlock extends Vue {
       items: this.menu,
       style: {
         top: `${event.pageY}px`,
-        left: `${event.pageX}px`,
-      },
-    });
+        left: `${event.pageX}px`
+      }
+    })
   }
 }
 </script>

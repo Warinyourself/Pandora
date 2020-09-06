@@ -1,9 +1,9 @@
-import Vue, { VNode } from 'vue';
-import { Framework } from 'vuetify';
-import { _DB } from '@/controller/db';
+import Vue, { VNode } from 'vue'
+import { Framework } from 'vuetify'
+import { IDB } from '@/controller/db'
 import {
-  WebFrame, Clipboard, ContextBridge, CrashReporter, DesktopCapturer, IpcRenderer, NativeImage, Remote, Shell,
-} from 'electron';
+  WebFrame, Clipboard, ContextBridge, CrashReporter, DesktopCapturer, IpcRenderer, NativeImage, Remote, Shell
+} from 'electron'
 
 declare module 'vue/types/vue' {
   export interface Vue {
@@ -19,7 +19,7 @@ declare module 'vue/types/vue' {
       shell: Shell;
       webFrame: WebFrame;
     };
-    $db: _DB;
+    $db: IDB;
   }
 }
 

@@ -2,37 +2,45 @@
   <div>
     <transition name="fade-menu">
       <ul
+        v-if="menu.view"
         v-click-outside="closeMenu"
         class="right-menu"
-        v-if="menu.view"
         :style="menu.style"
       >
         <li
-          :class="`right-menu-item ${item.disabled ? 'right-menu-items--disabled' : ''}`"
-          @click.stop.prevent="handleCallback(item)"
           v-for="item in menu.items"
           :key="item.title"
+          :class="`right-menu-item ${item.disabled ? 'right-menu-items--disabled' : ''}`"
+          @click.stop.prevent="handleCallback(item)"
         >
           <div class="right-menu-item-content">
             <p class="flex-1 mb-0">
               {{ item.title }}
             </p>
-            <AppIcon class="right-menu-item-arrow" v-if="item.items && item.items.length" name="arrow"/>
-            <ul
-              class="right-menu-items"
+            <AppIcon
               v-if="item.items && item.items.length"
+              class="right-menu-item-arrow"
+              name="arrow"
+            />
+            <ul
+              v-if="item.items && item.items.length"
+              class="right-menu-items"
             >
               <li
-                :class="`right-menu-item ${item.disabled ? 'right-menu-items--disabled' : ''}`"
-                @click.stop.prevent="item.callback"
                 v-for="item in item.items"
                 :key="item.title"
+                :class="`right-menu-item ${item.disabled ? 'right-menu-items--disabled' : ''}`"
+                @click.stop.prevent="item.callback"
               >
                 <div class="right-menu-item-content">
                   <p class="flex-1 mb-0">
                     {{ item.title }}
                   </p>
-                  <AppIcon class="right-menu-item-arrow" v-if="item.items && item.items.length" name="arrow"/>
+                  <AppIcon
+                    v-if="item.items && item.items.length"
+                    class="right-menu-item-arrow"
+                    name="arrow"
+                  />
                 </div>
               </li>
             </ul>
@@ -44,25 +52,25 @@
 </template>
 
 <script type="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { PageModule } from '@/store/page';
+import { Component, Vue } from 'vue-property-decorator'
+import { PageModule } from '@/store/page'
 
 @Component
 export default class AppBlock extends Vue {
   get menu() {
-    return PageModule.rightMenu;
+    return PageModule.rightMenu
   }
 
   async handleCallback(item) {
-    await item.callback();
+    await item.callback()
 
-    this.closeMenu();
+    this.closeMenu()
   }
 
   closeMenu() {
     PageModule.ASSING_MENU({
-      view: false,
-    });
+      view: false
+    })
   }
 }
 </script>

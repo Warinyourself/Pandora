@@ -1,8 +1,13 @@
 <template>
   <div class="palette-modify">
     <AppBlock>
-      <v-text-field label="Palette name" v-model="name"/>
-      <h2 class="title"> Create colors </h2>
+      <v-text-field
+        v-model="name"
+        label="Palette name"
+      />
+      <h2 class="title">
+        Create colors
+      </h2>
 
       <AppDrop
         type="color"
@@ -11,9 +16,9 @@
       >
         <v-row dense>
           <v-col
-            cols="auto"
             v-for="color in colors"
             :key="color.name"
+            cols="auto"
           >
             <AppActiveBlock
               @click="activeColor = color"
@@ -33,7 +38,9 @@
                   class="color-block c-pointer ma-0"
                   :style="`background-color: var(--v-bg-base)`"
                 >
-                <v-icon size="25"> mdi-plus </v-icon>
+                  <v-icon size="25">
+                    mdi-plus
+                  </v-icon>
                 </div>
               </div>
             </AppActiveBlock>
@@ -45,16 +52,16 @@
         <v-row>
           <v-col>
             <v-color-picker
-              class="ma-2"
               v-model="activeColor.hex"
+              class="ma-2"
               dot-size="10"
               width="400px"
-            ></v-color-picker>
-              </v-col>
-              <v-col>
+            />
+          </v-col>
+          <v-col>
             <v-select
-              :items="['primary', 'secondary', 'tertiary', 'fg', 'bg' ]"
               v-model="activeColor.name"
+              :items="['primary', 'secondary', 'tertiary', 'fg', 'bg']"
               label="Set color type"
             />
             <v-btn
@@ -73,7 +80,7 @@
             color="primary"
             @click="createPalette"
           >
-            {{isEdit ? 'Update' : 'Save'}} palette
+            {{ isEdit ? 'Update' : 'Save' }} palette
           </v-btn>
         </v-col>
         <v-col cols="auto">
@@ -98,12 +105,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-import { PaletteModule } from '@/store/palette';
+import { Component, Vue, Prop } from 'vue-property-decorator'
+import { PaletteModule } from '@/store/palette'
 // eslint-disable-next-line no-unused-vars
-import { Palette, PaletteColor } from '@/models/palette';
-import { defaultColor } from '@/models/palette';
-import { getUUID } from '@/utils/helper';
+import { Palette, PaletteColor, defaultColor } from '@/models/palette'
+import { getUUID } from '@/utils/helper'
 
 @Component
 export default class LayoutModifyPalette extends Vue {
@@ -118,7 +124,7 @@ export default class LayoutModifyPalette extends Vue {
   activeColor: PaletteColor | null = null
 
   get isEdit() {
-    return this.palette.id;
+    return this.palette.id
   }
 
   get computedPalette(): Palette {
@@ -126,47 +132,47 @@ export default class LayoutModifyPalette extends Vue {
       id: this.palette.id || this.id,
       name: this.name,
       colors: this.colors.map((color) => {
-        color.hex = color.hex.replace(/FF$/, '');
+        color.hex = color.hex.replace(/FF$/, '')
 
-        return color;
-      }),
-    };
+        return color
+      })
+    }
   }
 
   mounted() {
     if (this.isEdit) {
-      this.name = this.palette.name;
-      this.colors = this.palette.colors;
+      this.name = this.palette.name
+      this.colors = this.palette.colors
 
-      this.activeColor = this.colors[0];
+      this.activeColor = this.colors[0]
     }
   }
 
   async exportToJson() {
     try {
-      await navigator.clipboard.writeText(JSON.stringify(this.computedPalette));
+      await navigator.clipboard.writeText(JSON.stringify(this.computedPalette))
 
-      alert('Successful save');
+      alert('Successful save')
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   }
 
   async importPalette() {
     try {
-      const info = JSON.parse(await navigator.clipboard.readText()) as Palette;
-      let { id, name, colors } = info;
+      const info = JSON.parse(await navigator.clipboard.readText()) as Palette
+      let { id, name, colors } = info
 
-      colors = colors.filter(({ hex, name }) => hex && name);
+      colors = colors.filter(({ hex, name }) => hex && name)
 
-      this.id = id;
-      this.name = name;
-      this.colors = colors;
+      this.id = id
+      this.name = name
+      this.colors = colors
 
-      this.activeColor = this.colors[0];
-      alert('Successful export');
+      this.activeColor = this.colors[0]
+      alert('Successful export')
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   }
 
@@ -174,31 +180,31 @@ export default class LayoutModifyPalette extends Vue {
     this.colors.push(
       {
         name: 'undefined',
-        hex: color,
-      },
-    );
+        hex: color
+      }
+    )
   }
 
   deleteActiveColor() {
-    this.colors = this.colors.filter((color) => JSON.stringify(color) !== JSON.stringify(this.activeColor));
+    this.colors = this.colors.filter((color) => JSON.stringify(color) !== JSON.stringify(this.activeColor))
 
-    this.activeColor = this.colors[0];
+    this.activeColor = this.colors[0]
   }
 
   createColor() {
     const color: PaletteColor = {
       name: 'primary',
-      hex: defaultColor,
-    };
+      hex: defaultColor
+    }
 
-    this.colors.push(color);
-    this.activeColor = color;
+    this.colors.push(color)
+    this.activeColor = color
   }
 
   async createPalette() {
-    await PaletteModule.putPalette(this.computedPalette);
+    await PaletteModule.putPalette(this.computedPalette)
 
-    this.$router.push({ name: 'Palette' });
+    this.$router.push({ name: 'Palette' })
   }
 }
 </script>

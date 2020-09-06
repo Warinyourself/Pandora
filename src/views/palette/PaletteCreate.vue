@@ -1,15 +1,15 @@
 <template>
-  <LayoutModifyPalette/>
+  <LayoutModifyPalette />
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import LayoutModifyPalette from '@/components/page/palette/LayoutModifyPalette.vue';
+import { Component, Vue } from 'vue-property-decorator'
+import LayoutModifyPalette from '@/components/page/palette/LayoutModifyPalette.vue'
 
 @Component({
   components: {
-    LayoutModifyPalette,
-  },
+    LayoutModifyPalette
+  }
 })
 export default class PaletteCreatePage extends Vue {}
 </script>

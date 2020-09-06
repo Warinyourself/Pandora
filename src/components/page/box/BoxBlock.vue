@@ -1,25 +1,27 @@
 <template>
   <router-link
-    :to="{ name: 'BoxEdit', params: { id: box.name }}"
+    :to="{name: 'BoxEdit', params: {id: box.name}}"
     class="block box-block"
     :style="`background-image: url(${image.src})`"
   >
-    <h2 class="title">  {{ box.name }} </h2>
+    <h2 class="title">
+      {{ box.name }}
+    </h2>
   </router-link>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator'
 
 // eslint-disable-next-line no-unused-vars
-import { Box } from '@/models/box';
+import { Box } from '@/models/box'
 
 @Component
 export default class BoxBlock extends Vue {
   @Prop({ type: Object, required: true }) box!: Box
 
   get image() {
-    return this.box.files.find(({ type }) => type === 'image');
+    return this.box.files.find(({ type }) => type === 'image')
   }
 }
 </script>
