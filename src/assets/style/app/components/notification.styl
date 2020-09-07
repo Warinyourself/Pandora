@@ -1,0 +1,43 @@
+.notification-wrapper
+  bottom: 10px
+  right: 10px
+  z-index: 10
+  position: fixed
+  display: inline-block
+
+.app-notification
+  cursor: pointer
+  display: flex
+  background: var(--color-bg)
+  min-width: 275px
+  max-width: 275px
+  min-height: 90px
+  margin-top: 10px
+  border-radius: 6px
+  box-shadow: 0 0 3px var(--v-primary-base)
+  a
+    text-decoration: underline!important
+
+.app-notification--close.notification-leave-active
+  position: absolute
+
+.app-notification__icon
+  padding: 4px
+  display: flex
+  align-items: center
+  justify-content: center
+  height: 90px
+  width: 90px
+
+.app-notification__icon-emoji
+  font-size: 50px
+  text-align: center
+
+.app-notification__body
+  padding: 4px 8px 4px 0
+
+.app-notification__title
+  font-size: 1.1rem
+
+.app-notification p.app-notification__text
+  margin: 0

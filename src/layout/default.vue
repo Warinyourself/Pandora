@@ -13,16 +13,19 @@
       </div>
     </v-main>
     <AppRightMenu />
+    <AppSnackbar />
   </v-app>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import AppDrawer from '@/components/general/AppDrawer.vue'
+import AppSnackbar from '@/components/general/AppSnackbar.vue'
 
 @Component({
   components: {
-    AppDrawer
+    AppDrawer,
+    AppSnackbar
   }
 })
 export default class LayoutDefault extends Vue {}
