@@ -31,3 +31,14 @@ export interface LoaderFile {
   hash?: string;
   file: File;
 }
+
+export type AlertType = 'success' | 'error' | 'warning' | 'info';
+
+export interface Notification {
+  type: AlertType
+  text: string
+  title: string
+  id: string
+  show: boolean
+  emoji?: string
+}

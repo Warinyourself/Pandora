@@ -4,7 +4,8 @@ import {
 import { Route } from 'vue-router'
 import store from '@/store'
 
-import { RightMenu, DragItem } from '@/models/page'
+import { getUUID } from '@/utils/helper'
+import { RightMenu, DragItem, Notification } from '@/models/page'
 
 export interface PageState {
   routes: Route[];
@@ -21,6 +22,7 @@ class Page extends VuexModule implements PageState {
   routeReturnFunciton: null | Function = null
 
   dragable = [] as DragItem[]
+  notifications: Notification[] = []
 
   rightMenu = {
     view: false,
@@ -46,6 +48,24 @@ class Page extends VuexModule implements PageState {
   @Mutation
   ADD_DRAG(drag: DragItem) {
     this.dragable.push(drag)
+  }
+
+  @Mutation
+  SHOW_NOTIFICATION(notification: Partial<Notification>) {
+    if (!notification.id) {
+      notification.id = getUUID()
+    }
+
+    if (!notification.show) {
+      notification.show = true
+    }
+
+    this.notifications.push(notification as Notification)
+  }
+
+  @Mutation
+  HIDE_NOTIFICATION(uuid: string) {
+    this.notifications = this.notifications.filter(({ id }) => id !== uuid)
   }
 
   @Mutation
