@@ -241,7 +241,10 @@ export default class AppFileLoader extends Vue {
         fileObject.hash = hash
 
         if (this.files.find((file) => file.hash === hash)) {
-          alert('already loaded')
+          this.$alert({
+            title: 'Already loaded',
+            text: 'File already loaded'
+          })
           return
         }
 
@@ -266,7 +269,10 @@ export default class AppFileLoader extends Vue {
         fileObject.text = reader.result as string
 
         if (this.files.find((file) => file.hash === hash)) {
-          alert('already loaded')
+          this.$alert({
+            title: 'Already loaded',
+            text: 'File already loaded'
+          })
           return
         }
 

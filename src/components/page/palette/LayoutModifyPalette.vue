@@ -152,7 +152,10 @@ export default class LayoutModifyPalette extends Vue {
     try {
       await navigator.clipboard.writeText(JSON.stringify(this.computedPalette))
 
-      alert('Successful save')
+      this.$alert({
+        type: 'success',
+        title: 'Successful save'
+      })
     } catch (error) {
       console.error(error)
     }
@@ -170,7 +173,11 @@ export default class LayoutModifyPalette extends Vue {
       this.colors = colors
 
       this.activeColor = this.colors[0]
-      alert('Successful export')
+
+      this.$alert({
+        type: 'success',
+        title: 'Successful export'
+      })
     } catch (error) {
       console.error(error)
     }

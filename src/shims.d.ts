@@ -4,6 +4,7 @@ import { IDB } from '@/controller/db'
 import {
   WebFrame, Clipboard, ContextBridge, CrashReporter, DesktopCapturer, IpcRenderer, NativeImage, Remote, Shell
 } from 'electron'
+import { INotification } from '@/models/page'
 
 declare module 'vue/types/vue' {
   export interface Vue {
@@ -20,6 +21,7 @@ declare module 'vue/types/vue' {
       webFrame: WebFrame;
     };
     $db: IDB;
+    $alert: (notification: Partial<INotification>) => void
   }
 }
 

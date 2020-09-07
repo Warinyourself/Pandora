@@ -244,7 +244,11 @@ export default class LayoutModifyBox extends Vue {
 
         await this.$db.put('box', box)
       } else {
-        alert('already in indexdb')
+        this.$alert({
+          type: 'error',
+          title: 'Already loaded',
+          text: 'File already loaded'
+        })
       }
     }
   }
@@ -273,7 +277,11 @@ export default class LayoutModifyBox extends Vue {
           const [primary, secondary, tertiary] = fullColors.filter(([, , l]) => l >= 60 && l <= 80)
 
           if (!bg || !primary || !secondary || !tertiary) {
-            alert('Failed to generate palette')
+            this.$alert({
+              type: 'error',
+              title: 'Failed',
+              text: 'Failed to generate palette'
+            })
             return
           }
 

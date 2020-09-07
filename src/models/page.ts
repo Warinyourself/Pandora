@@ -34,7 +34,7 @@ export interface LoaderFile {
 
 export type AlertType = 'success' | 'error' | 'warning' | 'info';
 
-export interface Notification {
+export interface INotification {
   type: AlertType
   text: string
   title: string
