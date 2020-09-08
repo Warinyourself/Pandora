@@ -1,6 +1,12 @@
 import { VueConstructor } from 'vue'
-// const electron = require('electron')
-const electron = window.require('electron')
+
+const userAgent = navigator.userAgent.toLowerCase()
+const isElectron = userAgent.indexOf(' electron/') > -1
+let electron: null | any
+
+if (isElectron) {
+  electron = window.require('electron')
+}
 
 export default {
   install: (Vue: VueConstructor) => {
