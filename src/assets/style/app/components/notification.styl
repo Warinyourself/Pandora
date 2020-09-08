@@ -1,46 +1,61 @@
 .notification-wrapper
-  bottom: 10px
-  right: 10px
-  z-index: 10
-  position: fixed
-  display: inline-block
+  bottom 10px
+  right 10px
+  z-index 10
+  position fixed
+  display inline-block
 
 .app-notification
-  cursor: pointer
-  display: flex
-  background: var(--v-bg-base)
-  min-width: 275px
-  max-width: 275px
-  min-height: 90px
-  margin-top: 10px
-  border-radius: 6px
-  box-shadow: 0 0 3px var(--v-primary-base)
+  cursor pointer
+  display flex
+  position relative
+  overflow hidden
+  background var(--v-bg-base)
+  min-width 275px
+  max-width 275px
+  min-height 90px
+  margin-top 10px
+  border-radius 6px
+  box-shadow 0 0 3px var(--v-primary-base)
   a
-    text-decoration: underline!important
-
-.app-notification--close.notification-leave-active
-  position: absolute
+    text-decoration underline!important
 
 .app-notification__icon
-  padding: 4px
-  display: flex
-  align-items: center
-  justify-content: center
-  height: 90px
-  width: 90px
+  padding 4px
+  display flex
+  align-items center
+  justify-content center
+  height 90px
+  width 90px
 
 .app-notification__icon-emoji
-  font-size: 50px
-  text-align: center
+  font-size 50px
+  text-align center
 
 .app-notification__body
-  padding: 4px 8px 4px 0
+  padding 4px 8px 4px 0
 
 .app-notification__title
-  font-size: 1.2rem
+  font-size 1.2rem
 
 .app-notification__text
-  font-size: 1rem
+  font-size 1rem
 
 .app-notification p.app-notification__text
-  margin: 0
+  margin 0
+
+.app-notification__loader
+  height 3px
+  width 100%
+  position absolute
+  background-color var(--v-primary-base)
+  opacity 0.6
+  transform-origin left
+  animation scale-x-frames linear 1 forwards
+
+
+@keyframes scale-x-frames
+  0%
+    transform scaleX(1)
+  100%
+    transform scaleX(0)

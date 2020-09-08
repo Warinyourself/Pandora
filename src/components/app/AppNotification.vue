@@ -1,8 +1,15 @@
 <template>
   <div
-    :class="`app-notification ${closeByClick ? 'app-notification--close' : ''}`"
+    class="app-notification"
     @click="close"
+    @mouseenter="hoverPause"
+    @mouseleave="hoverPlay"
   >
+    <div
+      ref="loader"
+      :style="loaderStyle"
+      class="app-notification__loader"
+    />
     <div class="app-notification__icon">
       <div class="app-notification__icon-emoji">
         {{ currentImage }}
@@ -33,8 +40,50 @@ let lifeInterval: any
 export default class AppNotification extends Vue {
   @Prop({ type: Object, required: true }) notification!: INotification
   timeout = 5000
+  isRunning = true
+  pauseOnHover = true
+  draggable = true
 
-  closeByClick = false
+  get loaderStyle() {
+    return {
+      animationDuration: `${this.timeout}ms`,
+      animationPlayState: this.isRunning ? 'running' : 'paused'
+    }
+  }
+
+  hoverPause() {
+    if (this.pauseOnHover) {
+      this.isRunning = false
+    }
+  }
+
+  hoverPlay() {
+    if (this.pauseOnHover) {
+      this.isRunning = true
+    }
+  }
+
+  focusPause() {
+    this.isRunning = false
+  }
+
+  focusPlay() {
+    this.isRunning = true
+  }
+
+  focusSetup() {
+    const element = this.$el as HTMLElement
+
+    element.addEventListener('blur', this.focusPause)
+    element.addEventListener('focus', this.focusPlay)
+  }
+
+  focusCleanup() {
+    const element = this.$el as HTMLElement
+
+    element.removeEventListener('blur', this.focusPause)
+    element.removeEventListener('focus', this.focusPlay)
+  }
 
   get currentImage() {
     switch (this.notification.type) {
@@ -54,15 +103,28 @@ export default class AppNotification extends Vue {
   }
 
   mounted() {
-    console.log('AAA')
-    lifeInterval = setTimeout(() => {
-      PageModule.HIDE_NOTIFICATION(this.notification.id)
-    }, this.timeout)
+    const loader = this.$refs.loader as HTMLElement
+
+    loader?.addEventListener('animationend', this.close)
+
+    // if (this.draggable) {
+    //   this.draggableSetup()
+    // }
+    this.focusSetup()
+  }
+
+  beforeDestroy() {
+    const loader = this.$refs.loader as HTMLElement
+
+    loader.removeEventListener('animationend', this.close)
+
+    // if (this.draggable) {
+    //   this.draggableCleanup()
+    // }
+    this.focusCleanup()
   }
 
   close() {
-    this.closeByClick = true
-
     this.$nextTick(() => {
       clearTimeout(lifeInterval)
       PageModule.HIDE_NOTIFICATION(this.notification.id)
