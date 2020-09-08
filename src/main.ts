@@ -11,6 +11,10 @@ import '@/plugins/components'
 import '@/plugins/db'
 import '@/assets/style/app/index.styl'
 
+// @ts-ignore
+import Transitions from 'vue2-transitions'
+
+Vue.use(Transitions)
 Vue.use(prototype)
 Vue.use(VueElectron)
 

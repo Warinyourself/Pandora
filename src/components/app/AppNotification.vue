@@ -25,13 +25,13 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 import { PageModule } from '@/store/page'
 
 // eslint-disable-next-line no-unused-vars
-import { Notification } from '@/models/page'
+import { INotification } from '@/models/page'
 
 let lifeInterval: any
 
 @Component
 export default class AppNotification extends Vue {
-  @Prop({ type: Object, required: true }) notification!: Notification
+  @Prop({ type: Object, required: true }) notification!: INotification
   timeout = 5000
 
   closeByClick = false

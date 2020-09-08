@@ -1,15 +1,15 @@
 <template>
-  <transition-group
-    tag="div"
+  <div
     class="notification-wrapper"
-    name="notification"
   >
-    <AppNotification
-      v-for="notification in notifications"
-      :key="notification.id"
-      :notification="notification"
-    />
-  </transition-group>
+    <fade-transition :group="true">
+      <AppNotification
+        v-for="notification in notifications"
+        :key="notification.id"
+        :notification="notification"
+      />
+    </fade-transition>
+  </div>
 </template>
 
 <script lang="ts">
