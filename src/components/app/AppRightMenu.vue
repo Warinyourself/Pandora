@@ -27,17 +27,17 @@
               class="right-menu-items"
             >
               <li
-                v-for="item in item.items"
-                :key="item.title"
-                :class="`right-menu-item ${item.disabled ? 'right-menu-items--disabled' : ''}`"
-                @click.stop.prevent="item.callback"
+                v-for="subItem in item.items"
+                :key="subItem.title"
+                :class="`right-menu-item ${subItem.disabled ? 'right-menu-items--disabled' : ''}`"
+                @click.stop.prevent="subItem.callback"
               >
                 <div class="right-menu-item-content">
                   <p class="flex-1 mb-0">
-                    {{ item.title }}
+                    {{ subItem.title }}
                   </p>
                   <AppIcon
-                    v-if="item.items && item.items.length"
+                    v-if="subItem.items && subItem.items.length"
                     class="right-menu-item-arrow"
                     name="arrow"
                   />
@@ -80,6 +80,12 @@ export default class AppBlock extends Vue {
   position absolute
   border-radius 5px
   z-index 5
+  .right-menu-item:first-child
+    border-radius 6px 6px 0 0
+    overflow hidden
+  .right-menu-item:last-child
+    border-radius 0 0 6px 6px
+    overflow hidden
   & > .right-menu-item:hover
     .right-menu-items
       opacity 1
