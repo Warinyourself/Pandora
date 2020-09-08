@@ -134,17 +134,6 @@ import { LoaderFile, RightMenuItem } from '@/models/page'
 // eslint-disable-next-line no-unused-vars
 import { Color } from 'vuetify/lib/util/colors'
 
-let ipcRenderer: Electron.IpcRenderer
-
-const userAgent = navigator.userAgent.toLowerCase()
-const isElectron = userAgent.indexOf(' electron/') > -1
-
-if (isElectron) {
-  const obj = window.require('electron')
-
-  ipcRenderer = obj.ipcRenderer
-}
-
 @Component({
   components: {
     ModifyColor,
@@ -302,7 +291,7 @@ export default class LayoutModifyBox extends Vue {
           title: 'Set as background',
           icon: 'mdi-share',
           callback: () => {
-            ipcRenderer.send('sendCommand', { command: 'nitrogen', attrs: ['--set-auto', file.path] })
+            this.$electron?.ipcRenderer.send('sendCommand', { command: 'nitrogen', attrs: ['--set-auto', file.path] })
           }
         }
       ])

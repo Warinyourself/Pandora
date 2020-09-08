@@ -36,7 +36,7 @@ export default class CommandBlock extends Vue {
   @Prop({ type: Object, required: true }) command!: Command
 
   initCommand(command: string) {
-    this.$electron.ipcRenderer.send('sendCommand', { command })
+    this.$electron?.ipcRenderer.send('sendCommand', { command })
   }
 }
 </script>
