@@ -1,3 +1,15 @@
+import {
+  Shell,
+  Remote,
+  WebFrame,
+  Clipboard,
+  IpcRenderer,
+  NativeImage,
+  ContextBridge,
+  CrashReporter,
+  DesktopCapturer
+} from 'electron'
+
 export interface RightMenu {
   view: boolean;
   style: Record<string, string>;
@@ -41,4 +53,16 @@ export interface INotification {
   id: string
   show: boolean
   emoji?: string
+}
+
+export interface ElectronPlugin {
+  clipboard: Clipboard
+  contextBridge: ContextBridge
+  crashReporter: CrashReporter
+  desktopCapturer: DesktopCapturer
+  ipcRenderer: IpcRenderer
+  nativeImage: typeof NativeImage
+  remote: Remote
+  shell: Shell
+  webFrame: WebFrame
 }

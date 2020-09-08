@@ -1,26 +1,14 @@
 import Vue, { VNode } from 'vue'
 import { Framework } from 'vuetify'
 import { IDB } from '@/controller/db'
-import {
-  WebFrame, Clipboard, ContextBridge, CrashReporter, DesktopCapturer, IpcRenderer, NativeImage, Remote, Shell
-} from 'electron'
-import { INotification } from '@/models/page'
+
+import { INotification, ElectronPlugin } from '@/models/page'
 
 declare module 'vue/types/vue' {
   export interface Vue {
-    $vuetify: Framework;
-    $electron: {
-      clipboard: Clipboard;
-      contextBridge: ContextBridge;
-      crashReporter: CrashReporter;
-      desktopCapturer: DesktopCapturer;
-      ipcRenderer: IpcRenderer;
-      nativeImage: typeof NativeImage;
-      remote: Remote;
-      shell: Shell;
-      webFrame: WebFrame;
-    };
-    $db: IDB;
+    $vuetify: Framework
+    $electron?: ElectronPlugin
+    $db: IDB
     $alert: (notification: Partial<INotification>) => void
   }
 }
