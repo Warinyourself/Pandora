@@ -10,7 +10,7 @@ export interface IDB {
   db: null | IDBDatabase;
   get<T>(objectStoreName: KeysDB, key: string): Promise<T | undefined>;
   getAll<T>(objectStoreName: KeysDB): Promise<T[] | undefined>;
-  put<T>(objectStoreName: KeysDB, info: T, key?: string, rule?: IDBTransactionMode): Promise<any>;
+  put<T>(objectStoreName: KeysDB, info: T, key?: string, rule?: IDBTransactionMode): Promise<unknown>;
 }
 
 type KeysDB = 'box' | 'palette' | 'command'
@@ -82,7 +82,7 @@ export class DB implements IDB {
         alert('Need to reload page')
       }
 
-      this.db.onerror = (event: any) => {
+      this.db.onerror = (event: Event) => {
         console.log({ event }, 'Error creating/accessing IndexedDB database')
       }
     }
@@ -104,9 +104,9 @@ export class DB implements IDB {
     }
 
     request.onerror = (error: any) => {
-      const dbError = error.srcElement.error
+      const dbError = error?.srcElement?.error
       if (dbError.name === 'VersionError') {
-        const [_, newVersion] = dbError.message.match(/\d{1,}/g)
+        const [, newVersion] = dbError.message.match(/\d{1,}/g)
 
         this.version = newVersion
         this.connect()
@@ -134,7 +134,7 @@ export class DB implements IDB {
 
       const request = objectStore.get(key)
 
-      request.onsuccess = (response) => {
+      request.onsuccess = () => {
         resolve(request.result)
       }
     })
@@ -154,7 +154,7 @@ export class DB implements IDB {
 
       const request = objectStore.getAll()
 
-      request.onsuccess = (response) => {
+      request.onsuccess = () => {
         resolve(request.result)
       }
     })
