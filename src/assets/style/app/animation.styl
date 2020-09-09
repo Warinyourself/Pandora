@@ -65,3 +65,16 @@
     transform: rotate(0deg)
   100%
     transform: rotate(360deg)
+
+.content-animation-leave-active, .content-animation-enter-active 
+  transition .4s
+
+.content-animation-enter-active 
+  opacity 1
+
+.content-animation-enter
+  transform scale(0.95)
+  opacity 0
+
+.content-animation-leave-to
+  opacity 0
