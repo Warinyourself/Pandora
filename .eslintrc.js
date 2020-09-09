@@ -9,7 +9,6 @@ module.exports = {
     '@vue/standard',
     '@vue/typescript',
     'plugin:vue/essential',
-    '@vue/typescript/recommended',
   ],
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

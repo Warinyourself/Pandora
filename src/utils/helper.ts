@@ -12,3 +12,32 @@ export const getUUID = () => {
 
   return uuid
 }
+
+interface DictionaryLike {
+  [index: string]: unknown;
+}
+
+export const isNumber = (value: unknown): value is number => typeof value === 'number'
+
+export const isObject = (value: unknown): value is DictionaryLike =>
+  typeof value === 'object' && value !== null
+
+export const isTouchEvent = (event: Event): event is TouchEvent =>
+  window.TouchEvent && event instanceof TouchEvent
+
+export function getX(event: MouseEvent | TouchEvent) {
+  return isTouchEvent(event) ? event.targetTouches[0].clientX : event.clientX
+}
+
+export function getY(event: MouseEvent | TouchEvent) {
+  return isTouchEvent(event) ? event.targetTouches[0].clientY : event.clientY
+}
+
+export const isDOMRect = (obj: any): obj is DOMRect =>
+  isObject(obj) &&
+  isNumber(obj.height) &&
+  isNumber(obj.width) &&
+  isNumber(obj.right) &&
+  isNumber(obj.left) &&
+  isNumber(obj.top) &&
+  isNumber(obj.bottom)

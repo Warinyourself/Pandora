@@ -1,6 +1,8 @@
 <template>
   <div
-    class="app-notification"
+    v-click-outside="handleClickOutside"
+    :class="classes"
+    :style="draggableStyle"
     @click="close"
     @mouseenter="hoverPause"
     @mouseleave="hoverPlay"
@@ -17,11 +19,11 @@
     </div>
     <div class="app-notification__body">
       <h3 class="app-notification__title">
-        {{ notification.title || '123' }}
+        {{ notification.title }}
       </h3>
       <p
         class="app-notification__text"
-        v-html="notification.text"
+        v-html="notification.text.replace(/\n/g, '<br/>')"
       />
     </div>
   </div>
@@ -34,7 +36,11 @@ import { PageModule } from '@/store/page'
 // eslint-disable-next-line no-unused-vars
 import { INotification } from '@/models/page'
 
-let lifeInterval: any
+import {
+  getX,
+  getY,
+  isDOMRect
+} from '@/utils/helper'
 
 @Component
 export default class AppNotification extends Vue {
@@ -43,12 +49,103 @@ export default class AppNotification extends Vue {
   isRunning = true
   pauseOnHover = true
   draggable = true
+  draggablePercent = 0.5
+
+  beingDragged = false
+  dragStart = 0
+  dragPos = { x: 0, y: 0 }
+  disableTransitions = false
+  dragRect: DOMRect | Record<string, unknown> = {}
+
+  get classes() {
+    const classes = [
+      'app-notification',
+      `app-notification--${this.notification.type}`
+    ]
+
+    if (this.disableTransitions) {
+      classes.push('disable-transition')
+    }
+
+    return classes
+  }
+
+  get draggableStyle() {
+    if (this.dragStart === this.dragPos.x) {
+      return {}
+    }
+    if (this.beingDragged) {
+      return {
+        transform: `translateX(${this.dragDelta}px)`,
+        opacity: 1 - Math.abs(this.dragDelta / this.removalDistance)
+      }
+    }
+    return {
+      transition: 'transform 0.2s, opacity 0.2s',
+      transform: 'translateX(0)',
+      opacity: 1
+    }
+  }
+
+  get dragDelta() {
+    return this.beingDragged ? this.dragPos.x - this.dragStart : 0
+  }
+
+  get removalDistance() {
+    if (isDOMRect(this.dragRect)) {
+      return (this.dragRect.right - this.dragRect.left) * this.draggablePercent
+    }
+    return 0
+  }
 
   get loaderStyle() {
     return {
       animationDuration: `${this.timeout}ms`,
       animationPlayState: this.isRunning ? 'running' : 'paused'
     }
+  }
+
+  get currentImage() {
+    switch (this.notification.type) {
+      case 'error': {
+        return '👺'
+      }
+      case 'success': {
+        return '🌟'
+      }
+      case 'warning': {
+        return '👾'
+      }
+      default: {
+        return this.notification.emoji || '🔔'
+      }
+    }
+  }
+
+  mounted() {
+    if (this.draggable) {
+      this.draggableSetup()
+    }
+    this.focusSetup()
+
+    const loader = this.$refs.loader as HTMLElement
+
+    loader.addEventListener('animationend', this.close)
+  }
+
+  beforeDestroy() {
+    if (this.draggable) {
+      this.draggableCleanup()
+    }
+    this.focusCleanup()
+
+    const loader = this.$refs.loader as HTMLElement
+
+    loader.removeEventListener('animationend', this.close)
+  }
+
+  handleClickOutside() {
+    this.isRunning = true
   }
 
   hoverPause() {
@@ -85,50 +182,70 @@ export default class AppNotification extends Vue {
     element.removeEventListener('focus', this.focusPlay)
   }
 
-  get currentImage() {
-    switch (this.notification.type) {
-      case 'error': {
-        return '👺'
+  draggableSetup() {
+    const element = this.$el as HTMLElement
+    element.addEventListener('touchstart', this.onDragStart)
+    element.addEventListener('mousedown', this.onDragStart)
+    addEventListener('touchmove', this.onDragMove, { passive: false })
+    addEventListener('mousemove', this.onDragMove)
+    addEventListener('touchend', this.onDragEnd)
+    addEventListener('mouseup', this.onDragEnd)
+  }
+
+  draggableCleanup() {
+    const element = this.$el as HTMLElement
+    element.removeEventListener('touchstart', this.onDragStart)
+    element.removeEventListener('mousedown', this.onDragStart)
+    removeEventListener('touchmove', this.onDragMove)
+    removeEventListener('mousemove', this.onDragMove)
+    removeEventListener('touchend', this.onDragEnd)
+    removeEventListener('mouseup', this.onDragEnd)
+  }
+
+  onDragStart(event: TouchEvent | MouseEvent) {
+    this.beingDragged = true
+    this.dragPos = { x: getX(event), y: getY(event) }
+    this.dragStart = getX(event)
+    this.dragRect = this.$el.getBoundingClientRect()
+  }
+
+  onDragMove(event: TouchEvent | MouseEvent) {
+    if (this.beingDragged) {
+      event.preventDefault()
+      if (this.isRunning) {
+        this.isRunning = false
       }
-      case 'success': {
-        return '🌟'
-      }
-      case 'warning': {
-        return '👾'
-      }
-      default: {
-        return this.notification.emoji || '🔔'
+      this.dragPos = { x: getX(event), y: getY(event) }
+    }
+  }
+
+  onDragEnd() {
+    if (this.beingDragged) {
+      if (Math.abs(this.dragDelta) >= this.removalDistance) {
+        this.disableTransitions = true
+        this.$nextTick(() => this.close())
+      } else {
+        setTimeout(() => {
+          this.beingDragged = false
+          if (
+            isDOMRect(this.dragRect) &&
+              this.pauseOnHover &&
+              this.dragRect.bottom >= this.dragPos.y &&
+              this.dragPos.y >= this.dragRect.top &&
+              this.dragRect.left <= this.dragPos.x &&
+              this.dragPos.x <= this.dragRect.right
+          ) {
+            this.isRunning = false
+          } else {
+            this.isRunning = true
+          }
+        })
       }
     }
   }
 
-  mounted() {
-    const loader = this.$refs.loader as HTMLElement
-
-    loader?.addEventListener('animationend', this.close)
-
-    // if (this.draggable) {
-    //   this.draggableSetup()
-    // }
-    this.focusSetup()
-  }
-
-  beforeDestroy() {
-    const loader = this.$refs.loader as HTMLElement
-
-    loader.removeEventListener('animationend', this.close)
-
-    // if (this.draggable) {
-    //   this.draggableCleanup()
-    // }
-    this.focusCleanup()
-  }
-
   close() {
-    this.$nextTick(() => {
-      clearTimeout(lifeInterval)
-      PageModule.HIDE_NOTIFICATION(this.notification.id)
-    })
+    PageModule.HIDE_NOTIFICATION(this.notification.id)
   }
 }
 </script>
