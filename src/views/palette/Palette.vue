@@ -4,32 +4,34 @@
       <h2 class="title">
         {{ !palettes.length ? 'Set up palette' : 'Here you may create a palette' }}
       </h2>
-      <v-row>
-        <v-col
-          v-for="palette in palettes"
-          :key="palette.key"
-          cols="4"
-        >
-          <AppActiveBlock
-            :menu="generateMenu(palette)"
+      <AppLoader :is-loading="isLoading">
+        <v-row>
+          <v-col
+            v-for="palette in palettes"
+            :key="palette.key"
+            cols="4"
           >
-            <router-link
-              class="block block--darken"
-              :to="{name: 'PaletteEdit', params: {id: palette.name}}"
+            <AppActiveBlock
+              :menu="generateMenu(palette)"
             >
-              <h3> {{ palette.name }} </h3>
-              <div class="d-flex">
-                <div
-                  v-for="color in palette.colors"
-                  :key="color.name"
-                  class="color-block"
-                  :style="`background-color: ${color.hex}`"
-                />
-              </div>
-            </router-link>
-          </AppActiveBlock>
-        </v-col>
-      </v-row>
+              <router-link
+                class="block block--darken"
+                :to="{name: 'PaletteEdit', params: {id: palette.name}}"
+              >
+                <h3> {{ palette.name }} </h3>
+                <div class="d-flex">
+                  <div
+                    v-for="color in palette.colors"
+                    :key="color.name"
+                    class="color-block"
+                    :style="`background-color: ${color.hex}`"
+                  />
+                </div>
+              </router-link>
+            </AppActiveBlock>
+          </v-col>
+        </v-row>
+      </AppLoader>
       <v-btn
         color="primary"
         :to="{name: 'PaletteCreate'}"
@@ -43,13 +45,14 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { PaletteModule } from '@/store/palette'
-// eslint-disable-next-line no-unused-vars
+
 import { Palette } from '@/models/palette'
-// eslint-disable-next-line no-unused-vars
 import { RightMenuItem } from '@/models/page'
 
 @Component
 export default class PalettePage extends Vue {
+  isLoading = true
+
   get palettes() {
     return PaletteModule.palettes
   }
@@ -59,7 +62,9 @@ export default class PalettePage extends Vue {
   }
 
   async mounted() {
+    this.isLoading = true
     await PaletteModule.updatePalettes()
+    this.isLoading = false
   }
 
   generateMenu(palette: Palette) {
