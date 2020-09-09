@@ -47,22 +47,22 @@ export interface LoaderFile {
 export type AlertType = 'success' | 'error' | 'warning' | 'info';
 
 export interface INotification {
-  type: AlertType
-  text: string
-  title: string
-  id: string
-  show: boolean
-  emoji?: string
+  type: AlertType;
+  text: string;
+  title: string;
+  id: string;
+  show: boolean;
+  emoji?: string;
 }
 
 export interface ElectronPlugin {
-  clipboard: Clipboard
-  contextBridge: ContextBridge
-  crashReporter: CrashReporter
-  desktopCapturer: DesktopCapturer
-  ipcRenderer: IpcRenderer
-  nativeImage: typeof NativeImage
-  remote: Remote
-  shell: Shell
-  webFrame: WebFrame
+  clipboard: Clipboard;
+  contextBridge: ContextBridge;
+  crashReporter: CrashReporter;
+  desktopCapturer: DesktopCapturer;
+  ipcRenderer: IpcRenderer;
+  nativeImage: typeof NativeImage;
+  remote: Remote;
+  shell: Shell;
+  webFrame: WebFrame;
 }

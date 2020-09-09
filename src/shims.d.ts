@@ -1,4 +1,4 @@
-import Vue, { VNode } from 'vue'
+import Vue from 'vue'
 import { Framework } from 'vuetify'
 import { IDB } from '@/controller/db'
 
@@ -6,10 +6,10 @@ import { INotification, ElectronPlugin } from '@/models/page'
 
 declare module 'vue/types/vue' {
   export interface Vue {
-    $vuetify: Framework
-    $electron?: ElectronPlugin
-    $db: IDB
-    $alert: (notification: Partial<INotification>) => void
+    $vuetify: Framework;
+    $electron?: ElectronPlugin;
+    $db: IDB;
+    $alert: (notification: Partial<INotification>) => void;
   }
 }
 

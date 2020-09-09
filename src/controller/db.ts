@@ -8,9 +8,9 @@ export interface IDB {
   version: number;
   isConnected: boolean;
   db: null | IDBDatabase;
-  get: <T>(objectStoreName: KeysDB, key: string) => Promise<T | undefined>;
-  getAll: <T>(objectStoreName: KeysDB) => Promise<T[] | undefined>;
-  put: <T>(objectStoreName: KeysDB, info: T, key?: string, rule?: IDBTransactionMode) => Promise<any>;
+  get<T>(objectStoreName: KeysDB, key: string): Promise<T | undefined>;
+  getAll<T>(objectStoreName: KeysDB): Promise<T[] | undefined>;
+  put<T>(objectStoreName: KeysDB, info: T, key?: string, rule?: IDBTransactionMode): Promise<any>;
 }
 
 type KeysDB = 'box' | 'palette' | 'command'

@@ -9,11 +9,13 @@ module.exports = {
     '@vue/standard',
     '@vue/typescript',
     'plugin:vue/essential',
+    '@vue/typescript/recommended',
   ],
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-unused-expressions': 'off',
+    'interface-name-prefix': 'off',
     'space-before-function-paren': [2, 'never'],
     'vue/array-bracket-spacing': 'error',
     'vue/arrow-spacing': 'error',
