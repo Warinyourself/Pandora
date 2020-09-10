@@ -45,9 +45,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { PaletteModule } from '@/store/palette'
-
 import { Palette } from '@/models/palette'
-import { IRightMenuItem } from '@/models/page'
 
 @Component
 export default class PalettePage extends Vue {

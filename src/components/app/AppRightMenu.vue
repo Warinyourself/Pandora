@@ -14,6 +14,11 @@
           @click.stop.prevent="handleCallback(item)"
         >
           <div class="right-menu-item-content">
+            <AppIcon
+              v-if="item.icon"
+              class="right-menu-item-icon"
+              :name="item.icon"
+            />
             <p class="flex-1 mb-0">
               {{ item.title }}
             </p>
@@ -58,7 +63,7 @@ import { PageModule } from '@/store/page'
 @Component
 export default class AppBlock extends Vue {
   get menu() {
-    return PageModule.IRightMenu
+    return PageModule.rightMenu
   }
 
   async handleCallback(item) {
@@ -97,6 +102,10 @@ export default class AppBlock extends Vue {
   display flex
   align-items center
   z-index 2
+
+.right-menu-item-content .right-menu-item-icon
+  font-size 1rem
+  margin-right 8px
 
 .right-menu-item
   list-style none

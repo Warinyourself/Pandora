@@ -8,7 +8,7 @@
     >
       <template v-slot="{file, remove}">
         <AppActiveBlock
-          :menu="generateIRightMenu(file, {remove})"
+          :menu="generateRightMenu(file, {remove})"
         >
           <div
             :class="`app-file-loader-file app-file-loader-file--${file.type} ${file.loading ? '' : 'app-file-loader-file--loading'}`"
@@ -35,7 +35,7 @@
       <template v-slot:focusFile="{file, remove}">
         <div class="d-flex fw-wrap">
           <v-tooltip
-            v-for="item in generateIRightMenu(file, {remove})"
+            v-for="item in generateRightMenu(file, {remove})"
             :key="item.title + 'btn'"
             bottom
           >
@@ -246,7 +246,7 @@ export default class LayoutModifyBox extends Vue {
     }
   }
 
-  generateIRightMenu(file: ILoaderFile, { remove }: Record<string, Function>): IRightMenuItem[] {
+  generateRightMenu(file: ILoaderFile, { remove }: Record<string, Function>): IRightMenuItem[] {
     const fileOptions = [
       {
         title: 'Delete',
@@ -265,17 +265,24 @@ export default class LayoutModifyBox extends Vue {
         title: 'Generate palette',
         icon: 'mdi-cog-sync-outline',
         callback: () => {
-          const fullColors = file.palette.map((hex) => PaletteModule.hexToHsl(hex))
-          const bg = fullColors.find(([, , l]) => l <= 30)
-          const [primary, secondary, tertiary] = fullColors.filter(([, , l]) => l >= 60 && l <= 80)
-
-          if (!bg || !primary || !secondary || !tertiary) {
+          const generateError = () => {
             this.$alert({
               type: 'error',
               title: 'Failed',
               text: 'Failed to generate palette'
             })
-            return
+          }
+
+          if (!file.palette) {
+            return generateError()
+          }
+
+          const fullColors = file.palette.map((hex) => PaletteModule.hexToHsl(hex))
+          const bg = fullColors.find(([, , l]) => l <= 30)
+          const [primary, secondary, tertiary] = fullColors.filter(([, , l]) => l >= 60 && l <= 80)
+
+          if (!bg || !primary || !secondary || !tertiary) {
+            return generateError()
           }
 
           const finalColors = {

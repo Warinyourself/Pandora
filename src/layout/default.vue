@@ -12,7 +12,7 @@
         <slot />
       </div>
     </v-main>
-    <AppIRightMenu />
+    <AppRightMenu />
     <AppSnackbar />
   </v-app>
 </template>

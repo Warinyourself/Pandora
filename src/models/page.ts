@@ -12,7 +12,7 @@ import {
 
 export interface IRightMenu {
   view: boolean;
-  icon: string;
+  icon?: string;
   style: Record<string, string>;
   items: IRightMenuItem[];
 }

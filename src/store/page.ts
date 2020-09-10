@@ -7,24 +7,21 @@ import store from '@/store'
 import { getUUID } from '@/utils/helper'
 import { IRightMenu, DragItem, INotification } from '@/models/page'
 
-export interface PageState {
+export interface IPageState {
   routes: Route[];
   isInited: boolean;
-  IRightMenu: IRightMenu;
+  rightMenu: IRightMenu;
 }
 
 @Module({ dynamic: true, store, name: 'page' })
-class Page extends VuexModule implements PageState {
+class Page extends VuexModule implements IPageState {
   routes: Route[] = []
-
   isInited = false
-
   routeReturnFunciton: null | Function = null
-
   dragable = [] as DragItem[]
   notifications: INotification[] = []
 
-  IRightMenu = {
+  rightMenu = {
     view: false,
     style: {
       left: '0px',
@@ -75,7 +72,7 @@ class Page extends VuexModule implements PageState {
 
   @Mutation
   ASSING_MENU(menu: Partial<IRightMenu>) {
-    this.IRightMenu = Object.assign(this.IRightMenu, menu)
+    this.rightMenu = Object.assign(this.rightMenu, menu)
   }
 
   get route() {
@@ -92,7 +89,7 @@ class Page extends VuexModule implements PageState {
 
     const isEscape = event.which === 27 || event.key === 'Escape'
 
-    if (isEscape && this.IRightMenu.view) {
+    if (isEscape && this.rightMenu.view) {
       this.ASSING_MENU({
         view: false
       })
