@@ -10,13 +10,11 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
-
 import { PageModule } from '@/store/page'
 
 @Component
 export default class AppGrag extends Vue {
-  @Prop() info!: any
-
+  @Prop() info!: unknown
   @Prop({ required: true, type: String }) type!: string
 
   get dragable() {
@@ -43,7 +41,7 @@ export default class AppGrag extends Vue {
     console.log('DRAG END')
   }
 
-  dragstart(event: any) {
+  dragstart(event: DragEvent) {
     if (!this.isActive) {
       PageModule.ADD_DRAG({
         type: this.type,
@@ -51,7 +49,7 @@ export default class AppGrag extends Vue {
       })
     }
 
-    event.dataTransfer.setData('info', this.info)
+    event.dataTransfer?.setData('info', JSON.stringify(this.info))
   }
 }
 </script>

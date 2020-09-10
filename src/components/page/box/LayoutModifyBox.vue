@@ -125,14 +125,9 @@ import LayoutModifyPalette from '@/components/page/palette/LayoutModifyPalette.v
 // @ts-ignore
 import ColorThief from 'colorthief'
 
-// eslint-disable-next-line no-unused-vars
 import { Box } from '@/models/box'
-// eslint-disable-next-line no-unused-vars
-import { Palette, PaletteColor, ColorsType, defaultPalette, defaultColor } from '@/models/palette'
-// eslint-disable-next-line no-unused-vars
+import { Palette, ColorsType, defaultPalette, defaultColor } from '@/models/palette'
 import { LoaderFile, RightMenuItem } from '@/models/page'
-// eslint-disable-next-line no-unused-vars
-import { Color } from 'vuetify/lib/util/colors'
 
 @Component({
   components: {

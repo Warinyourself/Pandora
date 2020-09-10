@@ -32,8 +32,6 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import { PageModule } from '@/store/page'
-
-// eslint-disable-next-line no-unused-vars
 import { INotification } from '@/models/page'
 
 import {

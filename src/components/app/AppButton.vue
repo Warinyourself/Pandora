@@ -13,5 +13,3 @@ import { Component, Vue } from 'vue-property-decorator'
 @Component
 export default class AppButton extends Vue {}
 </script>
-
-<style lang="stylus"></style>

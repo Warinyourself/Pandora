@@ -107,7 +107,6 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import { PaletteModule } from '@/store/palette'
-// eslint-disable-next-line no-unused-vars
 import { Palette, PaletteColor, defaultColor } from '@/models/palette'
 import { getUUID } from '@/utils/helper'
 

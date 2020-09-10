@@ -46,7 +46,7 @@ export default class AppDrop extends Vue {
     drop.addEventListener('dragleave', this.dragleave)
   }
 
-  preventDefaults(event: any) {
+  preventDefaults(event: Event) {
     event.preventDefault()
     event.stopPropagation()
   }

@@ -205,8 +205,8 @@ export default class AppFileLoader extends Vue {
     }
   }
 
-  handleFileUpload(event: any) {
-    Array.from(event.target.files as ArrayLike<File>).forEach((file: File) => {
+  handleFileUpload(event: Event) {
+    Array.from((event.target as HTMLInputElement).files as ArrayLike<File>).forEach((file: File) => {
       this.parseFile(file)
     })
   }

@@ -12,8 +12,6 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
-
-// eslint-disable-next-line no-unused-vars
 import { Box } from '@/models/box'
 
 @Component
