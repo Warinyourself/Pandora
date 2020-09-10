@@ -11,9 +11,18 @@
           :menu="generateRightMenu(file, {remove})"
         >
           <div
-            :class="`app-file-loader-file app-file-loader-file--${file.type}`"
+            :class="`app-file-loader-file app-file-loader-file--${file.type} ${file.loading ? '' : 'app-file-loader-file--loading'}`"
             :style="`${file.type === 'image' ? 'background-image: url(' + file.src + ')': ''}`"
           >
+            <div
+              v-if="file.loading"
+              class="position-center"
+            >
+              <v-progress-circular
+                indeterminate
+                color="primary"
+              />
+            </div>
             <div
               v-if="file.type === 'text'"
               class="app-file-loader-file-name"
@@ -127,7 +136,7 @@ import ColorThief from 'colorthief'
 
 import { Box } from '@/models/box'
 import { Palette, ColorsType, defaultPalette, defaultColor } from '@/models/palette'
-import { LoaderFile, RightMenuItem } from '@/models/page'
+import { ILoaderFile, RightMenuItem } from '@/models/page'
 
 @Component({
   components: {
@@ -138,11 +147,11 @@ import { LoaderFile, RightMenuItem } from '@/models/page'
 export default class LayoutModifyBox extends Vue {
   @Prop({ type: Object }) box!: Box
 
-  editFile = {} as LoaderFile
+  editFile = {} as ILoaderFile
 
   boxName = 'Box name'
 
-  files = [] as Array<LoaderFile>
+  files = [] as Array<ILoaderFile>
 
   palette = defaultPalette
 
@@ -171,7 +180,7 @@ export default class LayoutModifyBox extends Vue {
     }
   }
 
-  fileModifier(file: LoaderFile) {
+  fileModifier(file: ILoaderFile) {
     return new Promise((resolve) => {
       if (file.type !== 'image') return resolve({})
 
@@ -209,7 +218,7 @@ export default class LayoutModifyBox extends Vue {
     this.palette = palette
   }
 
-  generateUpdateFileFunction(file: LoaderFile) {
+  generateUpdateFileFunction(file: ILoaderFile) {
     return async() => {
       const box = await this.$db.get('box', this.boxName) as Box
 
@@ -237,7 +246,7 @@ export default class LayoutModifyBox extends Vue {
     }
   }
 
-  generateRightMenu(file: LoaderFile, { remove }: Record<string, Function>): RightMenuItem[] {
+  generateRightMenu(file: ILoaderFile, { remove }: Record<string, Function>): RightMenuItem[] {
     const fileOptions = [
       {
         title: 'Delete',
