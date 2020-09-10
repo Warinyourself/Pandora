@@ -58,7 +58,7 @@ import { PageModule } from '@/store/page'
 @Component
 export default class AppBlock extends Vue {
   get menu() {
-    return PageModule.rightMenu
+    return PageModule.IRightMenu
   }
 
   async handleCallback(item) {

@@ -8,7 +8,7 @@
     >
       <template v-slot="{file, remove}">
         <AppActiveBlock
-          :menu="generateRightMenu(file, {remove})"
+          :menu="generateIRightMenu(file, {remove})"
         >
           <div
             :class="`app-file-loader-file app-file-loader-file--${file.type} ${file.loading ? '' : 'app-file-loader-file--loading'}`"
@@ -35,7 +35,7 @@
       <template v-slot:focusFile="{file, remove}">
         <div class="d-flex fw-wrap">
           <v-tooltip
-            v-for="item in generateRightMenu(file, {remove})"
+            v-for="item in generateIRightMenu(file, {remove})"
             :key="item.title + 'btn'"
             bottom
           >
@@ -136,7 +136,7 @@ import ColorThief from 'colorthief'
 
 import { Box } from '@/models/box'
 import { Palette, ColorsType, defaultPalette, defaultColor } from '@/models/palette'
-import { ILoaderFile, RightMenuItem } from '@/models/page'
+import { ILoaderFile, IRightMenuItem } from '@/models/page'
 
 @Component({
   components: {
@@ -246,7 +246,7 @@ export default class LayoutModifyBox extends Vue {
     }
   }
 
-  generateRightMenu(file: ILoaderFile, { remove }: Record<string, Function>): RightMenuItem[] {
+  generateIRightMenu(file: ILoaderFile, { remove }: Record<string, Function>): IRightMenuItem[] {
     const fileOptions = [
       {
         title: 'Delete',

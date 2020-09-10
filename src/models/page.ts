@@ -10,10 +10,11 @@ import {
   DesktopCapturer
 } from 'electron'
 
-export interface RightMenu {
+export interface IRightMenu {
   view: boolean;
+  icon: string;
   style: Record<string, string>;
-  items: RightMenuItem[];
+  items: IRightMenuItem[];
 }
 
 export interface DragItem {
@@ -21,12 +22,12 @@ export interface DragItem {
   info: any;
 }
 
-export interface RightMenuItem {
+export interface IRightMenuItem {
   icon?: string;
   title: string;
   disabled?: boolean;
   callback?: Function;
-  items?: RightMenuItem[];
+  items?: IRightMenuItem[];
 }
 
 export type ILoaderFileType = 'image' | 'text'
