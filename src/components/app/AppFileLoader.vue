@@ -73,13 +73,8 @@
 </template>
 
 <script lang="ts">
-import {
-  Component, Prop, Vue, Watch
-} from 'vue-property-decorator'
-
-// eslint-disable-next-line no-unused-vars
-import { LoaderFile, LoaderFileType } from '@/models/page'
-
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+import { ILoaderFile, ILoaderFileType } from '@/models/page'
 import { getUUID } from '@/utils/helper'
 
 // @ts-ignore
@@ -96,14 +91,14 @@ let timeoutToUnfocus: any = null
   }
 })
 export default class AppFileLoader extends Vue {
-  @Prop({ type: Array, default: () => [] }) files!: LoaderFile[]
+  @Prop({ type: Array, default: () => [] }) files!: ILoaderFile[]
+  @Prop() fileModifier!: (file: ILoaderFile) => Partial<ILoaderFile>
 
-  @Prop() fileModifier!: (file: LoaderFile) => Partial<LoaderFile>
-
+  result = []
+  id = getUUID()
   isFocus = false
-
+  focusFileHash = ''
   hideWrapper = true
-
   blockToUploadType: 'fileType' | '' = ''
 
   get isShowWrapper() {
@@ -114,14 +109,8 @@ export default class AppFileLoader extends Vue {
     return !this.isShowWrapper && this.hideWrapper
   }
 
-  focusFileHash = ''
-
-  result = []
-
-  id = getUUID()
-
   @Watch('files')
-  __filesChange(files: LoaderFile[]) {
+  __filesChange(files: ILoaderFile[]) {
     if (files && files[0]?.hash && !this.focusFileHash) {
       this.focusFileHash = files[0].hash
     }
@@ -144,9 +133,17 @@ export default class AppFileLoader extends Vue {
     if (this.files[0]) {
       this.focusFileHash = this.files[0]?.hash || ''
     }
+
+    this.$emit('input', [{
+      name: 'sadf',
+      id: getUUID(),
+      size: 23124,
+      type: 'image',
+      loading: true
+    }])
   }
 
-  preventDefaults(event: any) {
+  preventDefaults(event: Event) {
     event.preventDefault()
     event.stopPropagation()
   }
@@ -211,14 +208,12 @@ export default class AppFileLoader extends Vue {
     })
   }
 
-  remove(file: LoaderFile) {
+  remove(file: ILoaderFile) {
     this.$emit('input', this.files.filter(({ name }) => name !== file.name))
   }
 
-  parseFile(file: File) {
-    const {
-      name, type, size, path
-    } = file
+  async parseFile(file: File) {
+    const { name, type, size, path } = file
     const reader = new FileReader()
     const imageExtentions = ['image/jpeg', 'image/png']
     const id = getUUID()
@@ -228,38 +223,36 @@ export default class AppFileLoader extends Vue {
       name,
       size,
       file
-    } as LoaderFile
+    } as ILoaderFile
 
     if (imageExtentions.includes(type)) {
-      reader.readAsDataURL(file)
+      const src = URL.createObjectURL(file)
+      fileObject.type = 'image' as ILoaderFileType
+      fileObject.src = src as string
 
-      reader.onload = async() => {
-        fileObject.type = 'image' as LoaderFileType
-        fileObject.src = reader.result as string
+      const hash = SparkMD5.hash(src)
+      fileObject.hash = hash
 
-        const hash = SparkMD5.hash(reader.result)
-        fileObject.hash = hash
+      if (this.files.find((file) => file.hash === hash)) {
+        this.$alert({
+          title: 'Already loaded',
+          text: 'File already loaded',
+          type: 'error'
+        })
+        return
+      }
 
-        if (this.files.find((file) => file.hash === hash)) {
-          this.$alert({
-            title: 'Already loaded',
-            text: 'File already loaded'
-          })
-          return
-        }
+      if (this.fileModifier) {
+        fileObject = Object.assign(fileObject, await this.fileModifier(fileObject))
+      }
 
-        if (this.fileModifier) {
-          fileObject = Object.assign(fileObject, await this.fileModifier(fileObject))
-        }
+      this.files.push(fileObject)
 
-        this.files.push(fileObject)
-
-        if (!this.focusFileHash && hash) {
-          this.focusFileHash = hash
-        }
+      if (!this.focusFileHash && hash) {
+        this.focusFileHash = hash
       }
     } else {
-      fileObject.type = 'text' as LoaderFileType
+      fileObject.type = 'text' as ILoaderFileType
 
       reader.readAsText(file)
       reader.onload = async() => {
