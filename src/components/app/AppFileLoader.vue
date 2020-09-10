@@ -133,14 +133,6 @@ export default class AppFileLoader extends Vue {
     if (this.files[0]) {
       this.focusFileHash = this.files[0]?.hash || ''
     }
-
-    this.$emit('input', [{
-      name: 'sadf',
-      id: getUUID(),
-      size: 23124,
-      type: 'image',
-      loading: true
-    }])
   }
 
   preventDefaults(event: Event) {
