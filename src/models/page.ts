@@ -29,15 +29,16 @@ export interface RightMenuItem {
   items?: RightMenuItem[];
 }
 
-export type LoaderFileType = 'image' | 'text'
+export type ILoaderFileType = 'image' | 'text'
 
-export interface LoaderFile {
+export interface ILoaderFile {
   id: string;
-  path: string;
   name: string;
   size: number;
-  type: LoaderFileType;
-  palette: string[];
+  type: ILoaderFileType;
+  loading?: boolean;
+  palette?: string[];
+  path?: string;
   src?: string;
   text?: string;
   hash?: string;
