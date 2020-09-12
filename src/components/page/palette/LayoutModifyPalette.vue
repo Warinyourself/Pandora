@@ -17,7 +17,7 @@
         <v-row dense>
           <v-col
             v-for="color in colors"
-            :key="color.name"
+            :key="JSON.stringify(color)"
             cols="auto"
           >
             <AppActiveBlock

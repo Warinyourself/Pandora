@@ -13,7 +13,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 import { PageModule } from '@/store/page'
 
 @Component
-export default class AppGrag extends Vue {
+export default class AppDrag extends Vue {
   @Prop() info!: unknown
   @Prop({ required: true, type: String }) type!: string
 

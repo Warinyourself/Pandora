@@ -52,7 +52,7 @@
           </v-tooltip>
 
           <div class="d-flex fw-wrap">
-            <AppGrag
+            <AppDrag
               v-for="color in file.palette"
               :key="color"
               :info="color"
@@ -62,7 +62,7 @@
                 class="color-block d-flex"
                 :style="`background-color: ${color}`"
               />
-            </AppGrag>
+            </AppDrag>
           </div>
         </div>
       </template>
