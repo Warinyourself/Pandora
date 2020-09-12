@@ -1,7 +1,7 @@
 <template>
   <div
     ref="drop"
-    :class="`drop ${isActive ? 'drop--active' : ''} ${isFocus ? 'drop--focus' : ''}`"
+    :class="`drop ${currentItem ? 'drop--active' : ''} ${isFocus ? 'drop--focus' : ''}`"
     v-bind="$attrs"
     v-on="$listeners"
   >
@@ -26,7 +26,7 @@ export default class AppDrop extends Vue {
     return PageModule.dragable
   }
 
-  get isActive() {
+  get currentItem() {
     return this.dragable.find(({ type }) => type === this.type)
   }
 
@@ -60,19 +60,19 @@ export default class AppDrop extends Vue {
   }
 
   drop(event: DragEvent) {
-    if (!this.isActive) {
+    if (this.currentItem) {
+      const info = this.currentItem.info
+
+      event.dataTransfer?.clearData()
+
+      if (this.callback) {
+        this.callback(info)
+      }
+
+      this.isFocus = false
+
       PageModule.REMOVE_DRAG(this.type)
     }
-
-    const info = event.dataTransfer?.getData('info')
-    // eslint-disable-next-line no-unused-expressions
-    event.dataTransfer?.clearData()
-
-    if (this.callback) {
-      this.callback(info)
-    }
-
-    this.isFocus = false
   }
 }
 </script>
