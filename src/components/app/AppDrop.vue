@@ -14,6 +14,8 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 
 import { PageModule } from '@/store/page'
 
+let counter = 0
+
 @Component
 export default class AppDrop extends Vue {
   @Prop() callback!: Function
@@ -52,11 +54,17 @@ export default class AppDrop extends Vue {
   }
 
   dragenter() {
+    counter++
+
     this.isFocus = true
   }
 
   dragleave() {
-    this.isFocus = false
+    counter--
+
+    if (counter === 0) {
+      this.isFocus = false
+    }
   }
 
   drop(event: DragEvent) {
