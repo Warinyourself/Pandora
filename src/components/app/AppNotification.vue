@@ -3,7 +3,6 @@
     v-click-outside="handleClickOutside"
     :class="classes"
     :style="draggableStyle"
-    @click="close"
     @mouseenter="hoverPause"
     @mouseleave="hoverPlay"
   >
