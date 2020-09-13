@@ -34,12 +34,26 @@ export default class AppTextReader extends Vue {
       h('div', {
         class: 'line-margin'
       }, index + ''),
-      h('div', {
-        class: 'line-body',
-        domProps: {
-          innerHTML: text
-        }
-      })
+      this.generateBodyLine(h, text)
     ])
+  }
+
+  generateBodyLine(h: CreateElement, text: string) {
+    const hexRegex = /#([a-f0-9]{3,4}|[a-f0-9]{4}(?:[a-f0-9]{2}){1,2})\b/
+
+    const words = text.split(' ').filter(Boolean).map(word => {
+      const hexMatch = word.toLocaleLowerCase().match(hexRegex)
+      if (hexMatch) {
+        return h('div', {
+          class: 'line-word-color',
+          style: `background-color: ${hexMatch[0]};`
+        }, word + ' ')
+      }
+      return word + ' '
+    })
+
+    return h('div', {
+      class: 'line-body'
+    }, words)
   }
 }
