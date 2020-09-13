@@ -52,21 +52,33 @@
           </v-tooltip>
 
           <div class="d-flex fw-wrap">
-            <AppDrag
-              v-for="color in file.palette"
-              :key="color"
-              :info="color"
-              type="color"
-            >
-              <div
-                class="color-block d-flex"
-                :style="`background-color: ${color}`"
-              />
-            </AppDrag>
+            <v-row dense>
+              <v-col
+                v-for="color in file.palette"
+                :key="color"
+                cols="auto"
+              >
+                <AppDrag
+                  :info="color"
+                  type="color"
+                >
+                  <div
+                    class="color-block"
+                    :style="`background-color: ${color}`"
+                  />
+                </AppDrag>
+              </v-col>
+            </v-row>
           </div>
         </div>
       </template>
     </AppFileLoader>
+
+    <AppTextEditor
+      v-if="editFile.hash"
+      class="mt-4"
+      :file="editFile"
+    />
 
     <LayoutModifyPalette
       :palette="palette"
@@ -102,15 +114,6 @@
         </v-row>
       </div>
     </v-dialog>
-
-    <div
-      v-if="editFile.hash"
-      class="block edit-file"
-    >
-      <pre>
-        {{ editFile }}
-      </pre>
-    </div>
 
     <AppButton
       class="mt-2"
