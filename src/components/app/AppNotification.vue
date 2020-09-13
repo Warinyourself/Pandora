@@ -3,6 +3,7 @@
     v-click-outside="handleClickOutside"
     :class="classes"
     :style="draggableStyle"
+    @click="handleClick"
     @mouseenter="hoverPause"
     @mouseleave="hoverPlay"
   >
@@ -143,6 +144,12 @@ export default class AppNotification extends Vue {
 
   handleClickOutside() {
     this.isRunning = true
+  }
+
+  handleClick() {
+    if (!this.beingDragged || this.dragStart === this.dragPos.x) {
+      this.close()
+    }
   }
 
   hoverPause() {
