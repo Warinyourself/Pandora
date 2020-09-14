@@ -44,10 +44,21 @@ export default class AppTextReader extends Vue {
     const words = text.split(' ').filter(Boolean).map(word => {
       const hexMatch = word.toLocaleLowerCase().match(hexRegex)
       if (hexMatch) {
-        return h('div', {
-          class: 'line-word-color',
-          style: `background-color: ${hexMatch[0]};`
-        }, word + ' ')
+        return h('AppDrop', {
+          class: 'line-word-wrapper',
+          props: {
+            type: 'color',
+            activeClass: 'line-word-color--active',
+            callback: (color: string) => {
+              console.log('UPDATE COLOR', { color })
+            }
+          }
+        }, [
+          h('div', {
+            class: 'line-word-color',
+            style: `background-color: ${hexMatch[0]};`
+          }, word + ' ')
+        ])
       }
       return word + ' '
     })
