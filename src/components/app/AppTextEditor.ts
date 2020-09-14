@@ -6,6 +6,16 @@ import { CreateElement, VNode } from 'vue'
 export default class AppTextReader extends Vue {
   @Prop({ type: Object, required: true }) file!: ILoaderFile
 
+  get lines() {
+    return this.file.text?.split('\n')
+  }
+
+  get wordsOfline() {
+    return (text: string) => {
+      return text.split(' ').filter(Boolean)
+    }
+  }
+
   render(h: CreateElement): VNode {
     return h('div', {
       class: 'block text-editor'
@@ -18,7 +28,7 @@ export default class AppTextReader extends Vue {
   }
 
   generateBody(h: CreateElement) {
-    const lines = this.file.text?.split('\n')
+    const lines = this.lines
 
     return h('div', {
       class: 'text-editor-body'
@@ -33,16 +43,17 @@ export default class AppTextReader extends Vue {
     }, [
       h('div', {
         class: 'line-margin'
-      }, index + ''),
-      this.generateBodyLine(h, text)
+      }, index + 1 + ''),
+      this.generateBodyLine(h, text, index)
     ])
   }
 
-  generateBodyLine(h: CreateElement, text: string) {
+  generateBodyLine(h: CreateElement, text: string, rowOrder: number) {
     const hexRegex = /#([a-f0-9]{3,4}|[a-f0-9]{4}(?:[a-f0-9]{2}){1,2})\b/
 
-    const words = text.split(' ').filter(Boolean).map(word => {
+    const words = this.wordsOfline(text).map((word, wordOrder) => {
       const hexMatch = word.toLocaleLowerCase().match(hexRegex)
+
       if (hexMatch) {
         return h('AppDrop', {
           class: 'line-word-wrapper',
@@ -51,6 +62,8 @@ export default class AppTextReader extends Vue {
             activeClass: 'line-word-color--active',
             callback: (color: string) => {
               console.log('UPDATE COLOR', { color })
+              this.updateWordText(color, rowOrder, wordOrder)
+              // this.file.text = color
             }
           }
         }, [
@@ -66,5 +79,17 @@ export default class AppTextReader extends Vue {
     return h('div', {
       class: 'line-body'
     }, words)
+  }
+
+  updateWordText(text: string, rowOrder: number, wordOrder: number) {
+    this.file.text = this.lines?.map((line, i) => {
+      if (rowOrder === i) {
+        return this.wordsOfline(line).map((word, j) => {
+          console.log({ word, j })
+          return wordOrder === j ? text : word
+        }).join(' ')
+      }
+      return line + ''
+    }).join('\n')
   }
 }
