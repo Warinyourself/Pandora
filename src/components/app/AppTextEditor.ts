@@ -6,6 +6,8 @@ import { CreateElement, VNode } from 'vue'
 export default class AppTextReader extends Vue {
   @Prop({ type: Object, required: true }) file!: ILoaderFile
 
+  oldText = this.file.text
+
   get lines() {
     return this.file.text?.split('\n')
   }
@@ -16,12 +18,16 @@ export default class AppTextReader extends Vue {
     }
   }
 
+  get isUpdated() {
+    return this.file.text !== this.oldText
+  }
+
   render(h: CreateElement): VNode {
     return h('div', {
       class: 'block text-editor'
     }, [
       h('div', {
-        class: 'text-editor-header'
+        class: `text-editor-header ${this.isUpdated ? 'text-editor-header--updated' : ''}`
       }, [this.file.name]),
       this.generateBody(h)
     ])
@@ -61,9 +67,7 @@ export default class AppTextReader extends Vue {
             type: 'color',
             activeClass: 'line-word-color--active',
             callback: (color: string) => {
-              console.log('UPDATE COLOR', { color })
               this.updateWordText(color, rowOrder, wordOrder)
-              // this.file.text = color
             }
           }
         }, [
