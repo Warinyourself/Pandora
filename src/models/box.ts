@@ -1,13 +1,15 @@
-export interface Box {
+import { ILoaderFile } from '@/models/page'
+
+export interface IBox {
   id: string;
   name: string;
   readme: string;
   images: string[];
-  files: any[];
+  files: ILoaderFile[];
   commands: string[];
 }
 
-export interface Palette {
+export interface IPalette {
   id: string;
   name: string;
   description: string;

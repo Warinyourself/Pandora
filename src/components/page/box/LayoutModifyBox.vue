@@ -137,7 +137,7 @@ import LayoutModifyPalette from '@/components/page/palette/LayoutModifyPalette.v
 // @ts-ignore
 import ColorThief from 'colorthief'
 
-import { Box } from '@/models/box'
+import { IBox } from '@/models/box'
 import { Palette, ColorsType, defaultPalette, defaultColor } from '@/models/palette'
 import { ILoaderFile, IRightMenuItem } from '@/models/page'
 
@@ -148,7 +148,7 @@ import { ILoaderFile, IRightMenuItem } from '@/models/page'
   }
 })
 export default class LayoutModifyBox extends Vue {
-  @Prop({ type: Object }) box!: Box
+  @Prop({ type: Object }) box!: IBox
 
   editFile = {} as ILoaderFile
 
@@ -223,7 +223,7 @@ export default class LayoutModifyBox extends Vue {
 
   generateUpdateFileFunction(file: ILoaderFile) {
     return async() => {
-      const box = await this.$db.get('box', this.boxName) as Box
+      const box = await this.$db.get<IBox>('box', this.boxName)
 
       if (!box) {
         await this.$db.put('box', {

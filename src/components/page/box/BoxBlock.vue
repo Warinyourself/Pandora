@@ -12,11 +12,11 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
-import { Box } from '@/models/box'
+import { IBox } from '@/models/box'
 
 @Component
 export default class BoxBlock extends Vue {
-  @Prop({ type: Object, required: true }) box!: Box
+  @Prop({ type: Object, required: true }) box!: IBox
 
   get image() {
     return this.box.files.find(({ type }) => type === 'image')

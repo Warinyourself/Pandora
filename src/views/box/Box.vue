@@ -40,8 +40,6 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { BoxModule } from '@/store/box'
 
-// eslint-disable-next-line no-unused-vars
-import { Box } from '@/models/box'
 import BoxBlock from '@/components/page/box/BoxBlock.vue'
 
 @Component({

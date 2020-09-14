@@ -4,15 +4,15 @@ import {
 import store from '@/store'
 import db from '@/controller/db'
 
-import { Box } from '@/models/box'
+import { IBox } from '@/models/box'
 
-export interface BoxState {
-  boxes: Box[];
+export interface IBoxState {
+  boxes: IBox[];
 }
 
 @Module({ dynamic: true, store, name: 'box' })
-class BoxClass extends VuexModule implements BoxState {
-  boxes: Box[] = []
+class BoxClass extends VuexModule implements IBoxState {
+  boxes: IBox[] = []
 
   @Mutation
   SET<S extends this, K extends keyof this>({ key, value }: { key: K; value: S[K] }) {
@@ -21,7 +21,7 @@ class BoxClass extends VuexModule implements BoxState {
 
   @Action
   async loadAll() {
-    const boxes = await db.getAll<Box>('box')
+    const boxes = await db.getAll<IBox>('box')
 
     if (boxes) {
       this.SET({ key: 'boxes', value: boxes })
