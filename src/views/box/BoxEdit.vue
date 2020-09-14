@@ -8,7 +8,6 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import LayoutModifyBox from '@/components/page/box/LayoutModifyBox.vue'
-// eslint-disable-next-line no-unused-vars
 import { IBox } from '@/models/box'
 
 @Component({
@@ -17,12 +16,24 @@ import { IBox } from '@/models/box'
   }
 })
 export default class EditBoxPage extends Vue {
-  box: IBox | null | undefined = null
+  box: IBox | undefined | null = null
 
   async mounted() {
     const { id } = this.$route.params
 
-    this.box = await this.$db.get<IBox>('box', id)
+    const box = await this.$db.get<IBox>('box', id)
+
+    if (box) {
+      box.files = box.files.map((fileObject) => {
+        if (fileObject.type === 'image') {
+          fileObject.src = URL.createObjectURL(fileObject.file)
+          return fileObject
+        }
+        return fileObject
+      })
+
+      this.box = box
+    }
   }
 }
 </script>
