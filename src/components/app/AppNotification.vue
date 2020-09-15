@@ -13,15 +13,20 @@
       class="app-notification__loader"
     />
     <div class="app-notification__icon">
-      <div class="app-notification__icon-emoji">
-        {{ currentImage }}
-      </div>
+      <div
+        class="app-notification__icon-emoji"
+        v-html="$options.filters.emojiParse(currentImage)"
+      />
     </div>
     <div class="app-notification__body">
-      <h3 class="app-notification__title">
+      <h3
+        v-if="notification.title"
+        class="app-notification__title"
+      >
         {{ notification.title }}
       </h3>
       <p
+        v-if="notification.text"
         class="app-notification__text"
         v-html="notification.text.replace(/\n/g, '<br/>')"
       />
@@ -104,6 +109,8 @@ export default class AppNotification extends Vue {
   }
 
   get currentImage() {
+    if (this.notification.emoji) return this.notification.emoji
+
     switch (this.notification.type) {
       case 'error': {
         return '👺'
