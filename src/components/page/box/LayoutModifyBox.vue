@@ -231,31 +231,42 @@ export default class LayoutModifyBox extends Vue {
     this.palette = palette
   }
 
-  generateUpdateFileFunction(file: ILoaderFile) {
-    return async() => {
-      const box = await this.$db.get<IBox>('box', this.boxName)
+  async generateUpdateFileFunction(file: ILoaderFile) {
+    const box = await this.$db.get<IBox>('box', this.boxName)
+    const notifySuccess = () => {
+      this.$alert({
+        type: 'success',
+        title: 'File successfully saved',
+        emoji: '💾'
+      })
+    }
+    const notifyError = () => {
+      this.$alert({
+        type: 'error',
+        title: 'Already loaded',
+        text: 'File already loaded'
+      })
+    }
 
-      if (!box) {
-        await this.$db.put('box', {
-          name: this.boxName,
-          files: [file]
-        })
-        return
-      }
+    if (!box) {
+      await this.$db.put('box', {
+        name: this.boxName,
+        files: [file]
+      })
 
-      const hasInDB = box.files.find(({ hash }) => hash === file.hash)
+      return notifySuccess()
+    }
 
-      if (!hasInDB) {
-        box.files.push(file)
+    const hasInDB = box.files.find(({ hash }) => hash === file.hash)
 
-        await this.$db.put('box', box)
-      } else {
-        this.$alert({
-          type: 'error',
-          title: 'Already loaded',
-          text: 'File already loaded'
-        })
-      }
+    if (!hasInDB) {
+      box.files.push(file)
+
+      await this.$db.put('box', box)
+
+      return notifySuccess()
+    } else {
+      return notifyError()
     }
   }
 
@@ -269,7 +280,7 @@ export default class LayoutModifyBox extends Vue {
       {
         title: 'Save file',
         icon: 'mdi-content-save',
-        callback: this.generateUpdateFileFunction(file)
+        callback: () => this.generateUpdateFileFunction(file)
       }
     ]
 
