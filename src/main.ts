@@ -7,8 +7,9 @@ import store from './store'
 
 import prototype from './plugins/prototype'
 
-import '@/plugins/components'
 import '@/plugins/db'
+import '@/plugins/filter'
+import '@/plugins/components'
 import '@/assets/style/app/index.styl'
 
 // @ts-ignore
