@@ -21,9 +21,21 @@ class BoxClass extends VuexModule implements IBoxState {
 
   @Action
   async loadAll() {
-    const boxes = await db.getAll<IBox>('box')
+    let boxes = await db.getAll<IBox>('box')
 
     if (boxes) {
+      boxes = boxes.map((box) => {
+        box.files.map((fileObject) => {
+          if (fileObject.type === 'image') {
+            fileObject.src = URL.createObjectURL(fileObject.file)
+            return fileObject
+          }
+          return fileObject
+        })
+
+        return box
+      })
+
       this.SET({ key: 'boxes', value: boxes })
     }
   }
