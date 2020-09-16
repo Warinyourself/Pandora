@@ -1,6 +1,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import { ILoaderFile } from '@/models/page'
 import { CreateElement, VNode } from 'vue'
+import { VIcon } from 'vuetify/lib'
 
 @Component
 export default class AppTextReader extends Vue {
@@ -22,15 +23,33 @@ export default class AppTextReader extends Vue {
     return this.file.text !== this.oldText
   }
 
+  // mdi:content-save"
+
   render(h: CreateElement): VNode {
     return h('div', {
       class: 'block text-editor'
     }, [
       h('div', {
         class: `text-editor-header ${this.isUpdated ? 'text-editor-header--updated' : ''}`
-      }, [this.file.name]),
+      }, [
+        this.file.name,
+        (this.isUpdated || true) && h(VIcon, {
+          class: 'ml-2',
+          on: {
+            click: this.saveFile
+          }
+        }, ['mdi-content-save'])
+      ]),
       this.generateBody(h)
     ])
+  }
+
+  saveFile() {
+    const blob = new Blob([this.file.text || ''], { type: this.file.type })
+    const file = new File([blob], this.file.name)
+    const url = URL.createObjectURL(file)
+
+    window.open(url)
   }
 
   generateBody(h: CreateElement) {
