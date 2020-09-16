@@ -21,11 +21,11 @@
             cols="auto"
           >
             <AppActiveBlock
-              @click="activeColor = color"
+              @click="handleClickColor(color)"
             >
               <div class="d-flex">
                 <div
-                  class="color-block ma-0"
+                  class="color-block"
                   :style="`background-color: ${color.hex}`"
                 />
               </div>
@@ -35,7 +35,7 @@
             <AppActiveBlock @click="createColor">
               <div class="d-flex">
                 <div
-                  class="color-block c-pointer ma-0"
+                  class="color-block c-pointer"
                   :style="`background-color: var(--v-bg-base)`"
                 >
                   <v-icon size="25">
@@ -48,31 +48,35 @@
         </v-row>
       </AppDrop>
 
-      <div v-if="activeColor">
-        <v-row>
-          <v-col>
-            <v-color-picker
-              v-model="activeColor.hex"
-              class="ma-2"
-              dot-size="10"
-              width="400px"
-            />
-          </v-col>
-          <v-col>
-            <v-select
-              v-model="activeColor.name"
-              :items="['primary', 'secondary', 'tertiary', 'fg', 'bg']"
-              label="Set color type"
-            />
-            <v-btn
-              color="primary"
-              @click="deleteActiveColor"
-            >
-              Delete color
-            </v-btn>
-          </v-col>
-        </v-row>
-      </div>
+      <v-expand-transition>
+        <div v-show="activeColor">
+          <v-row>
+            <v-col>
+              <!-- v-model="activeColor ? activeColor.hex : empty" -->
+              <v-color-picker
+                :value="activeColor ? activeColor.hex : '#da0463'"
+                class="ma-2"
+                dot-size="10"
+                width="400px"
+              />
+            </v-col>
+            <v-col>
+              <!-- v-model="activeColor.name" -->
+              <v-select
+                :value="activeColor && activeColor.name"
+                :items="['primary', 'secondary', 'tertiary', 'fg', 'bg']"
+                label="Set color type"
+              />
+              <v-btn
+                color="primary"
+                @click="deleteActiveColor"
+              >
+                Delete color
+              </v-btn>
+            </v-col>
+          </v-row>
+        </div>
+      </v-expand-transition>
 
       <v-row dense>
         <v-col cols="auto">
@@ -143,7 +147,7 @@ export default class LayoutModifyPalette extends Vue {
       this.name = this.palette.name
       this.colors = this.palette.colors
 
-      this.activeColor = this.colors[0]
+      // this.activeColor = this.colors[0]
     }
   }
 
@@ -157,6 +161,14 @@ export default class LayoutModifyPalette extends Vue {
       })
     } catch (error) {
       console.error(error)
+    }
+  }
+
+  handleClickColor(color: PaletteColor) {
+    if (JSON.stringify(color) === JSON.stringify(this.activeColor)) {
+      this.activeColor = null
+    } else {
+      this.activeColor = color
     }
   }
 
