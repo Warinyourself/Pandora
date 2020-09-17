@@ -221,6 +221,8 @@ export default class LayoutModifyBox extends Vue {
   handleDbclick(file: ILoaderFile, event: Event) {
     if (file.type === 'text') {
       this.editFile = file
+    } else if (file.type === 'image') {
+      this.generatePalette(file)
     }
 
     event.preventDefault()
@@ -270,6 +272,36 @@ export default class LayoutModifyBox extends Vue {
     }
   }
 
+  generatePalette(file: ILoaderFile) {
+    const generateError = () => {
+      this.$alert({
+        type: 'error',
+        title: 'Failed',
+        text: 'Failed to generate palette'
+      })
+    }
+
+    if (!file.palette) {
+      return generateError()
+    }
+
+    const fullColors = file.palette.map((hex) => PaletteModule.hexToHsl(hex))
+    const bg = fullColors.find(([, , l]) => l <= 30)
+    const [primary, secondary, tertiary] = fullColors.filter(([, , l]) => l >= 60 && l <= 80)
+
+    if (!bg || !primary || !secondary || !tertiary) {
+      return generateError()
+    }
+
+    const finalColors = {
+      bg, primary, secondary, tertiary
+    }
+    this.palette.colors = Object.entries<[number, number, number]>(finalColors).map(([name, hsl]) => ({
+      name: name as ColorsType,
+      hex: PaletteModule.hslToHex(hsl)
+    }))
+  }
+
   generateRightMenu(file: ILoaderFile, { remove }: Record<string, Function>): IRightMenuItem[] {
     const fileOptions = [
       {
@@ -288,35 +320,7 @@ export default class LayoutModifyBox extends Vue {
       fileOptions.push({
         title: 'Generate palette',
         icon: 'mdi-cog-sync-outline',
-        callback: () => {
-          const generateError = () => {
-            this.$alert({
-              type: 'error',
-              title: 'Failed',
-              text: 'Failed to generate palette'
-            })
-          }
-
-          if (!file.palette) {
-            return generateError()
-          }
-
-          const fullColors = file.palette.map((hex) => PaletteModule.hexToHsl(hex))
-          const bg = fullColors.find(([, , l]) => l <= 30)
-          const [primary, secondary, tertiary] = fullColors.filter(([, , l]) => l >= 60 && l <= 80)
-
-          if (!bg || !primary || !secondary || !tertiary) {
-            return generateError()
-          }
-
-          const finalColors = {
-            bg, primary, secondary, tertiary
-          }
-          this.palette.colors = Object.entries<[number, number, number]>(finalColors).map(([name, hsl]) => ({
-            name: name as ColorsType,
-            hex: PaletteModule.hslToHex(hsl)
-          }))
-        }
+        callback: () => this.generatePalette(file)
       })
     }
 

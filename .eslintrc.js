@@ -28,7 +28,7 @@ module.exports = {
     '@typescript-eslint/ban-ts-ignore': 'off',
     'space-before-function-paren': [2, 'never'],
     'vue/component-name-in-template-casing': 'error',
-    "@typescript-eslint/interface-name-prefix": [ "error", { "prefixWithI": "always" } ],
+    "@typescript-eslint/interface-name-prefix": 'off',
   },
   parserOptions: {
     parser: '@typescript-eslint/parser',
