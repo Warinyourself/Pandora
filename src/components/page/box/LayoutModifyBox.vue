@@ -332,6 +332,13 @@ export default class LayoutModifyBox extends Vue {
           callback: () => {
             this.$electron?.ipcRenderer.send('sendCommand', { command: 'nitrogen', attrs: ['--set-auto', file.path] })
           }
+        },
+        {
+          title: 'Set as background',
+          icon: 'mdi-share',
+          callback: async() => {
+            await navigator.clipboard.write([new ClipboardItem({ 'image/png': file })])
+          }
         }
       ])
     }
