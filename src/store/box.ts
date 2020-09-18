@@ -26,7 +26,7 @@ class BoxClass extends VuexModule implements IBoxState {
     if (boxes) {
       boxes = boxes.map((box) => {
         box.files.map((fileObject) => {
-          if (fileObject.type === 'image') {
+          if (['image', 'video'].includes(fileObject.type)) {
             fileObject.src = URL.createObjectURL(fileObject.file)
             return fileObject
           }

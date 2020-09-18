@@ -30,6 +30,18 @@
             >
               {{ file.name }}
             </div>
+            <video
+              v-else-if="file.type === 'video'"
+              muted
+              loop
+              autoplay
+              class="char-upload-file-video"
+            >
+              <source
+                :src="file.src"
+                type="video/mp4"
+              >
+            </video>
           </div>
         </AppActiveBlock>
       </template>
@@ -337,7 +349,7 @@ export default class LayoutModifyBox extends Vue {
           title: 'Set as background',
           icon: 'mdi-share',
           callback: async() => {
-            await navigator.clipboard.write([new ClipboardItem({ 'image/png': file })])
+            // await navigator.clipboard.write([new ClipboardItem({ 'image/png': file })])
           }
         }
       ])
@@ -355,5 +367,3 @@ export default class LayoutModifyBox extends Vue {
   }
 }
 </script>
-
-<style lang="stylus"></style>

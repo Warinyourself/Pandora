@@ -30,7 +30,7 @@ export interface IRightMenuItem {
   items?: IRightMenuItem[];
 }
 
-export type ILoaderFileType = 'image' | 'text'
+export type ILoaderFileType = 'image' | 'text' | 'video'
 
 export interface ILoaderFile {
   id: string;

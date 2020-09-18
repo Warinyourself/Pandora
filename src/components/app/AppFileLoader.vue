@@ -208,6 +208,7 @@ export default class AppFileLoader extends Vue {
     const { name, type, size, path } = file
     const reader = new FileReader()
     const imageExtentions = ['image/jpeg', 'image/png']
+    const videoExtentions = ['video/mp4', 'video/mpeg']
     const id = getUUID()
     let fileObject = {
       id,
@@ -220,6 +221,32 @@ export default class AppFileLoader extends Vue {
     if (imageExtentions.includes(type)) {
       const src = URL.createObjectURL(file)
       fileObject.type = 'image' as ILoaderFileType
+      fileObject.src = src as string
+
+      const hash = SparkMD5.hash(src)
+      fileObject.hash = hash
+
+      if (this.files.find((file) => file.hash === hash)) {
+        this.$alert({
+          title: 'Already loaded',
+          text: 'File already loaded',
+          type: 'error'
+        })
+        return
+      }
+
+      if (this.fileModifier) {
+        fileObject = Object.assign(fileObject, await this.fileModifier(fileObject))
+      }
+
+      this.files.push(fileObject)
+
+      if (!this.focusFileHash && hash) {
+        this.focusFileHash = hash
+      }
+    } else if (videoExtentions.includes(type)) {
+      const src = URL.createObjectURL(file)
+      fileObject.type = 'video' as ILoaderFileType
       fileObject.src = src as string
 
       const hash = SparkMD5.hash(src)

@@ -25,7 +25,7 @@ export default class EditBoxPage extends Vue {
 
     if (box) {
       box.files = box.files.map((fileObject) => {
-        if (fileObject.type === 'image') {
+        if (['image', 'video'].includes(fileObject.type)) {
           fileObject.src = URL.createObjectURL(fileObject.file)
           return fileObject
         }
