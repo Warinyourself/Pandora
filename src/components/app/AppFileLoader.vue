@@ -201,7 +201,8 @@ export default class AppFileLoader extends Vue {
   }
 
   remove(file: ILoaderFile) {
-    this.$emit('input', this.files.filter(({ name }) => name !== file.name))
+    this.$emit('input', this.files.filter(({ id }) => id !== file.id))
+    this.$emit('updated', { type: 'remove' })
   }
 
   async parseFile(file: File) {

@@ -5,6 +5,7 @@
     <AppFileLoader
       v-model="files"
       :file-modifier="fileModifier"
+      @updated="handleFileUpdated"
     >
       <template v-slot="{file, remove}">
         <AppActiveBlock
@@ -175,6 +176,13 @@ export default class LayoutModifyBox extends Vue {
 
   paletteSelectionModal = false
 
+  get currentBox() {
+    return {
+      name: this.boxName,
+      files: this.files
+    }
+  }
+
   get palettes() {
     return PaletteModule.palettes
   }
@@ -222,12 +230,21 @@ export default class LayoutModifyBox extends Vue {
   }
 
   async saveBox() {
-    await this.$db.put('box', {
-      name: this.boxName,
-      files: this.files
-    })
+    await this.$db.put('box', this.currentBox)
 
     this.$router.push({ name: 'Box' })
+  }
+
+  async handleFileUpdated({ type }: { type: string }) {
+    await this.$db.put('box', this.currentBox)
+
+    if (type === 'remove') {
+      this.$alert({
+        type: 'success',
+        title: 'File successfully deleted',
+        emoji: '💾'
+      })
+    }
   }
 
   handleDbclick(file: ILoaderFile, event: Event) {
@@ -346,7 +363,7 @@ export default class LayoutModifyBox extends Vue {
           }
         },
         {
-          title: 'Set as background',
+          title: 'Copy to clipboard',
           icon: 'mdi-share',
           callback: async() => {
             // await navigator.clipboard.write([new ClipboardItem({ 'image/png': file })])
