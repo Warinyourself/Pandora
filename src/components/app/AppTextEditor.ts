@@ -45,11 +45,7 @@ export default class AppTextReader extends Vue {
   }
 
   saveFile() {
-    const blob = new Blob([this.file.text || ''], { type: this.file.type })
-    const file = new File([blob], this.file.name)
-    const url = URL.createObjectURL(file)
-
-    window.open(url)
+    this.$platform.saveFile(this.file)
   }
 
   generateBody(h: CreateElement) {
