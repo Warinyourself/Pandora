@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import { Framework } from 'vuetify'
 import { IDB } from '@/controller/db'
+import { IPlatform } from '@/controller/platform'
 
 import { INotification, ElectronPlugin } from '@/models/page'
 
@@ -9,6 +10,7 @@ declare module 'vue/types/vue' {
     $vuetify: Framework;
     $electron?: ElectronPlugin;
     $db: IDB;
+    $platform: IPlatform;
     $alert: (notification: Partial<INotification>) => void;
   }
 }
