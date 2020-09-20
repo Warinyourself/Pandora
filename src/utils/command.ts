@@ -4,7 +4,7 @@ import childProcess from 'child_process'
 import { resolve } from 'dns'
 import { reject } from 'lodash'
 
-export default interface IBackgroundProcessOptions {
+export interface IBackgroundProcessOptions {
   command: string;
   attrs?: string[];
 }

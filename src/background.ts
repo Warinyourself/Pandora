@@ -1,9 +1,7 @@
-import {
-  app, protocol, BrowserWindow, ipcMain
-} from 'electron'
+import { app, protocol, BrowserWindow, ipcMain } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
-import { backgroundProcess } from '@/utils/command'
+import { IBackgroundProcessOptions, backgroundProcess } from '@/utils/command'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -92,8 +90,14 @@ if (isDevelopment) {
   }
 }
 
-ipcMain.on('sendCommand', async(event, options) => {
-  const answer = await backgroundProcess(options)
+export interface ISendCommandOption extends IBackgroundProcessOptions {
+  eventName?: string;
+}
 
-  event.sender.send('sendCommand', { answer, options })
+ipcMain.on('sendCommand', async(event, options: ISendCommandOption) => {
+  const { eventName, ...bgProcess } = options
+
+  const answer = await backgroundProcess(bgProcess)
+
+  event.sender.send(eventName || 'sendCommand', { answer, options })
 })
