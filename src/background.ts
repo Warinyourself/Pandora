@@ -92,9 +92,8 @@ if (isDevelopment) {
   }
 }
 
-ipcMain.on('sendCommand', (event, options) => {
-  console.log({ options })
+ipcMain.on('sendCommand', async(event, options) => {
+  const answer = await backgroundProcess(options)
 
-  backgroundProcess(options)
-  event.reply('set background', 'pong')
+  event.sender.send('sendCommand', { answer, options })
 })
