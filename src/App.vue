@@ -35,19 +35,9 @@ export default class App extends Vue {
   mounted() {
     document.documentElement.addEventListener('keydown', PageModule.handleKeypress)
 
+    this.$platform.setEnv()
+
     this.initPalette()
-  }
-
-  initIpc() {
-    const ipc = this.$electron?.ipcRenderer
-
-    if (!ipc) return
-
-    ipc.send('sendCommand', { command: 'printenv' })
-
-    ipc.on('sendCommand', (event, arg) => {
-      console.log(arg)
-    })
   }
 
   initPalette() {
