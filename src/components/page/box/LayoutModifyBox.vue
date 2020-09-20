@@ -6,11 +6,11 @@
       v-model="files"
       :file-modifier="fileModifier"
       @updated="handleFileUpdated"
+      @dblclickBlock="handleDbclick"
     >
       <template v-slot="{file, remove}">
         <AppActiveBlock
           :menu="generateRightMenu(file, {remove})"
-          @dblclick="handleDbclick(file, $event)"
         >
           <div
             :class="`app-file-loader-file app-file-loader-file--${file.type} ${file.loading ? '' : 'app-file-loader-file--loading'}`"
@@ -247,15 +247,13 @@ export default class LayoutModifyBox extends Vue {
     }
   }
 
-  handleDbclick(file: ILoaderFile, event: Event) {
+  handleDbclick(file: ILoaderFile) {
+    console.log({ file })
     if (file.type === 'text') {
       this.editFile = file
     } else if (file.type === 'image') {
       this.generatePalette(file)
     }
-
-    event.preventDefault()
-    event.stopPropagation()
   }
 
   activatePalette(palette: Palette) {

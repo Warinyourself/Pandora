@@ -54,7 +54,7 @@
           cols="3"
           lg="2"
           class="pa-2"
-          @click="focusFileHash = file.hash"
+          @click="handleClick(file, $event)"
         >
           <slot
             v-bind="{file, remove}"
@@ -83,6 +83,7 @@ import SparkMD5 from 'spark-md5'
 // Couter for inner child on drag events
 let counter = 0
 let timeoutToUnfocus: any = null
+let doubleClickTimeout: any = null
 
 @Component({
   model: {
@@ -198,6 +199,22 @@ export default class AppFileLoader extends Vue {
     Array.from((event.target as HTMLInputElement).files as ArrayLike<File>).forEach((file: File) => {
       this.parseFile(file)
     })
+  }
+
+  handleClick(file: ILoaderFile, event: Event) {
+    if (doubleClickTimeout) {
+      clearTimeout(doubleClickTimeout)
+      doubleClickTimeout = null
+
+      this.$emit('dblclickBlock', file)
+      return
+    }
+
+    doubleClickTimeout = setTimeout(() => {
+      this.focusFileHash = file.hash || ''
+
+      setTimeout(() => { doubleClickTimeout = null }, 0)
+    }, 200)
   }
 
   remove(file: ILoaderFile) {
