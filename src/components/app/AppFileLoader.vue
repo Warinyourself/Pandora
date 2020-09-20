@@ -58,7 +58,6 @@
         >
           <slot
             v-bind="{file, remove}"
-            class="update-class"
           />
         </v-col>
       </v-row>
