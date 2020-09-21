@@ -1,25 +1,27 @@
 .draggable
   cursor pointer
 
-.drop
-  position relative
+.drop--default
   border-radius 10px
   border 2px dashed transparent
   transition .3s
+  &.drop--active
+    border 2px dashed var(--v-primary-lighten4)
+    border-radius 10px
+    padding-left 4px
+    padding-right 4px
 
-.drop--active
-  border 2px dashed var(--v-primary-lighten4)
-  border-radius 10px
-  padding-left 4px
-  padding-right 4px
+  &.drop--focus
+    &::before
+      content ''
+      display block
+      position absolute
+      top 0
+      left 0
+      width 100%
+      height 100%
+      background rgba(255, 255, 255, .2)
 
-.drop--focus
-  &::before
-    content ''
-    display block
-    position absolute
-    top 0
-    left 0
-    width 100%
-    height 100%
-    background rgba(255, 255, 255, .2)
+.drop
+  position relative
+

@@ -11,7 +11,7 @@
 
       <AppDrop
         type="color"
-        class="mb-2"
+        class="mb-2 drop--default"
         :callback="handleDropColor"
       >
         <v-row dense>
@@ -52,7 +52,6 @@
         <div v-show="activeColor">
           <v-row>
             <v-col>
-              <!-- v-model="activeColor ? activeColor.hex : empty" -->
               <v-color-picker
                 :value="activeColor ? activeColor.hex : '#da0463'"
                 class="ma-2"
@@ -61,7 +60,6 @@
               />
             </v-col>
             <v-col>
-              <!-- v-model="activeColor.name" -->
               <v-select
                 :value="activeColor && activeColor.name"
                 :items="['primary', 'secondary', 'tertiary', 'fg', 'bg']"
@@ -119,11 +117,8 @@ export default class LayoutModifyPalette extends Vue {
   @Prop({ type: Object, default: () => ({}) }) palette!: Palette
 
   id = getUUID()
-
   name = 'Default name'
-
   colors = [] as PaletteColor[]
-
   activeColor: PaletteColor | null = null
 
   get isEdit() {
