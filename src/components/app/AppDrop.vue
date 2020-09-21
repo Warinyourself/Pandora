@@ -5,6 +5,10 @@
     v-bind="$attrs"
     v-on="$listeners"
   >
+    <slot
+      name="wrapper"
+      v-bind="{isActive, isFocus, dropInfo}"
+    />
     <slot />
   </div>
 </template>
@@ -26,6 +30,14 @@ export default class AppDrop extends Vue {
 
   get dragable() {
     return PageModule.dragable
+  }
+
+  get isActive() {
+    return !!this.currentItem
+  }
+
+  get dropInfo() {
+    return this.currentItem?.info
   }
 
   get currentItem() {
@@ -70,6 +82,8 @@ export default class AppDrop extends Vue {
   drop(event: DragEvent) {
     if (this.currentItem) {
       const info = this.currentItem.info
+
+      console.log({ event, ts: event.dataTransfer })
 
       event.dataTransfer?.clearData()
 
