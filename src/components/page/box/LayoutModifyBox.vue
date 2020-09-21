@@ -2,6 +2,8 @@
   <AppContent>
     <v-text-field v-model="boxName" />
 
+    <AppColorWorker />
+
     <AppFileLoader
       v-model="files"
       :file-modifier="fileModifier"
