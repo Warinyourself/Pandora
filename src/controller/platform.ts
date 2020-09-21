@@ -9,20 +9,31 @@ if (isElectron) {
   electron = window.require('electron') as ElectronPlugin
 }
 
-export type PlatformTypes = 'web' | 'dektop'
+export type PlatformTypes = 'web' | 'desktop'
 
 export interface IPlatform {
   os: string | null;
   type: PlatformTypes;
   env: Record<string, string>;
+  isWeb: boolean;
+  isElectron: boolean;
   setEnv(): void;
   saveFile(file: ILoaderFile): void;
+  setBackground(path: string): void;
 }
 
 export class Platform implements IPlatform {
   os = null
-  type: PlatformTypes = 'dektop'
+  type: PlatformTypes = 'desktop'
   env: Record<string, string> = {}
+
+  get isWeb() {
+    return this.type === 'web'
+  }
+
+  get isElectron() {
+    return this.type === 'desktop'
+  }
 
   constructor() {
     console.log({ isElectron })
@@ -32,7 +43,7 @@ export class Platform implements IPlatform {
   }
 
   setEnv() {
-    if (this.type === 'web') {
+    if (this.isWeb) {
       this.env = process.env as Record<string, string>
     } else {
       const ipc = electron?.ipcRenderer
@@ -58,7 +69,7 @@ export class Platform implements IPlatform {
   }
 
   saveFile(file: ILoaderFile) {
-    if (this.type === 'web') {
+    if (this.isWeb) {
       const blob = new Blob([file.text || ''], { type: file.type })
       const newFile = new File([blob], file.name)
       const url = URL.createObjectURL(newFile)
@@ -101,6 +112,10 @@ export class Platform implements IPlatform {
         }
       })
     }
+  }
+
+  setBackground(path: string) {
+    electron?.ipcRenderer.send('sendCommand', { command: 'nitrogen', attrs: ['--set-zoom-fill', path] })
   }
 }
 

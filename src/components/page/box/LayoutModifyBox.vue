@@ -330,7 +330,7 @@ export default class LayoutModifyBox extends Vue {
   }
 
   generateRightMenu(file: ILoaderFile, { remove }: Record<string, Function>): IRightMenuItem[] {
-    const fileOptions = [
+    const fileOptions: IRightMenuItem[] = [
       {
         title: 'Delete',
         icon: 'mdi-trash-can-outline',
@@ -356,17 +356,18 @@ export default class LayoutModifyBox extends Vue {
         {
           title: 'Set as background',
           icon: 'mdi-share',
+          disabled: this.$platform.isWeb,
           callback: () => {
-            this.$electron?.ipcRenderer.send('sendCommand', { command: 'nitrogen', attrs: ['--set-auto', file.path] })
-          }
-        },
-        {
-          title: 'Copy to clipboard',
-          icon: 'mdi-share',
-          callback: async() => {
-            // await navigator.clipboard.write([new ClipboardItem({ 'image/png': file })])
+            this.$platform.setBackground(file.path || '')
           }
         }
+        // {
+        //   title: 'Copy to clipboard',
+        //   icon: 'mdi-share',
+        //   callback: async() => {
+        //     await navigator.clipboard.write([new ClipboardItem({ 'image/png': file })])
+        //   }
+        // }
       ])
     }
 
