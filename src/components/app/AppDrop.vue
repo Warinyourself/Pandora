@@ -1,7 +1,7 @@
 <template>
   <div
     ref="drop"
-    :class="`drop ${currentItem ? activeClass : ''} ${isFocus ? 'drop--focus' : ''}`"
+    :class="`drop ${currentItem ? activeClass : ''} ${isFocus ? 'drop--focus' : ''} ${isEmpty ? 'drop--empty' : ''}`"
     v-bind="$attrs"
     v-on="$listeners"
   >
@@ -24,6 +24,7 @@ let counter = 0
 export default class AppDrop extends Vue {
   @Prop() callback!: Function
   @Prop({ required: true, type: String }) type!: string
+  @Prop({ default: false, type: Boolean }) isEmpty!: boolean
   @Prop({ type: String, default: 'drop--active' }) activeClass!: string
 
   isFocus = false

@@ -77,7 +77,7 @@ export default class AppTextReader extends Vue {
 
       if (hexMatch) {
         return h('AppDrop', {
-          class: 'line-word-wrapper',
+          class: 'line-word-wrapper drop--default',
           props: {
             type: 'color',
             activeClass: 'line-word-color--active',

@@ -1,13 +1,18 @@
 .color-worker
-  height 0px
+  height 52px
   border 2px solid transparent
+  padding: 0 4px
   transition .5s height, .2s border
   border-radius 8px
+  background-color var(--v-bg-darken1)
+  &.drop--empty
+    height 0px
   &.drop--active
     height 30px
     border-color rgba(255, 255, 255, .2)
   &.drop--focus
-    padding: 0 4px
+    overflow hidden
+    transition .3s height, .2s border
     height 52px
     
 .color-worker-wrapper-title
