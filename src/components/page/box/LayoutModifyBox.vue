@@ -2,6 +2,8 @@
   <AppContent>
     <v-text-field v-model="boxName" />
 
+    <AppImageWorker />
+
     <AppColorWorker />
 
     <AppFileLoader
@@ -11,42 +13,47 @@
       @dblclickBlock="handleDbclick"
     >
       <template v-slot="{file, remove}">
-        <AppActiveBlock
-          :menu="generateRightMenu(file, {remove})"
+        <AppDrag
+          :info="file"
+          type="image"
         >
-          <div
-            :class="`app-file-loader-file app-file-loader-file--${file.type} ${file.loading ? '' : 'app-file-loader-file--loading'}`"
-            :style="`${file.type === 'image' ? 'background-image: url(' + file.src + ')': ''}`"
+          <AppActiveBlock
+            :menu="generateRightMenu(file, {remove})"
           >
             <div
-              v-if="file.loading"
-              class="position-center"
+              :class="`app-file-loader-file app-file-loader-file--${file.type} ${file.loading ? '' : 'app-file-loader-file--loading'}`"
+              :style="`${file.type === 'image' ? 'background-image: url(' + file.src + ')': ''}`"
             >
-              <v-progress-circular
-                indeterminate
-                color="primary"
-              />
-            </div>
-            <div
-              v-if="file.type === 'text'"
-              class="app-file-loader-file-name"
-            >
-              {{ file.name }}
-            </div>
-            <video
-              v-else-if="file.type === 'video'"
-              muted
-              loop
-              autoplay
-              class="char-upload-file-video"
-            >
-              <source
-                :src="file.src"
-                type="video/mp4"
+              <div
+                v-if="file.loading"
+                class="position-center"
               >
-            </video>
-          </div>
-        </AppActiveBlock>
+                <v-progress-circular
+                  indeterminate
+                  color="primary"
+                />
+              </div>
+              <div
+                v-if="file.type === 'text'"
+                class="app-file-loader-file-name"
+              >
+                {{ file.name }}
+              </div>
+              <video
+                v-else-if="file.type === 'video'"
+                muted
+                loop
+                autoplay
+                class="char-upload-file-video"
+              >
+                <source
+                  :src="file.src"
+                  type="video/mp4"
+                >
+              </video>
+            </div>
+          </AppActiveBlock>
+        </AppDrag>
       </template>
       <template v-slot:focusFile="{file, remove}">
         <div class="d-flex fw-wrap">
