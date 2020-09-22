@@ -6,10 +6,8 @@
     v-on="$listeners"
   >
     <slot
-      name="wrapper"
       v-bind="{isActive, isFocus, dropInfo}"
     />
-    <slot />
   </div>
 </template>
 
