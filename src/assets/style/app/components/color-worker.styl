@@ -1,7 +1,7 @@
 .color-worker
   height 52px
   border 2px solid transparent
-  padding: 0 4px
+  padding 4px
   transition .5s height, .2s border
   border-radius 8px
   background-color var(--v-bg-darken1)
@@ -9,6 +9,8 @@
   &.drop--empty
     height 0px
     background-color transparent
+    .color-worker-body
+      opacity 0
     &.drop--active
       height 52px
   &.drop--active
@@ -34,3 +36,9 @@
   line-height 25px
   background rgba(255, 255, 255, .1)
 
+.color-worker-body
+  margin-left: -3px
+  margin-right: -3px
+  & > *
+    padding-left 3px
+    padding-right 3px

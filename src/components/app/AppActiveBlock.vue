@@ -1,6 +1,8 @@
 <template>
   <div
     ref="block"
+    class="active-block"
+    v-bind="$attrs"
     @click.right.prevent.stop="viewMenu"
     v-on="$listeners"
   >

@@ -12,52 +12,44 @@
       >
         put color here
       </div>
-      <v-row
-        dense
+      <fade-transition
+        tag="div"
+        class="d-flex color-worker-body"
+        :group="true"
       >
-        <v-col
+        <AppActiveBlock
           v-for="color in colors"
           :key="JSON.stringify(color)"
-          cols="auto"
         >
-          <AppActiveBlock>
-            <div class="d-flex">
-              <div
-                class="color-block"
-                :style="`background-color: ${color.hex}`"
-              />
-            </div>
-          </AppActiveBlock>
-        </v-col>
-        <v-col
+          <div
+            class="color-block"
+            :style="`background-color: ${color.hex}`"
+          />
+        </AppActiveBlock>
+        <AppActiveBlock
           v-if="dropInfo && isFocus"
           :key="JSON.stringify(dropInfo)"
-          cols="auto"
+          class="disable-transition"
         >
-          <AppActiveBlock>
-            <div class="d-flex">
-              <div
-                class="color-block"
-                :style="`background-color: ${dropInfo}`"
-              />
-            </div>
-          </AppActiveBlock>
-        </v-col>
-        <v-col cols="auto">
-          <AppActiveBlock @click="createColor">
-            <div class="d-flex">
-              <div
-                class="color-block c-pointer"
-                :style="`background-color: var(--v-bg-base)`"
-              >
-                <v-icon size="25">
-                  mdi-plus
-                </v-icon>
-              </div>
-            </div>
-          </AppActiveBlock>
-        </v-col>
-      </v-row>
+          <div
+            class="color-block"
+            :style="`background-color: ${dropInfo}`"
+          />
+        </AppActiveBlock>
+        <AppActiveBlock
+          key="plus"
+          @click="createColor"
+        >
+          <div
+            class="color-block c-pointer"
+            :style="`background-color: var(--v-bg-base)`"
+          >
+            <v-icon size="25">
+              mdi-plus
+            </v-icon>
+          </div>
+        </AppActiveBlock>
+      </fade-transition>
     </template>
   </AppDrop>
 </template>
