@@ -5,7 +5,7 @@
     :is-empty="!colors.length"
     :callback="handleDropColor"
   >
-    <template v-slot:wrapper="{isActive, isFocus, dropInfo}">
+    <template v-slot="{isActive, isFocus, dropInfo}">
       <div
         v-if="isActive && !isFocus"
         class="color-worker-wrapper"
