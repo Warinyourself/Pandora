@@ -1,7 +1,7 @@
 <template>
   <div
     ref="drop"
-    :class="`drop ${currentItem ? activeClass : ''} ${isFocus ? 'drop--focus' : ''} ${isEmpty ? 'drop--empty' : ''}`"
+    :class="classes"
     v-bind="$attrs"
     v-on="$listeners"
   >
@@ -28,6 +28,15 @@ export default class AppDrop extends Vue {
   @Prop({ type: String, default: 'drop--active' }) activeClass!: string
 
   isFocus = false
+
+  get classes() {
+    return {
+      drop: true,
+      [this.activeClass]: this.currentItem,
+      'drop--focus': this.isFocus,
+      'drop--empty': this.isEmpty
+    }
+  }
 
   get dragable() {
     return PageModule.dragable
@@ -84,8 +93,6 @@ export default class AppDrop extends Vue {
     if (this.currentItem) {
       const info = this.currentItem.info
 
-      console.log({ event, ts: event.dataTransfer })
-
       event.dataTransfer?.clearData()
 
       if (this.callback) {
@@ -93,6 +100,7 @@ export default class AppDrop extends Vue {
       }
 
       this.isFocus = false
+      counter = 0
 
       PageModule.REMOVE_DRAG(this.type)
     }

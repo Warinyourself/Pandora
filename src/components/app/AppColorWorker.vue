@@ -6,61 +6,59 @@
     :callback="handleDropColor"
   >
     <template v-slot:wrapper="{isActive, isFocus, dropInfo}">
-      <p
+      <div
         v-if="isActive && !isFocus"
-        class="color-worker-wrapper-title"
+        class="color-worker-wrapper"
       >
         put color here
-      </p>
-      <div v-if="dropInfo && isFocus">
-        <v-row dense>
-          <v-col cols="auto">
-            <AppActiveBlock>
-              <div class="d-flex">
-                <div
-                  class="color-block"
-                  :style="`background-color: ${dropInfo}`"
-                />
-              </div>
-            </AppActiveBlock>
-          </v-col>
-        </v-row>
       </div>
-    </template>
-
-    <v-row
-      v-if="colors.length"
-      dense
-    >
-      <v-col
-        v-for="color in colors"
-        :key="JSON.stringify(color)"
-        cols="auto"
+      <v-row
+        dense
       >
-        <AppActiveBlock>
-          <div class="d-flex">
-            <div
-              class="color-block"
-              :style="`background-color: ${color.hex}`"
-            />
-          </div>
-        </AppActiveBlock>
-      </v-col>
-      <v-col cols="auto">
-        <AppActiveBlock @click="createColor">
-          <div class="d-flex">
-            <div
-              class="color-block c-pointer"
-              :style="`background-color: var(--v-bg-base)`"
-            >
-              <v-icon size="25">
-                mdi-plus
-              </v-icon>
+        <v-col
+          v-for="color in colors"
+          :key="JSON.stringify(color)"
+          cols="auto"
+        >
+          <AppActiveBlock>
+            <div class="d-flex">
+              <div
+                class="color-block"
+                :style="`background-color: ${color.hex}`"
+              />
             </div>
-          </div>
-        </AppActiveBlock>
-      </v-col>
-    </v-row>
+          </AppActiveBlock>
+        </v-col>
+        <v-col
+          v-if="dropInfo && isFocus"
+          :key="JSON.stringify(dropInfo)"
+          cols="auto"
+        >
+          <AppActiveBlock>
+            <div class="d-flex">
+              <div
+                class="color-block"
+                :style="`background-color: ${dropInfo}`"
+              />
+            </div>
+          </AppActiveBlock>
+        </v-col>
+        <v-col cols="auto">
+          <AppActiveBlock @click="createColor">
+            <div class="d-flex">
+              <div
+                class="color-block c-pointer"
+                :style="`background-color: var(--v-bg-base)`"
+              >
+                <v-icon size="25">
+                  mdi-plus
+                </v-icon>
+              </div>
+            </div>
+          </AppActiveBlock>
+        </v-col>
+      </v-row>
+    </template>
   </AppDrop>
 </template>
 
