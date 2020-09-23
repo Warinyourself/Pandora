@@ -14,9 +14,9 @@
       </div>
       <AppActiveBlock
         v-if="(dropInfo && isFocus) || image.src"
-        :key="JSON.stringify(dropInfo)"
+        :key="JSON.stringify(dropInfo || image)"
         class="image-editor"
-        :style="`background-image: url(${dropInfo.src})`"
+        :style="`background-image: url(${image.src || dropInfo.src})`"
       />
     </template>
   </AppDrop>
