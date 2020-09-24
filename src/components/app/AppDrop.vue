@@ -13,7 +13,6 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
-
 import { PageModule } from '@/store/page'
 
 let counter = 0
@@ -75,12 +74,14 @@ export default class AppDrop extends Vue {
 
   dragenter() {
     counter++
+    console.log('dragenter')
 
     this.isFocus = true
   }
 
   dragleave() {
     counter--
+    console.log('dragleave')
 
     if (counter === 0) {
       this.isFocus = false

@@ -7,7 +7,7 @@
   >
     <template v-slot="{isActive, isFocus, dropInfo}">
       <div
-        v-if="isActive && !isFocus"
+        v-if="isActive"
         class="color-worker-wrapper"
       >
         put image here
