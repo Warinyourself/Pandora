@@ -74,14 +74,12 @@ export default class AppDrop extends Vue {
 
   dragenter() {
     counter++
-    console.log('dragenter')
 
     this.isFocus = true
   }
 
   dragleave() {
     counter--
-    console.log('dragleave')
 
     if (counter === 0) {
       this.isFocus = false
