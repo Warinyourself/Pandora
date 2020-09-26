@@ -12,14 +12,36 @@
       >
         put image here
       </div>
-      <canvas
+      <div
         v-if="(dropInfo && isFocus) || image && image.src"
-        ref="canvas"
         width="100%"
-        height="200px"
+        height="100%"
         :generate="JSON.stringify(setUpCanvas(dropInfo))"
-        class="worker-canvas image-editor"
-      />
+      >
+        <canvas
+          ref="canvas"
+          class="worker-canvas image-editor"
+        />
+        <div
+          class="image-worker-colors"
+        >
+          <fade-transition
+            tag="div"
+            class="d-flex color-worker-body"
+            :group="true"
+          >
+            <AppActiveBlock
+              v-for="color in colors"
+              :key="JSON.stringify(color)"
+            >
+              <div
+                class="color-block"
+                :style="`background-color: ${color}`"
+              />
+            </AppActiveBlock>
+          </fade-transition>
+        </div>
+      </div>
     </template>
   </AppDrop>
 </template>
@@ -33,12 +55,17 @@ import { coverImage } from '@/utils/helper'
 export default class AppImageWorker extends Vue {
   image: null | ILoaderFile = null
 
+  get colors() {
+    if (!this.image) return []
+
+    return this.image.palette
+  }
+
   handleDrop(file: ILoaderFile) {
     this.image = file
   }
 
   setUpCanvas(file?: ILoaderFile) {
-    console.log('setup')
     this.$nextTick(() => {
       if (file) {
         this.image = file
@@ -67,6 +94,7 @@ export default class AppImageWorker extends Vue {
   }
 
   async setImage() {
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise<HTMLImageElement>(async(resolve, reject) => {
       if (!this.image) {
         reject(new Error('Upload image'))

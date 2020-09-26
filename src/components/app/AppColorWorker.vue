@@ -55,12 +55,20 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Prop } from 'vue-property-decorator'
 import { PaletteColor, defaultColor } from '@/models/palette'
 
 @Component
 export default class AppColorWorker extends Vue {
+  @Prop({ type: Array }) value!: PaletteColor[]
+
   colors = [] as PaletteColor[]
+
+  mounted() {
+    if (this.value) {
+      this.colors = this.value
+    }
+  }
 
   handleDropColor(color: string) {
     this.colors.push(

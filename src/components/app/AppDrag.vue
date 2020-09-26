@@ -38,7 +38,6 @@ export default class AppDrag extends Vue {
 
   dragend() {
     PageModule.REMOVE_DRAG(this.type)
-    console.log('DRAG END')
   }
 
   dragstart(event: DragEvent) {
