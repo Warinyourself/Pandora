@@ -41,3 +41,16 @@ export const isDOMRect = (obj: any): obj is DOMRect =>
   isNumber(obj.left) &&
   isNumber(obj.top) &&
   isNumber(obj.bottom)
+
+export const coverImage = (ctx: CanvasRenderingContext2D, img: HTMLImageElement, type: 'cover' | 'contain', ctxWidth: number, ctxHeight: number) => {
+  const imgRatio = img.height / img.width
+  const winRatio = ctxHeight / ctxWidth
+  if ((imgRatio < winRatio && type === 'contain') || (imgRatio > winRatio && type === 'cover')) {
+    const h = ctxWidth * imgRatio
+    ctx.drawImage(img, 0, (ctxHeight - h) / 2, ctxWidth, h)
+  }
+  if ((imgRatio > winRatio && type === 'contain') || (imgRatio < winRatio && type === 'cover')) {
+    const w = ctxWidth * winRatio / imgRatio
+    ctx.drawImage(img, (ctxWidth - w) / 2, 0, w, ctxHeight)
+  }
+}

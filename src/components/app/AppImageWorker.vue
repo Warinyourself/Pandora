@@ -12,14 +12,11 @@
       >
         put image here
       </div>
-      <!-- <AppActiveBlock
-        v-if="(dropInfo && isFocus) || image.src"
-        :key="JSON.stringify(dropInfo || image)"
-        :style="`background-image: url(${image.src || dropInfo.src})`"
-      /> -->
       <canvas
         v-if="(dropInfo && isFocus) || image && image.src"
         ref="canvas"
+        width="100%"
+        height="200px"
         :generate="JSON.stringify(setUpCanvas(dropInfo))"
         class="worker-canvas image-editor"
       />
@@ -30,6 +27,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { ILoaderFile } from '@/models/page'
+import { coverImage } from '@/utils/helper'
 
 @Component
 export default class AppImageWorker extends Vue {
@@ -53,10 +51,19 @@ export default class AppImageWorker extends Vue {
 
   async generateCanvas() {
     const canvas = this.$refs.canvas as HTMLCanvasElement
-    const context = canvas.getContext('2d')
-    const img = await this.setImage()
+    const ctx = canvas.getContext('2d')
 
-    context?.drawImage(img, 0, 0)
+    if (!ctx) { return }
+
+    const image = await this.setImage()
+
+    const ctxWidth = ctx.canvas.width
+    const ctxHeight = ctx.canvas.height
+
+    canvas.width = canvas.clientWidth
+    canvas.height = canvas.clientHeight
+
+    coverImage(ctx, image, 'cover', ctxWidth, ctxHeight)
   }
 
   async setImage() {
