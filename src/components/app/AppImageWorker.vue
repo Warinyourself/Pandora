@@ -4,6 +4,7 @@
     class="mb-2 color-worker image-worker"
     :is-empty="!image"
     :callback="handleDrop"
+    :validator="validateImage"
   >
     <template v-slot="{isActive, isFocus, dropInfo}">
       <div
@@ -16,7 +17,7 @@
         v-if="(dropInfo && isFocus) || image && image.src"
         width="100%"
         height="100%"
-        :generate="JSON.stringify(setUpCanvas(dropInfo))"
+        :generate="JSON.stringify(setUpCanvas(dropInfo, isFocus))"
       >
         <canvas
           ref="canvas"
@@ -65,15 +66,19 @@ export default class AppImageWorker extends Vue {
     this.image = file
   }
 
-  setUpCanvas(file?: ILoaderFile) {
+  setUpCanvas(file?: ILoaderFile, isFocus?: boolean) {
     this.$nextTick(() => {
-      if (file) {
+      if (file && isFocus) {
         this.image = file
       }
       this.generateCanvas()
     })
 
     return Math.random()
+  }
+
+  validateImage(file?: ILoaderFile) {
+    return file && file.type === 'image' && file.name !== this.image?.name
   }
 
   async generateCanvas() {
