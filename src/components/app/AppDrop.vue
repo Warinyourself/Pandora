@@ -20,6 +20,7 @@ let counter = 0
 @Component
 export default class AppDrop extends Vue {
   @Prop() callback!: Function
+  @Prop() validator!: Function
   @Prop({ required: true, type: String }) type!: string
   @Prop({ default: false, type: Boolean }) isEmpty!: boolean
   @Prop({ type: String, default: 'drop--active' }) activeClass!: string
@@ -29,7 +30,7 @@ export default class AppDrop extends Vue {
   get classes() {
     return {
       drop: true,
-      [this.activeClass]: this.currentItem,
+      [this.activeClass]: this.isActive,
       'drop--focus': this.isFocus,
       'drop--empty': this.isEmpty
     }
@@ -40,7 +41,7 @@ export default class AppDrop extends Vue {
   }
 
   get isActive() {
-    return !!this.currentItem
+    return this.validator ? this.validator(this.currentItem?.info) && !!this.currentItem : !!this.currentItem
   }
 
   get dropInfo() {
@@ -75,6 +76,8 @@ export default class AppDrop extends Vue {
   dragenter() {
     counter++
 
+    if (!this.validator || !this.validator(this.currentItem?.info)) { return }
+
     this.isFocus = true
   }
 
@@ -87,7 +90,7 @@ export default class AppDrop extends Vue {
   }
 
   drop(event: DragEvent) {
-    if (this.currentItem) {
+    if (this.currentItem && this.isActive) {
       const info = this.currentItem.info
 
       event.dataTransfer?.clearData()
@@ -104,5 +107,3 @@ export default class AppDrop extends Vue {
   }
 }
 </script>
-
-<style lang="stylus"></style>
